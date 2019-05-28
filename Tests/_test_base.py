@@ -70,9 +70,7 @@ class _BaseTest(unittest.TestCase):
                           A2B_0 is "A2B";
                           B2C_0 is "B2C";
                         end"""
-
-        with pycotools3.model.BuildAntimony(self.copasi_file) as loader:
-            self.model = loader.load(self.ant)
+        self.model = pycotools3.model.loada(self.ant, self.copasi_file)
 
     @classmethod
     def tearDownClass(cls):
@@ -86,7 +84,8 @@ class _BaseTest(unittest.TestCase):
                        'EnsembleTimeCourse', 'Histograms',
                        'LinearRegression', 'MultipleParameterEstimationResults',
                        'PCA', 'Scatters', 'ProfileLikelihoods',
-                       'ParameterEstimationResults', 'Problem1']
+                       'ParameterEstimationResults', 'Problem1',
+                       'CrossValidation']
             if delete_dirs:
                 for i in subdirs:
                     d = os.path.join(dire, i)
@@ -106,7 +105,8 @@ class _BaseTest(unittest.TestCase):
                 '*.json',
                 '*.yaml',
                 '*.yml',
-                '*.yaml'
+                '*.yaml',
+                '*.sbml',
             ]
             for i in file_types_to_remove:
                 for j in glob.glob(os.path.join(dire, i)):

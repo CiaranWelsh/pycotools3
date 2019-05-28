@@ -39,12 +39,8 @@ import time
 from io import StringIO
 
 
-## todo test model_value for start values are being resolved (there not)
-## todo: go through other classes that depend on parameter estiomation and ensure a context manager works for them
 ## todo make sure viz works with new parameter estimation
 ## todo modify other class arguments if necessary to be like the parameter estimation class
-## todo documentation needs to be better
-## todo examples, tutorials, html etc.
 ## todo clean up repository of old and unused code, objects files etc
 ## todo remove Models folder
 class DotDictTests(unittest.TestCase):
@@ -253,12 +249,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
                 mappings.B.model_object, 'B')
 
     def test_fit_items_A_lower_bound(self):
-        ## now I've broken the use of lower and upper bounds in
-        ## individual fit items
-        ## line 2965 commented out. This is where I set default boundaries
-        ## instead the boundary assignment should occur in the config class
-        ## instead of assigning boundaries again, set the defaults prior to
-        ## qhen needed
         expected = 15
         actual = self.PE.config.items.fit_items.A.lower_bound
         self.assertEqual(expected, actual)
@@ -433,34 +423,39 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
     def setUp(self):
         super(ExperimentMapperTests, self).setUp()
+        fname1 = os.path.join(os.path.dirname(__file__), 'report1.txt')
+        fname2 = os.path.join(os.path.dirname(__file__), 'report2.txt')
 
-        self.TC1 = pycotools3.tasks.TimeCourse(self.model,
-                                               end=1000,
-                                               step_size=100,
-                                               intervals=10,
-                                               report_name='report1.txt')
-        self.TC2 = pycotools3.tasks.TimeCourse(self.model,
-                                               end=1000,
-                                               step_size=100,
-                                               intervals=10,
-                                               report_name='report2.txt')
+        data1 = self.model.simulate(0, 1000, 100)
+        data2 = self.model.simulate(0, 1000, 100)
+        data1.to_csv(fname1, sep='\t')
+        data2.to_csv(fname2, sep='\t')
 
-        pycotools3.utils.format_timecourse_data(self.TC1.report_name)
-        pycotools3.utils.format_timecourse_data(self.TC2.report_name)
 
-        df = pandas.read_csv(self.TC2.report_name, sep='\t')
+        fname3 = os.path.join(os.path.dirname(__file__), 'report3.txt')
+        df = pandas.read_csv(fname2, sep='\t')
         ## remove square brackets around species
         df = df.rename(columns={list(df.keys())[2]: list(df.keys())[2] + str('_indep')})
-        self.report3 = os.path.join(os.path.dirname(self.TC2.report_name), 'report3.txt')
-        df.to_csv(self.report3, sep='\t', index=False)
-        assert os.path.isfile(self.report3)
+        df.to_csv(fname3, sep='\t', index=False)
+        assert os.path.isfile(fname3)
 
         ## create some SS data for fitting
         ss_df = df.drop('Time', axis=1)
         ss_df = pandas.DataFrame(ss_df.iloc[0].transpose(), index=list(ss_df.keys())).transpose()
-        self.report4 = os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
+        fname4 = os.path.join(os.path.dirname(__file__), 'report4.txt')
+        ss_df.to_csv(fname4, sep='\t', index=False)
 
-        ss_df.to_csv(self.report4, sep='\t', index=False)
+        ## create some SS data with more than one experiment
+        fname5 = os.path.join(os.path.dirname(__file__), 'report5.txt')
+        s = 'A\tB\tC\n0.07\t0.06\t2.8\n\n0.09\t0.10\t2.9\n'
+        with open(fname5, 'w') as f:
+            f.write(s)
+
+        self.report1 = fname1
+        self.report2 = fname2
+        self.report3 = fname3
+        self.report4 = fname4
+        self.report5 = fname5
 
         self.conf_dct = dict(
             models=dict(
@@ -471,13 +466,16 @@ class ExperimentMapperTests(_test_base._BaseTest):
             datasets=dict(
                 experiments=dict(
                     report1=dict(
-                        filename=self.TC1.report_name,
+                        filename=self.report1,
                     ),
                     report2=dict(
-                        filename=self.TC2.report_name
+                        filename=self.report2
                     ),
                     ss=dict(
                         filename=self.report4
+                    ),
+                    ss_multi=dict(
+                        filename=self.report5
                     )
                 ),
                 validations=dict(
@@ -489,7 +487,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
             items=dict(
                 fit_items=dict(
                     A=dict(
-                        affected_experiments=['report1', 'ss']
+                        affected_experiments=['report1', 'ss', 'ss_multi']
                     ),
                     B=dict(
                         affected_validation_experiments=['report3']
@@ -514,8 +512,8 @@ class ExperimentMapperTests(_test_base._BaseTest):
         )
         self.conf = ParameterEstimation.Config(**self.conf_dct)
         self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
-
-        # print(self.TC1.report_name)
+        # self.mod = self.PE.models['first'].model
+        # print(self.mod)
 
     def test_metabolite_entries(self):
         """
@@ -550,7 +548,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in mod.xml.xpath(query):
             for j in i:
                 count += 1
-        self.assertEqual(count, 3)
+        self.assertEqual(count, 5)
 
     def test_correct_number_of_validation_experiments(self):
         """
@@ -652,15 +650,14 @@ class ExperimentMapperTests(_test_base._BaseTest):
         :return:
         """
         self.experiment_checker_function(
-            os.path.join(
-                os.path.dirname(__file__), 'report1.txt'), 'File Name')
+            os.path.join(os.path.dirname(__file__), 'report1.txt'), 'File Name')
 
     def test_experiment_number_of_columns(self):
         """
         First row of experiment_0==1
         :return:
         """
-        self.experiment_checker_function('10', 'Number of Columns')
+        self.experiment_checker_function('4', 'Number of Columns')
 
     def test_experiment_correct_reference1(self):
         """
@@ -782,7 +779,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
                 for k in j:
                     if k.attrib['name'] == 'Object Map':
                         count += 1
-        self.assertEqual(3, count)
+        self.assertEqual(5, count)
 
     def test_experiment_correct_number_of_validation_obj_maps(self):
         """
@@ -817,7 +814,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in mod.xml.xpath(query):
             for j in i:
                 count += 1
-        self.assertEqual(3, count)
+        self.assertEqual(5, count)
 
     def test_fit_items_property(self):
         lst = ['A', 'B', 'C', 'A2B', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ADeg_k1']
@@ -831,7 +828,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         for i in mod.xml.xpath(query):
             for j in i:
                 count += 1
-        self.assertEqual(3, count)
+        self.assertEqual(5, count)
 
     def test_correct_number_of_fit_items(self):
         query = '//*[@name="FitItem"]'
@@ -853,6 +850,43 @@ class ExperimentMapperTests(_test_base._BaseTest):
                     if j.tag == 'Method':
                         ans = j.attrib['name']
         self.assertEqual('Genetic Algorithm SR', ans)
+
+    def test_independent_variables_get_mapped(self):
+        mod = self.PE.models['model1'].model
+        query = '//*[@name="ss"]'
+        actual = None
+        expected = r'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration'
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'Object Map':
+                    for k in j:
+                        if k.attrib['name'] == '1':
+                            for l in k:
+                                if l.attrib['name'] == 'Object CN':
+                                    actual = l.attrib['value']
+        self.assertEqual(expected, actual)
+
+    def test_affected_experiments_key(self):
+        """
+        Since changing the configuration to support experimental data files containing more than
+        one experiment there has been a bug in the mapping of initial concentation of A. After digging,
+        it turns out that the initial concentration of A makes use of the affected experiments feature which
+        is causing the bug because of inconsisent experiment keys.
+        Returns:
+
+        """
+        #  Could not find experiment for fit item 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],
+        #  Vector=Metabolites[A],Reference=InitialConcentration'.
+        mod = self.PE.models['model1'].model
+        query = '//*[@name="Affected Experiments"]'
+        actual = None
+        expected = 'Experiment_report1'
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.attrib['value'] == 'Experiment_report1':
+                    actual = 'Experiment_report1'
+        self.assertEqual(expected, actual)
+
 
 
 class ParameterEstimationTests(_test_base._BaseTest):
@@ -1332,6 +1366,7 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
             context.set('number_of_generations', 25)
             context.set('population_size', 10)
             config = context.get_config()
+
         self.assertTrue(isinstance(config, ParameterEstimation.Config))
 
     def test_create_config_file(self):
@@ -2192,7 +2227,6 @@ class CrossValidationContextTests(_test_base._BaseTest):
     def setUp(self):
         super(CrossValidationContextTests, self).setUp()
 
-
         self.ant = self.ant.replace('ADeg: A => ; nuc*ADeg_k1*A;', '')
         self.ant = self.ant.replace('ADeg_k1 = 0.1;', '')
         self.model = pycotools3.model.loada(self.ant, copasi_file=self.copasi_file)
@@ -2236,7 +2270,7 @@ class CrossValidationContextTests(_test_base._BaseTest):
 
     def test_simple(self):
         with pycotools3.tasks.ParameterEstimation.Context(
-            self.model, self.experiments, context='cv', parameters='gm'
+                self.model, self.experiments, context='cv', parameters='gm'
         ) as context:
             context.set('randomize_start_values', True)
             context.set('method', 'genetic_algorithm')
@@ -2256,28 +2290,203 @@ class CrossValidationContextTests(_test_base._BaseTest):
         data = pycotools3.viz.Parse(pe).concat()
         self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
 
-    # def test_depth_is_2(self):
-    #     with pycotools3.tasks.ParameterEstimation.Context(
-    #         self.model, self.experiments, context='cv', parameters='gm'
-    #     ) as context:
-    #         context.set('randomize_start_values', True)
-    #         context.set('method', 'genetic_algorithm')
-    #         context.set('population_size', 20)
-    #         context.set('number_of_generations', 50)
-    #         context.set('swarm_size', 100)
-    #         context.set('iteration_limit', 2000)
-    #         context.set('copy_number', 3)
-    #         context.set('validation_threshold', 500)
-    #         context.set('cross_validation_depth', 1)
-    #         context.set('run_mode', True)
-    #         context.set('lower_bound', 1e-3)
-    #         context.set('upper_bound', 1e2)
-    #         config = context.get_config()
-    #
-    #     pe = ParameterEstimation(config)
-        # data = pycotools3.viz.Parse(pe).concat()
-        # print(data)
-        # self.assertLess(data.loc['3_0', 0]['RSS'], data.loc['3_1', 0]['RSS'])
+
+class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
+    """
+    Sometimes we want to show copasi data files that have individual repeats
+    rather than the average. These repeats are separated by a blank
+    line. Test that ParameterEstimation is flexible enough to
+    support both.
+    """
+
+    def setUp(self):
+        ant1 = """
+
+        model first()
+            compartment Cell = 1;
+
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: C => A ; Cell * k3 * C;
+
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+
+        self.data1 = "A,B,C\n5,10,15\n\n\n"""
+
+        self.data2 = "A,B,C\n5,10,15\n\n4,11,14\n\n6,9,16"
+
+        self.data3 = "Time,A,B,C\n" \
+                     "0,5,10,15\n" \
+                     "1,6,11,16\n" \
+                     "2,7,12,17\n" \
+                     "\n" \
+                     "0,8,12,16\n" \
+                     "1,9,12,17\n" \
+                     "2,10,13,18\n" \
+                     "\n" \
+                     "0,5,10,15\n" \
+                     "1,6,11,16\n" \
+                     "2,7,12,17\n"
+
+        fname1 = os.path.join(os.path.dirname(__file__), 'first.cps')
+        self.mod1 = pycotools3.model.loada(ant1, fname1)
+
+        self.fname1 = os.path.join(os.path.dirname(__file__), 'dataset1.txt')
+        self.fname2 = os.path.join(os.path.dirname(__file__), 'dataset2.txt')
+        self.fname3 = os.path.join(os.path.dirname(__file__), 'dataset3.txt')
+
+        with open(self.fname1, 'w') as f:
+            f.write(self.data1)
+        with open(self.fname2, 'w') as f:
+            f.write(self.data2)
+        with open(self.fname3, 'w') as f:
+            f.write(self.data3)
+
+        with ParameterEstimation.Context(
+                self.mod1, [self.fname1, self.fname2, self.fname3],
+                context='s', parameters='g') as context:
+            context.set('separator', ',')
+            self.config = context.get_config()
+
+        self.pe = ParameterEstimation(self.config)
+
+    # def tearDown(self):
+    #     os.remove(self.fname1)
+    #     os.remove(self.fname2)
+    #     os.remove(self.fname3)
+
+    def test_line_numbers_accurate_in_multi_experiment_file(self):
+        actual_end = None
+        actual_start = None
+        mod = self.pe.config.models['first'].model
+        for i in mod.xml.xpath("//*[@name='dataset2_1']"):
+            for j in list(i):
+                if j.attrib['name'] == 'First Row':
+                    actual_start = int(j.attrib['value'])
+                elif j.attrib['name'] == 'Last Row':
+                    actual_end = int(j.attrib['value'])
+        expected_start = 4
+        expected_end = 4
+        # ans = [(1, 2), (4, 4), (6, 6)]
+        self.assertEqual((expected_start, expected_end), (actual_start, actual_end))
+
+    def test_line_numbers_accurate_in_multi_experiment_file2(self):
+        actual_end = None
+        actual_start = None
+        mod = self.pe.config.models['first'].model
+        for i in mod.xml.xpath("//*[@name='dataset2_1']"):
+            for j in list(i):
+                if j.attrib['name'] == 'First Row':
+                    actual_start = int(j.attrib['value'])
+                elif j.attrib['name'] == 'Last Row':
+                    actual_end = int(j.attrib['value'])
+        expected_start = 4
+        expected_end = 4
+        # ans = [(1, 2), (4, 4), (6, 6)]
+        self.assertEqual((expected_start, expected_end), (actual_start, actual_end))
+
+
+    def test_file_data_file3(self):
+        expected = (10, 12)
+
+        actual_start = None
+        actual_end = None
+
+        mod = self.pe.config.models['first'].model
+        for i in mod.xml.xpath("//*[@name='dataset3_2']"):
+            for j in list(i):
+                if j.attrib['name'] == 'First Row':
+                    actual_start = int(j.attrib['value'])
+                elif j.attrib['name'] == 'Last Row':
+                    actual_end = int(j.attrib['value'])
+        self.assertEqual(expected, (actual_start, actual_end))
+
+
+
+class DuplicateForEachExperimentTests(_test_base._BaseTest):
+    """
+    Sometimes we want to show copasi data files that have individual repeats
+    rather than the average. These repeats are separated by a blank
+    line. Test that ParameterEstimation is flexible enough to
+    support both.
+    """
+
+    def setUp(self):
+        ant1 = """
+
+        model first()
+            compartment Cell = 1;
+
+            R1: A => B ; Cell * k1 * A;
+            R2: B => C ; Cell * k2 * B;
+            R3: C => A ; Cell * k3 * C;
+
+            k1 = 0.1;
+            k2 = 0.1;
+            k3 = 0.1;
+
+            A = 100;
+            B = 0;
+            C = 0;
+        end
+        """
+
+        self.data1 = "A,B,C\n5,10,15\n\n\n"""
+
+        self.data2 = "A,B,C\n5,10,15\n\n4,11,14\n\n6,9,16"
+
+        self.data3 = "Time,A,B,C\n" \
+                     "0,5,10,15\n" \
+                     "1,6,11,16\n" \
+                     "2,7,12,17\n" \
+                     "\n" \
+                     "0,8,12,16\n" \
+                     "1,9,12,17\n" \
+                     "2,10,13,18\n" \
+                     "\n" \
+                     "0,5,10,15\n" \
+                     "1,6,11,16\n" \
+                     "2,7,12,17\n"
+
+        fname1 = os.path.join(os.path.dirname(__file__), 'first.cps')
+
+        with pycotools3.model.BuildAntimony(fname1) as loader:
+            self.mod1 = loader.load(ant1)
+
+        self.fname1 = os.path.join(os.path.dirname(__file__), 'dataset1.txt')
+        self.fname2 = os.path.join(os.path.dirname(__file__), 'dataset2.txt')
+        self.fname3 = os.path.join(os.path.dirname(__file__), 'dataset3.txt')
+
+        with open(self.fname1, 'w') as f:
+            f.write(self.data1)
+        with open(self.fname2, 'w') as f:
+            f.write(self.data2)
+        with open(self.fname3, 'w') as f:
+            f.write(self.data3)
+
+        with ParameterEstimation.Context(
+                self.mod1, [self.fname1, self.fname2, self.fname3],
+                context='s', parameters='g') as context:
+            context.set('separator', ',')
+            self.config = context.get_config()
+
+        self.pe = ParameterEstimation(self.config)
+
+
+    # def test(self):
+    #     self.pe.duplicate_for_every_experiment(
+    #         self.pe.models['first'].model,
+    #         'A',
+    #     )
+#
 
 
 if __name__ == '__main__':

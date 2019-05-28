@@ -254,7 +254,6 @@ class _Task(object):
             if key not in allowed:
                 raise errors.InputError('{} not in {}'.format(key, allowed))
 
-
 class Bool2Str(object):
     """copasiML expects strings and we pythoners
     want to use python booleans not strings
@@ -1824,7 +1823,7 @@ class TimeCourse(_Task):
                 if 'append' and 'target' in list(j.attrib.keys()):
                     present = True
                     j.attrib.update(arg_dct)
-            if present == False:
+            if not present:
                 report = etree.Element('Report', attrib=arg_dct)
                 i.insert(0, report)
         return self.model
@@ -2279,9 +2278,60 @@ class Scan(_Task):
         R = Run(self.model, task='scan', mode=self.run)
 
 
+class _ParameterEstimationBase(_Task):
+    """
+    These are methods that are needed in more than one of the Parameter estimation classes
+    """
+    @staticmethod
+    def _read_data(fname, sep):
+        """
+        Reads data into pandas dataframe. This function is only for the situation
+        where a datafile contains a single experiment. See :py:meth:`_read_data_multiple_experiments`
+        for function that supports multiple experiments per file.
+        Args:
+            experiment:
+
+        Returns:
+
+        """
+        data = pandas.read_csv(fname, sep)
+        # return line numbers as nested list to make consistent with _read_data_multiple_experiments
+        return data, [1, data.shape[0] + 1]
+
+    @staticmethod
+    def _read_data_multiple_experiments(fname, sep):
+        with open(fname, 'r') as f:
+            data = f.read()
+
+        data = data.split('\n\n')
+        df1 = pandas.read_csv(StringIO(data[0]), sep=sep)
+        data = data[1:]
+        dfs = [pandas.read_csv(StringIO(i), sep=sep) for i in data]
+        for i in dfs:
+            i.columns = df1.columns
+
+        data = [df1] + dfs
+
+        # figure out what the line numbers are
+        line_numbers = []
+        for i, df in enumerate(data):
+            if i == 0:
+                start = 1
+                end = df.shape[0]+1
+                line_numbers.append((start, end))
+            else:
+                start = end + 2
+                end = start + df.shape[0]
+                line_numbers.append((start, end))
+
+        if len(line_numbers) != len(data):
+            raise ValueError('Huston, we have a problem')
+        return data, line_numbers
+
+
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
-class ParameterEstimation(_Task):
+class ParameterEstimation(_ParameterEstimationBase):
     """
     Interface to COPASI's parameter estimation task
 
@@ -2462,7 +2512,7 @@ class ParameterEstimation(_Task):
             }
 
     @staticmethod
-    class Config(_Task, Munch):
+    class Config(_ParameterEstimationBase, Munch):
         """
         A class for holding a parameter estimation configuration
 
@@ -2799,6 +2849,10 @@ class ParameterEstimation(_Task):
                 None, the method operates on class attributes inplace
             """
             for experiment_name in self.experiment_names:
+                # determine whether the experiment_name has been appended with a number for multi experiments per file (i.e. exp1_0)
+                match = re.findall('(.*)_\d+$', experiment_name)
+                if match != []:
+                    experiment_name = match[0]
                 for default_kwarg in self.defaults.experiments:
                     if default_kwarg not in self.datasets.experiments[experiment_name]:
                         self.datasets.experiments[experiment_name][default_kwarg] = self.defaults.experiments[
@@ -3078,6 +3132,27 @@ class ParameterEstimation(_Task):
             return self.datasets.experiments
 
         @property
+        def multi_experiments(self):
+            """
+            List of experiment names that have more than one experiment separated by blank line
+            Returns (tuple): (list, int)
+            """
+            for experiment_name in self.experiments:
+                fname = self.experiments[experiment_name].filename
+
+                # detect whether multiple experiments are in one data file
+                multiple_experiments = []
+                with open(fname) as f:
+                    data_str = f.read()
+                    match = re.findall('\n\n\w', data_str)
+                    if match != []:
+                        assert len(match) == 1
+                        multiple_experiments.append(experiment_name)
+                        # and count the experiments
+            num_experiments = len(data_str.strip().split('\n\n'))
+            return multiple_experiments, num_experiments
+
+        @property
         def validations(self):
             """
             The validations property
@@ -3119,9 +3194,24 @@ class ParameterEstimation(_Task):
 
             """
             experiment_names = []
-            for i in self.experiments:
-                experiment_names.append(i)
+            for experiment_name in self.experiments:
+                fname = self.experiments[experiment_name].filename
 
+                # detect whether multiple experiments are in one data file
+                num_experiments = 1
+                multiple_experiments = False
+                with open(fname) as f:
+                    data_str = f.read()
+                    match = re.findall('\n\n\w', data_str)
+                    if match != []:
+                        multiple_experiments = True
+                        # and count the experiments
+                        num_experiments = len(data_str.strip().split('\n\n'))
+                        assert num_experiments > 1, "was expecting more than 1 experiment but got {}".format(num_experiments)
+                if multiple_experiments:
+                    experiment_names += [experiment_name+'_'+str(j) for j in range(num_experiments)]
+                else:
+                    experiment_names.append(experiment_name)
             return experiment_names
 
         @property
@@ -3181,11 +3271,17 @@ class ParameterEstimation(_Task):
             """
             model_obj = []
             for i in self.experiment_names:
+                match = re.findall('(.*)_\d+$', i)
+                if match != []:
+                    i = match[0]
                 for j in self.experiments[i].mappings:
                     if self.experiments[i].mappings[j] is not None:
                         model_obj.append(self.experiments[i].mappings[j].model_object)
 
             for i in self.validation_names:
+                match = re.findall('(.*)_\d+$', i)
+                if match != []:
+                    i = match[0]
                 for j in self.validations[i].mappings:
                     if self.validations[i].mappings[j] is not None:
                         model_obj.append(self.validations[i].mappings[j].model_object)
@@ -3603,7 +3699,7 @@ class ParameterEstimation(_Task):
 
         elif role == 'dependent':
             cn = '{},{}'.format(mod.reference,
-                                global_quantity.initial_reference)
+                                global_quantity.transient_reference)
         else:
             raise ValueError
 
@@ -3662,11 +3758,16 @@ class ParameterEstimation(_Task):
         return parent
 
     def _map1experiment(self, model_name, mod, experiment_names, experiments,
-                        keys_function, validation, query, weight_method_lookup_dct
-                        ):
+                        keys_function, validation, query, weight_method_lookup_dct):
+
         for experiment_name in experiment_names:
             ## if experiment_name exists, remove and reconfigure
-            experiment = experiments[experiment_name]
+            match = re.findall('(.*)_\d+$', experiment_name)
+            try:
+                experiment = experiments[experiment_name]
+            except KeyError:
+                experiment = experiments[match[0]]
+
             if not isinstance(experiment.affected_models, list):
                 experiment.affected_models = [experiment.affected_models]
 
@@ -3685,13 +3786,30 @@ class ParameterEstimation(_Task):
                 else:
                     LOG.warning(message)
                 continue
-            ## also need to remove from affected_models attrib
-            ##todo if all remove affected experiments
 
-            data = pandas.read_csv(
-                experiment.filename,
-                sep=experiment.separator
-            )
+            # detect whether multiple experiments are in one data file
+            multiple_experiments = False
+            with open(experiment.filename) as f:
+                data_str = f.read()
+                match = re.findall('\n\n\w', data_str)
+                if match != []:
+                    multiple_experiments = True
+            # read data differently depending on whether there are multiple experiments per file
+            if not multiple_experiments:
+                data, line_numbers = self._read_data(experiment.filename, experiment.separator)
+                data = data
+            else:
+                data, line_numbers = self._read_data_multiple_experiments(experiment.filename, experiment.separator)
+                # need to index the data here to match the current experiment key
+                idx = re.findall('.*_(\d+)?', experiment_name)
+                if idx == []:
+                    raise ValueError
+                idx = int(idx[0])
+                data = data[idx]
+                line_numbers = line_numbers[idx]
+
+            # This for loop is now superflous but not doing any harm. Left for now
+            # for i, experiment in enumerate(data):
             experiment_type = 'steadystate'
 
             if 'time' in [i.lower() for i in data.columns]:
@@ -3705,9 +3823,10 @@ class ParameterEstimation(_Task):
             experiment_file = {'type': 'file',
                                'name': 'File Name',
                                'value': experiment.filename}
+            key_value = keys_function()[model_name][experiment_name]
             key = {'type': 'key',
                    'name': 'Key',
-                   'value': keys_function()[model_name][experiment_name]
+                   'value': key_value
                    }
 
             # necessary XML attributes
@@ -3726,11 +3845,11 @@ class ParameterEstimation(_Task):
 
             first_row = {'type': 'unsignedInteger',
                          'name': 'First Row',
-                         'value': str(1)}
+                         'value': str(line_numbers[0])}
 
             last_row = {'type': 'unsignedInteger',
                         'name': 'Last Row',
-                        'value': str(int(num_rows) + 1)}  # add 1 to account for 0 indexed python
+                        'value': str(line_numbers[1])}  # add 1 to account for 0 indexed python
 
             normalize_weights_per_experiment = {'type': 'bool',
                                                 'name': 'Normalize Weights per Experiment',
@@ -3767,8 +3886,7 @@ class ParameterEstimation(_Task):
                 separator,
                 weight_method,
                 row_containing_names,
-                number_of_columns,
-            ]:
+                number_of_columns]:
                 for j, k in i.items():
                     if isinstance(k, bool):
                         i[j] = str(int(k))
@@ -3788,10 +3906,15 @@ class ParameterEstimation(_Task):
 
                 elif experiment.mappings[data_name].object_type == 'Metabolite':
                     metab = [i for i in mod.metabolites if
-                             i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                    data_name].model_object[
-                                                                                                :-6]]
-                    assert len(metab) == 1
+                             i.name == experiment.mappings[data_name].model_object \
+                             or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                    assert len(metab) == 1, f"len(metab) should equal 1 but instead equals {len(metab)}"
+                    indep = [i for i in mod.metabolites if \
+                             re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                    if indep != []:
+                        experiment.mappings[data_name].role = 'independent'
+
+                    # modifies map_group inplace
                     self._create_metabolite_reference(
                         mod,
                         map_group,
@@ -3802,10 +3925,17 @@ class ParameterEstimation(_Task):
 
                 elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
                     glo = [i for i in mod.global_quantities if
-                           i.name == experiment.mappings[data_name].model_object or i.name == experiment.mappings[
-                                                                                                  data_name].model_object[
-                                                                                              :-6]]
-                    assert len(metab) == 1
+                           i.name == experiment.mappings[data_name].model_object \
+                           or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                    assert len(glo) == 1
+
+                    indep = [i for i in mod.global_quantities if \
+                             re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+
+                    if indep != []:
+                        experiment.mappings[data_name].role = 'independent'
+
+
                     self._create_global_quantity_reference(
                         mod,
                         map_group,
@@ -3841,7 +3971,7 @@ class ParameterEstimation(_Task):
 
         """
         ## build a reference dct for weight method numbers
-        weight_method_string = ['mean_squared', 'stardard_deviation', 'value_scaling',
+        weight_method_string = ['mean_squared', 'standard_deviation', 'value_scaling',
                                 'mean']
         weight_method_numbers = [str(i) for i in [1, 2, 3, 4]]
         weight_method_lookup_dct = dict(list(zip(weight_method_string, weight_method_numbers)))
@@ -4104,8 +4234,8 @@ class ParameterEstimation(_Task):
                                 pattern = 'Metabolites\[(.*)\],Reference=(.*)'
                                 match2_copasiML = re.findall(pattern, j.attrib['value'])
                                 if match2_copasiML != []:
-                                    if match2_copasiML[0][1] == 'InitialConcentration' or match2_copasiML[0][
-                                        1] == 'InitialParticleNumber':
+                                    if match2_copasiML[0][1] == 'InitialConcentration' \
+                                            or match2_copasiML[0][1] == 'InitialParticleNumber':
                                         match2_item = re.findall(pattern, item['value'])
                                         if match2_item != []:
                                             if match2_item == match2_copasiML:
@@ -4131,11 +4261,9 @@ class ParameterEstimation(_Task):
         dct = OrderedDict()
 
         for model_name in self.models:
-            # model_name = self.models[model_name].model
             dct[model_name] = OrderedDict()
 
             for experiment_name in self.config.experiment_names:
-                # experiment = self.config.datasets.experiments[experiment_name]
                 key = "Experiment_{}".format(experiment_name)
                 dct[model_name][experiment_name] = key
         return dct
@@ -4243,20 +4371,6 @@ class ParameterEstimation(_Task):
                 # initialize new element
                 fit_item_element = etree.Element('ParameterGroup', attrib={'name': 'FitItem'})
 
-                '''
-                We have a problem here in that when we ignore an experiment for a model 
-                via the affected models arg, we also need to remove that experiment 
-                from any fit items which may depend on it. 
-                
-                solutions
-                ----------
-                1. If affected experiments is 'all' change it so that the Affected Experiments element 
-                   is blank, as it is when copasi configures the parameter estimation. 
-                2. Modify the below section of code such that if an experiment doesn't exist for a 
-                   model, we remove it from the affected experiments section. 
-                3. Remove experiment from experiment_keys
-                
-                '''
                 affected_experiments = {'name': 'Affected Experiments'}
                 ## read affected _experiments from config file.yaml
                 affected_experiments_attr = OrderedDict()
@@ -4281,10 +4395,25 @@ class ParameterEstimation(_Task):
                     if not ignore_affected_experiments:
                         ## iterate over list. Raise ValueError is can't find experiment name
                         ## otherwise add the corresponding experiment key to the affected _experiments attr dict
-                        for affected_experiment in item['affected_experiments']:  ## iterate over the list
+
+                        # resolves the affected_experiments from multiple experiments that
+                        # were declared in one file
+                        new_affected_experiments = []
+                        for affected_experiment in item['affected_experiments']:
+                            multi_experiments, num_experiments = self.config.multi_experiments
+                            if affected_experiment in multi_experiments:
+                                new_affected_experiments += [affected_experiment+'_'+str(i) for i in range(num_experiments)]
+                            else:
+                                new_affected_experiments.append(affected_experiment)
+
+
+                        for affected_experiment in new_affected_experiments:  ## iterate over the list
                             ## ensures that the parameter being configured `item_name`
                             ## has only experiments under its affected experiments attribute
                             ## that are actually in the model.
+
+                            # resolve affected experiments for when experiments are all in one file
+
                             if affected_experiment not in self.config.models_affected_experiments[model_name]:
                                 LOG.warning(
                                     f'ignoring {item_name} as {affected_experiment} not in '
@@ -4298,6 +4427,7 @@ class ParameterEstimation(_Task):
                                                  'affect the {} parameter'.format(
                                     affected_experiment, component.name
                                 ))
+
 
                             if affected_experiment not in self._get_experiment_keys()[model_name]:
                                 raise ValueError('"{}" (type({}))is not one of your _experiments. These are '
@@ -4849,7 +4979,6 @@ class ParameterEstimation(_Task):
                         LOG.info(f'running model {model_name}: {copy_number}')
                         Run(mod, mode=self.config.settings.run_mode, task='scan')
             else:
-                print('lhs running')
                 self.lhs_run(models)
 
 
@@ -4859,6 +4988,20 @@ class ParameterEstimation(_Task):
         else:
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
+    def duplicate_for_every_experiment(self, model, fit_items, lower_bounds, start_values, upper_bounds):
+        """
+        Replicate Copasi's duplicate for every experiment button.
+
+        Args:
+            model:
+            fit_items:
+            lower_bounds:
+            start_values:
+            upper_bounds:
+
+        Returns:
+
+        """
 
     class Context:
         """
@@ -4966,7 +5109,6 @@ class ParameterEstimation(_Task):
                 None
 
             """
-            print(parameter, value)
             if parameter in self.defaults.settings:
                 self.defaults.settings[parameter] = value
 
