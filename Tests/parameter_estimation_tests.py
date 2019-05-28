@@ -2378,6 +2378,21 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
         # ans = [(1, 2), (4, 4), (6, 6)]
         self.assertEqual((expected_start, expected_end), (actual_start, actual_end))
 
+    def test_line_numbers_accurate_in_multi_experiment_file2(self):
+        actual_end = None
+        actual_start = None
+        mod = self.pe.config.models['first'].model
+        for i in mod.xml.xpath("//*[@name='dataset2_1']"):
+            for j in list(i):
+                if j.attrib['name'] == 'First Row':
+                    actual_start = int(j.attrib['value'])
+                elif j.attrib['name'] == 'Last Row':
+                    actual_end = int(j.attrib['value'])
+        expected_start = 4
+        expected_end = 4
+        # ans = [(1, 2), (4, 4), (6, 6)]
+        self.assertEqual((expected_start, expected_end), (actual_start, actual_end))
+
 
     def test_file_data_file3(self):
         expected = (10, 12)

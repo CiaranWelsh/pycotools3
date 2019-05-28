@@ -2303,13 +2303,14 @@ class _ParameterEstimationBase(_Task):
         with open(fname, 'r') as f:
             data = f.read()
 
+        data = data.split('\n\n')
+        df1 = pandas.read_csv(StringIO(data[0]), sep=sep)
+        data = data[1:]
+        dfs = [pandas.read_csv(StringIO(i), sep=sep) for i in data]
+        for i in dfs:
+            i.columns = df1.columns
 
-        # get the data as dataframes
-        headers = data.split('\n')[0]
-        data = data.split('\n')[1:]
-        data = [i for i in data if i != '']
-        data = [headers + '\n' + i for i in data]
-        data = [pandas.read_csv(StringIO(i), sep=sep) for i in data]
+        data = [df1] + dfs
 
         # figure out what the line numbers are
         line_numbers = []
@@ -2320,7 +2321,7 @@ class _ParameterEstimationBase(_Task):
                 line_numbers.append((start, end))
             else:
                 start = end + 2
-                end = start + df.shape[0] - 1
+                end = start + df.shape[0]
                 line_numbers.append((start, end))
 
         if len(line_numbers) != len(data):
