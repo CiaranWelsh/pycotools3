@@ -423,34 +423,39 @@ class ExperimentMapperTests(_test_base._BaseTest):
 
     def setUp(self):
         super(ExperimentMapperTests, self).setUp()
+        fname1 = os.path.join(os.path.dirname(__file__), 'report1.txt')
+        fname2 = os.path.join(os.path.dirname(__file__), 'report2.txt')
 
-        self.TC1 = pycotools3.tasks.TimeCourse(self.model,
-                                               end=1000,
-                                               step_size=100,
-                                               intervals=10,
-                                               report_name='report1.txt')
-        self.TC2 = pycotools3.tasks.TimeCourse(self.model,
-                                               end=1000,
-                                               step_size=100,
-                                               intervals=10,
-                                               report_name='report2.txt')
+        data1 = self.model.simulate(0, 1000, 100)
+        data2 = self.model.simulate(0, 1000, 100)
+        data1.to_csv(fname1, sep='\t')
+        data2.to_csv(fname2, sep='\t')
 
-        pycotools3.utils.format_timecourse_data(self.TC1.report_name)
-        pycotools3.utils.format_timecourse_data(self.TC2.report_name)
 
-        df = pandas.read_csv(self.TC2.report_name, sep='\t')
+        fname3 = os.path.join(os.path.dirname(__file__), 'report3.txt')
+        df = pandas.read_csv(fname2, sep='\t')
         ## remove square brackets around species
         df = df.rename(columns={list(df.keys())[2]: list(df.keys())[2] + str('_indep')})
-        self.report3 = os.path.join(os.path.dirname(self.TC2.report_name), 'report3.txt')
-        df.to_csv(self.report3, sep='\t', index=False)
-        assert os.path.isfile(self.report3)
+        df.to_csv(fname3, sep='\t', index=False)
+        assert os.path.isfile(fname3)
 
         ## create some SS data for fitting
         ss_df = df.drop('Time', axis=1)
         ss_df = pandas.DataFrame(ss_df.iloc[0].transpose(), index=list(ss_df.keys())).transpose()
-        self.report4 = os.path.join(os.path.dirname(self.TC2.report_name), 'report4.txt')
+        fname4 = os.path.join(os.path.dirname(__file__), 'report4.txt')
+        ss_df.to_csv(fname4, sep='\t', index=False)
 
-        ss_df.to_csv(self.report4, sep='\t', index=False)
+        ## create some SS data with more than one experiment
+        fname5 = os.path.join(os.path.dirname(__file__), 'report5.txt')
+        s = 'A\tB\tC\n0.07\t0.06\t2.8\n\n0.09\t0.10\t2.9\n'
+        with open(fname5, 'w') as f:
+            f.write(s)
+
+        self.report1 = fname1
+        self.report2 = fname2
+        self.report3 = fname3
+        self.report4 = fname4
+        self.report5 = fname5
 
         self.conf_dct = dict(
             models=dict(
@@ -461,13 +466,16 @@ class ExperimentMapperTests(_test_base._BaseTest):
             datasets=dict(
                 experiments=dict(
                     report1=dict(
-                        filename=self.TC1.report_name,
+                        filename=self.report1,
                     ),
                     report2=dict(
-                        filename=self.TC2.report_name
+                        filename=self.report2
                     ),
                     ss=dict(
                         filename=self.report4
+                    ),
+                    ss_multi=dict(
+                        filename=self.report5
                     )
                 ),
                 validations=dict(
@@ -479,7 +487,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
             items=dict(
                 fit_items=dict(
                     A=dict(
-                        affected_experiments=['report1', 'ss']
+                        affected_experiments=['report1', 'ss', 'ss_multi']
                     ),
                     B=dict(
                         affected_validation_experiments=['report3']
@@ -504,8 +512,8 @@ class ExperimentMapperTests(_test_base._BaseTest):
         )
         self.conf = ParameterEstimation.Config(**self.conf_dct)
         self.PE = pycotools3.tasks.ParameterEstimation(self.conf)
-
-        # print(self.TC1.report_name)
+        # self.mod = self.PE.models['first'].model
+        # print(self.mod)
 
     def test_metabolite_entries(self):
         """
@@ -553,7 +561,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Validation Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report3':
+                if j.attrib['name'] == 'report3_0':
                     count += 1
 
         self.assertEqual(count, 1)
@@ -612,11 +620,12 @@ class ExperimentMapperTests(_test_base._BaseTest):
     def experiment_checker_function(self, expected_value, attribute):
 
         mod = self.PE.config.models.model1.model
+        mod.open()
         ans = None
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report1':
+                if j.attrib['name'] == 'report1_0':
                     for k in j:
                         if k.attrib['name'] == attribute:
                             ans = k.attrib['value']
@@ -642,8 +651,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         :return:
         """
         self.experiment_checker_function(
-            os.path.join(
-                os.path.dirname(__file__), 'report1.txt'), 'File Name')
+            os.path.join(os.path.dirname(__file__), 'report1.txt'), 'File Name')
 
     def test_experiment_number_of_columns(self):
         """
@@ -664,7 +672,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report2':
+                if j.attrib['name'] == 'report2_0':
                     for k in j:
                         if k.attrib['name'] == 'Object Map':
                             for l in k:
@@ -686,7 +694,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report1':
+                if j.attrib['name'] == 'report1_0':
                     for k in j:
                         if k.attrib['name'] == 'Object Map':
                             for l in k:
@@ -709,7 +717,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Validation Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report3':
+                if j.attrib['name'] == 'report3_0':
                     for k in j:
                         if k.attrib['name'] == 'Object Map':
                             for l in k:
@@ -731,7 +739,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'ss':
+                if j.attrib['name'] == 'ss_0':
                     for k in j:
                         if k.attrib['name'] == 'Experiment Type':
                             ## code for steady state is '0'
@@ -750,7 +758,7 @@ class ExperimentMapperTests(_test_base._BaseTest):
         query = '//*[@name="Experiment Set"]'
         for i in mod.xml.xpath(query):
             for j in i:
-                if j.attrib['name'] == 'report1':
+                if j.attrib['name'] == 'report1_0':
                     for k in j:
                         if k.attrib['name'] == 'Experiment Type':
                             ## code for steady state is '0'
@@ -843,6 +851,64 @@ class ExperimentMapperTests(_test_base._BaseTest):
                     if j.tag == 'Method':
                         ans = j.attrib['name']
         self.assertEqual('Genetic Algorithm SR', ans)
+
+    def test_independent_variables_get_mapped(self):
+        mod = self.PE.models['model1'].model
+        query = '//*[@name="ss_0"]'
+        actual = None
+        expected = r'CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=InitialConcentration'
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'Object Map':
+                    for k in j:
+                        if k.attrib['name'] == '1':
+                            for l in k:
+                                if l.attrib['name'] == 'Object CN':
+                                    actual = l.attrib['value']
+        self.assertEqual(expected, actual)
+
+    def test_affected_experiments_key(self):
+        """
+        Since changing the configuration to support experimental data files containing more than
+        one experiment there has been a bug in the mapping of initial concentation of A. After digging,
+        it turns out that the initial concentration of A makes use of the affected experiments feature which
+        is causing the bug because of inconsisent experiment keys.
+        Returns:
+
+        """
+        #  Could not find experiment for fit item 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],
+        #  Vector=Metabolites[A],Reference=InitialConcentration'.
+        mod = self.PE.models['model1'].model
+        query = '//*[@name="Affected Experiments"]'
+        actual = None
+        expected = 'Experiment_report1'
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.attrib['value'] == 'Experiment_report1':
+                    actual = 'Experiment_report1'
+        self.assertEqual(expected, actual)
+
+    def test_affected_experiments_key2(self):
+        """
+        Since changing the configuration to support experimental data files containing more than
+        one experiment there has been a bug in the mapping of initial concentation of A. After digging,
+        it turns out that the initial concentration of A makes use of the affected experiments feature which
+        is causing the bug because of inconsisent experiment keys.
+        Returns:
+
+        """
+        #  Could not find experiment for fit item 'CN=Root,Model=TestModel1,Vector=Compartments[nuc],
+        #  Vector=Metabolites[A],Reference=InitialConcentration'.
+        mod = self.PE.models['model1'].model
+        # mod.open()
+        # query = '//*[@name="Affected Experiments"]'
+        # actual = None
+        # expected = 'Experiment_report1'
+        # for i in mod.xml.xpath(query):
+        #     for j in i:
+        #         if j.attrib['value'] == 'Experiment_report1':
+        #             actual = 'Experiment_report1'
+        # self.assertEqual(expected, actual)
 
 
 class ParameterEstimationTests(_test_base._BaseTest):
@@ -986,7 +1052,6 @@ class ParameterEstimationTests(_test_base._BaseTest):
 
     def test_global_quantities(self):
         glo = ['A2B', 'ADeg_k1', 'B2C', 'B2C_0_k2', 'C2A_k1', 'ThisIsAssignment']
-        self.PE.models['model1'].model.open()
         self.assertListEqual(sorted(glo), sorted(self.PE.global_quantities))
 
     def test_local_parameter(self):
@@ -2294,9 +2359,7 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
                      "2,7,12,17\n"
 
         fname1 = os.path.join(os.path.dirname(__file__), 'first.cps')
-
-        with pycotools3.model.BuildAntimony(fname1) as loader:
-            self.mod1 = loader.load(ant1)
+        self.mod1 = pycotools3.model.loada(ant1, fname1)
 
         self.fname1 = os.path.join(os.path.dirname(__file__), 'dataset1.txt')
         self.fname2 = os.path.join(os.path.dirname(__file__), 'dataset2.txt')

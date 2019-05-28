@@ -70,14 +70,12 @@ class _BaseTest(unittest.TestCase):
                           A2B_0 is "A2B";
                           B2C_0 is "B2C";
                         end"""
-
-        with pycotools3.model.BuildAntimony(self.copasi_file) as loader:
-            self.model = loader.load(self.ant)
+        self.model = pycotools3.model.loada(self.ant, self.copasi_file)
 
     @classmethod
     def tearDownClass(cls):
-        tear_down = True
-        delete_dirs = True
+        tear_down = False
+        delete_dirs = False
 
         if tear_down:
             dire = os.path.dirname(__file__)

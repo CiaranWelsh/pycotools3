@@ -254,7 +254,6 @@ class _Task(object):
             if key not in allowed:
                 raise errors.InputError('{} not in {}'.format(key, allowed))
 
-
 class Bool2Str(object):
     """copasiML expects strings and we pythoners
     want to use python booleans not strings
@@ -2279,9 +2278,59 @@ class Scan(_Task):
         R = Run(self.model, task='scan', mode=self.run)
 
 
+class _ParameterEstimationBase(_Task):
+    """
+    These are methods that are needed in more than one of the Parameter estimation classes
+    """
+    @staticmethod
+    def _read_data(fname, sep):
+        """
+        Reads data into pandas dataframe. This function is only for the situation
+        where a datafile contains a single experiment. See :py:meth:`_read_data_multiple_experiments`
+        for function that supports multiple experiments per file.
+        Args:
+            experiment:
+
+        Returns:
+
+        """
+        data = pandas.read_csv(fname, sep)
+        # return line numbers as nested list to make consistent with _read_data_multiple_experiments
+        return data, [[1, data.shape[0] + 1]]
+
+    @staticmethod
+    def _read_data_multiple_experiments(fname, sep):
+        with open(fname, 'r') as f:
+            data = f.read()
+
+
+        # get the data as dataframes
+        headers = data.split('\n')[0]
+        data = data.split('\n')[1:]
+        data = [i for i in data if i != '']
+        data = [headers + '\n' + i for i in data]
+        data = [pandas.read_csv(StringIO(i), sep=sep) for i in data]
+
+        # and figure out what the line numbers are
+        line_numbers = []
+        for i, df in enumerate(data):
+            if i == 0:
+                start = 1
+                end = df.shape[0]
+                line_numbers.append((start, end))
+            else:
+                start = end + 2
+                end = start + df.shape[0] - 1
+                line_numbers.append((start, end))
+
+        if len(line_numbers) != len(data):
+            raise ValueError('Huston, we have a problem')
+        return data, line_numbers
+
+
 @mixin(model.GetModelComponentFromStringMixin)
 @mixin(model.ReadModelMixin)
-class ParameterEstimation(_Task):
+class ParameterEstimation(_ParameterEstimationBase):
     """
     Interface to COPASI's parameter estimation task
 
@@ -2356,7 +2405,6 @@ class ParameterEstimation(_Task):
                 if i.lower() == 'time':
                     roles[i] = 'time'
                 elif i[:-6] == '_indep':
-                    print('im an independent')
                     roles[i] = 'independent'
                 else:
                     roles[i] = 'dependent'
@@ -2463,7 +2511,7 @@ class ParameterEstimation(_Task):
             }
 
     @staticmethod
-    class Config(_Task, Munch):
+    class Config(_ParameterEstimationBase, Munch):
         """
         A class for holding a parameter estimation configuration
 
@@ -2799,7 +2847,12 @@ class ParameterEstimation(_Task):
             Returns:
                 None, the method operates on class attributes inplace
             """
+            print(self.datasets.experiments)
             for experiment_name in self.experiment_names:
+                # determine whether the experiment_name has been appended with a number for multi experiments per file (i.e. exp1_0)
+                match = re.findall('(.*)_\d+$', experiment_name)
+                if match != []:
+                    experiment_name = match[0]
                 for default_kwarg in self.defaults.experiments:
                     if default_kwarg not in self.datasets.experiments[experiment_name]:
                         self.datasets.experiments[experiment_name][default_kwarg] = self.defaults.experiments[
@@ -3079,6 +3132,27 @@ class ParameterEstimation(_Task):
             return self.datasets.experiments
 
         @property
+        def multi_experiments(self):
+            """
+            List of experiment names that have more than one experiment separated by blank line
+            Returns (tuple): (list, int)
+            """
+            for experiment_name in self.experiments:
+                fname = self.experiments[experiment_name].filename
+
+                # detect whether multiple experiments are in one data file
+                multiple_experiments = []
+                with open(fname) as f:
+                    data_str = f.read()
+                    match = re.findall('\n\n\w', data_str)
+                    if match != []:
+                        assert len(match) == 1
+                        multiple_experiments.append(experiment_name)
+                        # and count the experiments
+            num_experiments = len(data_str.strip().split('\n\n'))
+            return multiple_experiments, num_experiments
+
+        @property
         def validations(self):
             """
             The validations property
@@ -3120,8 +3194,24 @@ class ParameterEstimation(_Task):
 
             """
             experiment_names = []
-            for i in self.experiments:
-                experiment_names.append(i)
+            for experiment_name in self.experiments:
+                fname = self.experiments[experiment_name].filename
+
+                # detect whether multiple experiments are in one data file
+                num_experiments = 1
+                multiple_experiments = False
+                with open(fname) as f:
+                    data_str = f.read()
+                    match = re.findall('\n\n\w', data_str)
+                    if match != []:
+                        multiple_experiments = True
+                        # and count the experiments
+                        num_experiments = len(data_str.strip().split('\n\n'))
+                        assert num_experiments > 1, "was expecting more than 1 experiment but got {}".format(num_experiments)
+                if multiple_experiments:
+                    experiment_names += [experiment_name+'_'+str(j) for j in range(num_experiments)]
+                else:
+                    experiment_names.append(experiment_name)
 
             return experiment_names
 
@@ -3182,11 +3272,17 @@ class ParameterEstimation(_Task):
             """
             model_obj = []
             for i in self.experiment_names:
+                match = re.findall('(.*)_\d+$', i)
+                if match != []:
+                    i = match[0]
                 for j in self.experiments[i].mappings:
                     if self.experiments[i].mappings[j] is not None:
                         model_obj.append(self.experiments[i].mappings[j].model_object)
 
             for i in self.validation_names:
+                match = re.findall('(.*)_\d+$', i)
+                if match != []:
+                    i = match[0]
                 for j in self.validations[i].mappings:
                     if self.validations[i].mappings[j] is not None:
                         model_obj.append(self.validations[i].mappings[j].model_object)
@@ -3662,61 +3758,17 @@ class ParameterEstimation(_Task):
 
         return parent
 
-    def _read_data(self, experiment):
-        """
-        Reads data into pandas dataframe. This function is only for the situation
-        where a datafile contains a single experiment. See :py:meth:`_read_data_multiple_experiments`
-        for function that supports multiple experiments per file.
-        Args:
-            experiment:
-
-        Returns:
-
-        """
-        data = pandas.read_csv(
-            experiment.filename,
-            sep=experiment.separator
-        )
-        # return line numbers as nested list to make consistent with _read_data_multiple_experiments
-        return data, [[1, data.shape[0] + 1]]
-
-    def _read_data_multiple_experiments(self, experiment):
-        with open(experiment.filename, 'r') as f:
-            data = f.read()
-
-        # get the data as dataframes
-        headers = data.split('\n')[0]
-        data = data.split('\n\n')
-        data = [i for i in data if i != '']
-        data = [headers + '\n' + i for i in data]
-        data = [pandas.read_csv(StringIO(i), sep=experiment.separator) for i in data]
-
-        # and figure out what the line numbers are
-        line_numbers = []
-        for i, df in enumerate(data):
-            if i == 0:
-                start = 1
-                end = df.shape[0]
-                line_numbers.append((start, end))
-            else:
-                start = end + 2
-                end = start + df.shape[0] - 1
-                line_numbers.append((start, end))
-
-        if len(line_numbers) != len(data):
-            raise ValueError('Huston, we have a problem')
-
-        return data, line_numbers
-
     def _map1experiment(self, model_name, mod, experiment_names, experiments,
                         keys_function, validation, query, weight_method_lookup_dct):
 
-        # todo consider making this function recursive for situation when multiple experiments
-        # are in one data file
-
         for experiment_name in experiment_names:
             ## if experiment_name exists, remove and reconfigure
-            experiment = experiments[experiment_name]
+            match = re.findall('(.*)_\d+$', experiment_name)
+            try:
+                experiment = experiments[experiment_name]
+            except KeyError:
+                experiment = experiments[match[0]]
+
             if not isinstance(experiment.affected_models, list):
                 experiment.affected_models = [experiment.affected_models]
 
@@ -3746,12 +3798,13 @@ class ParameterEstimation(_Task):
 
             # read data differently depending on whether there are multiple experiments per file
             if not multiple_experiments:
-                data, line_numbers = self._read_data(experiment)
+                data, line_numbers = self._read_data(experiment.filename, experiment.separator)
                 data = [data]
             else:
-                data, line_numbers = self._read_data_multiple_experiments(experiment)
+                data, line_numbers = self._read_data_multiple_experiments(experiment.filename, experiment.separator)
 
             for i, sub_experiment in enumerate(data):
+                print('\ndata is', sub_experiment, '\n')
                 experiment_type = 'steadystate'
                 if 'time' in [i.lower() for i in sub_experiment.columns]:
                     experiment_type = 'timecourse'
@@ -3764,15 +3817,18 @@ class ParameterEstimation(_Task):
                 experiment_file = {'type': 'file',
                                    'name': 'File Name',
                                    'value': experiment.filename}
+                print('keys fuinction', keys_function()[model_name])
+                key_value = keys_function()[model_name][experiment_name]
+                print('kv', key_value)
                 key = {'type': 'key',
                        'name': 'Key',
-                       'value': keys_function()[model_name][experiment_name] + '_' + str(i)
+                       'value': key_value#+ '_' + str(i) if multiple_experiments else key_value
                        }
 
                 # necessary XML attributes
                 experiment_group = etree.Element('ParameterGroup',
                                                  attrib={
-                                                     'name': experiment_name + '_' + str(i)
+                                                     'name': experiment_name #+ '_' + str(i) if multiple_experiments else experiment_name
                                                  })
 
                 row_orientation = {'type': 'bool',
@@ -3847,8 +3903,14 @@ class ParameterEstimation(_Task):
                     elif experiment.mappings[data_name].object_type == 'Metabolite':
                         metab = [i for i in mod.metabolites if
                                  i.name == experiment.mappings[data_name].model_object \
-                                 or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != []]
+                                 or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
                         assert len(metab) == 1, f"len(metab) should equal 1 but instead equals {len(metab)}"
+                        indep = [i for i in mod.metabolites if \
+                                 re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                        if indep != []:
+                            experiment.mappings[data_name].role = 'independent'
+
+                        # modifies map_group inplace
                         self._create_metabolite_reference(
                             mod,
                             map_group,
@@ -3860,8 +3922,16 @@ class ParameterEstimation(_Task):
                     elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
                         glo = [i for i in mod.global_quantities if
                                i.name == experiment.mappings[data_name].model_object \
-                               or re.findall(i.name+'_indep', experiment.mappings[data_name].model_object) != []]
+                               or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
                         assert len(glo) == 1
+
+                        indep = [i for i in mod.global_quantities if \
+                                 re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+
+                        if indep != []:
+                            experiment.mappings[data_name].role = 'independent'
+
+
                         self._create_global_quantity_reference(
                             mod,
                             map_group,
@@ -4321,10 +4391,25 @@ class ParameterEstimation(_Task):
                     if not ignore_affected_experiments:
                         ## iterate over list. Raise ValueError is can't find experiment name
                         ## otherwise add the corresponding experiment key to the affected _experiments attr dict
-                        for affected_experiment in item['affected_experiments']:  ## iterate over the list
+
+                        # resolves the affected_experiments from multiple experiments that
+                        # were declared in one file
+                        new_affected_experiments = []
+                        for affected_experiment in item['affected_experiments']:
+                            multi_experiments, num_experiments = self.config.multi_experiments
+                            if affected_experiment in multi_experiments:
+                                new_affected_experiments += [affected_experiment+'_'+str(i) for i in range(num_experiments)]
+                            else:
+                                new_affected_experiments.append(affected_experiment)
+
+
+                        for affected_experiment in new_affected_experiments:  ## iterate over the list
                             ## ensures that the parameter being configured `item_name`
                             ## has only experiments under its affected experiments attribute
                             ## that are actually in the model.
+
+                            # resolve affected experiments for when experiments are all in one file
+
                             if affected_experiment not in self.config.models_affected_experiments[model_name]:
                                 LOG.warning(
                                     f'ignoring {item_name} as {affected_experiment} not in '
@@ -4338,6 +4423,7 @@ class ParameterEstimation(_Task):
                                                  'affect the {} parameter'.format(
                                     affected_experiment, component.name
                                 ))
+
 
                             if affected_experiment not in self._get_experiment_keys()[model_name]:
                                 raise ValueError('"{}" (type({}))is not one of your _experiments. These are '
