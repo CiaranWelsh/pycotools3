@@ -53,6 +53,7 @@ import itertools
 
 LOG = logging.getLogger(__name__)
 
+
 sns.set_context(context='poster',
                 font_scale=3)
 
@@ -4992,8 +4993,7 @@ class ParameterEstimation(_ParameterEstimationBase):
         else:
             for model_name in models:
                 for copy_number, mod in list(models[model_name].items()):
-                    print('is doing a run')
-                    LOG.info(f'running model {model_name}: {copy_number}')
+                    print(f'running model {model_name}: {copy_number}')
                     Run(mod, mode=self.config.settings.run_mode, task='scan')
 
 

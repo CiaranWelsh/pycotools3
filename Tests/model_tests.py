@@ -26,17 +26,19 @@ Module that tests the operations of the _Base base test
 import os, glob
 # import site
 # site.addsitedir(os.path.dirname(os.path.dirname(__file__)))
-import _test_base
 import pycotools3
 
 import pandas
 import unittest
 from lxml import etree
+
+from ._test_base import _BaseTest
+# import _test_base
 from collections import OrderedDict
 ##todo build tests for inserting parameters from parameter estimation file. It may be best to not
 
 
-class ModelLevelAttributeTests(_test_base._BaseTest):
+class ModelLevelAttributeTests(_BaseTest):
     """
     Test things like volume and mole units
     """
@@ -143,7 +145,7 @@ class ModelLevelAttributeTests(_test_base._BaseTest):
         self.assertTrue(isinstance(m, pycotools3.model.Model))
 
 
-class ModelComponentAttributeTests(_test_base._BaseTest):
+class ModelComponentAttributeTests(_BaseTest):
     """
     Test aspects of model components, such as metbaolite or
     global quantity
@@ -304,7 +306,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         self.assertIsInstance(model_obj, pycotools3.model.GlobalQuantity)
 
 
-class SetTests(_test_base._BaseTest):
+class SetTests(_BaseTest):
     """
     Test setting of existing model variables
     """
@@ -484,7 +486,7 @@ class SetTests(_test_base._BaseTest):
     #     self.assertEqual(changed.name, 'changed_name')
 
 
-class GetTests(_test_base._BaseTest):
+class GetTests(_BaseTest):
     """
     Test getting of existing model variables
     """
@@ -543,7 +545,7 @@ class GetTests(_test_base._BaseTest):
         self.assertListEqual(names, [i.name for i in r.parameters])
 
 
-class RemoveTests(_test_base._BaseTest):
+class RemoveTests(_BaseTest):
     """
     Test removal of  model variables
     """
@@ -657,7 +659,7 @@ class RemoveTests(_test_base._BaseTest):
         self.assertTrue(boolean)
 
 
-class AddTests(_test_base._BaseTest):
+class AddTests(_BaseTest):
     """
     Test adding of  model variables
     """
@@ -990,7 +992,7 @@ class AddTests(_test_base._BaseTest):
         self.assertEqual(self.model.get('global_quantity', 'X', by='name').name, 'X')
 
 
-class TranslatorTests(_test_base._BaseTest):
+class TranslatorTests(_BaseTest):
     """
     Test the Translator class
     """
@@ -1048,7 +1050,7 @@ class TranslatorTests(_test_base._BaseTest):
         self.assertEqual(str(metab.concentration), str(float(1)))
 
 
-class InsertParameterTests(_test_base._BaseTest):
+class InsertParameterTests(_BaseTest):
     """
     Test the Translator class
     """
@@ -1251,7 +1253,7 @@ class InsertParameterTestsWithAssignments(unittest.TestCase):
         # self.assertEqual(self.mod.get('global_quantity', 'k1').initial_value, str(60.0))
 
 
-class RunningTimeCourseFroModelTests(_test_base._BaseTest):
+class RunningTimeCourseFroModelTests(_BaseTest):
     def setUp(self):
         super(RunningTimeCourseFroModelTests, self).setUp()
         self.model = pycotools3.model.Model(self.copasi_file)
