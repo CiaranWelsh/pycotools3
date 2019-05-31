@@ -616,9 +616,8 @@ class Run(_Task):
         """
         self.sge_job_filename = self.sge_job_filename.replace('/', '_')
         with open(self.sge_job_filename, 'w') as f:
-            f.write('#!/bin/bash\n#$ \nmodule add {}\nCopasiSE "{}"'.format(
-                self.copasi_location, self.model.copasi_file
-            )
+            f.write('#!/bin/bash\n#$ \nCopasiSE "{}"'.format(
+                self.model.copasi_file)
             )
 
         ## -N option for job namexx
@@ -4985,13 +4984,11 @@ class ParameterEstimation(_ParameterEstimationBase):
             else:
                 raise NotImplementedError('Parallel implelentation of lhs is not yet implemented. Use run_mode=True')
 
-        if self.config.settings.context != 'lhs':
+        else:
             for model_name in models:
                 for copy_number, mod in list(models[model_name].items()):
                     LOG.info(f'running model {model_name}: {copy_number}')
                     Run(mod, mode=self.config.settings.run_mode, task='scan')
-        else:
-            self.lhs_run(models)
 
 
     def duplicate_for_every_experiment(self, model, fit_items, lower_bounds, start_values, upper_bounds):
