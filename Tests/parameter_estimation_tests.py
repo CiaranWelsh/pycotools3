@@ -1480,6 +1480,34 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
         expected = [',', ',', ',', ',']
         self.assertListEqual(expected, actual)
 
+    def test_context_set_lower_bound(self):
+        with ParameterEstimation.Context(
+                self.model.copasi_file,
+                [self.TC1.report_name, self.TC2.report_name,
+                 self.report3, self.report4],
+                context='s', parameters='a') as context:
+            context.set('method', 'genetic_algorithm_sr')
+            context.set('number_of_generations', 254)
+            context.set('population_size', 143)
+            context.set('prefix', 'B')
+            context.set('separator', ',')
+            context.set('start_value', 5)
+            context.set('lower_bound', 0.1)
+            context.set('upper_bound', 10)
+            # start value lower bound and upper bounds are not being copied over to config.items.fititems
+            config = context.get_config()
+        pe = ParameterEstimation(config)
+
+        mod = pe.models.test_model.model
+        l = []
+        query = '//*[@name="FitItem"]'
+        for i in mod.xml.xpath(query):
+            for j in i:
+                if j.attrib['name'] == 'LowerBound':
+                    l.append(j.attrib['value'])
+        self.assertListEqual([0.1, 0.1, 0.1], [float(i) for i in l])
+
+
     def test_context_mappings_after_use_of_set(self):
         fname = os.path.join(os.path.dirname(__file__), 'timeseries.txt')
         data = self.model.simulate(0, 10, 11)

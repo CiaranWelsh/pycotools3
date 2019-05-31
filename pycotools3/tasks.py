@@ -2992,11 +2992,16 @@ class ParameterEstimation(_ParameterEstimationBase):
                     item = estimated_variables[model_name][fit_item]
                     if item == {}:
                         item = self.defaults.fit_items
-
                     else:
                         for i in self.defaults.fit_items:
                             if i not in item:
                                 item[i] = self.defaults.fit_items[i]
+
+                    # makes sure we respect the start_value, lower_bound and upper_bound values specified by
+                    # context.set method
+                    item['lower_bound'] = self.settings['lower_bound']
+                    item['upper_bound'] = self.settings['upper_bound']
+                    item['start_value'] = self.settings['start_value']
 
                     if item['affected_experiments'] == 'all':
                         if isinstance(self.experiment_names, str):
@@ -3011,9 +3016,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                             item['affected_validation_experiments'] = self.validation_names
 
                     if item['affected_models'] == 'all':
-                        item['affected_models'] = [
-                            i for i in self.models if fit_item in self.models[model_name].model
-                        ]
+                        item['affected_models'] = [i for i in self.models if fit_item in self.models[model_name].model]
                     dct[fit_item] = item
 
             self.items.fit_items = Munch.fromDict(dct)
@@ -4309,8 +4312,10 @@ class ParameterEstimation(_ParameterEstimationBase):
             else:
                 items = self.config.items.fit_items
 
+
             for item_name in items:
                 item = items[item_name]
+
                 if not isinstance(item.affected_models, list):
                     item.affected_models = [item.affected_models]
 
@@ -4752,7 +4757,7 @@ class ParameterEstimation(_ParameterEstimationBase):
             for i in mod.xml.xpath(query):
                 i.attrib.update(scheluled_attrib)
                 for j in list(i):
-                    if self.config.settings.report_name != None:
+                    if self.config.settings.report_name is not None:
                         if 'append' in list(j.attrib.keys()):
                             j.attrib.update(report_attrib)
                     if list(j) != []:
@@ -4982,11 +4987,12 @@ class ParameterEstimation(_ParameterEstimationBase):
                         max_active=self.config.settings.max_active,
                         task='scan')
             else:
-                raise NotImplementedError('Parallel implelentation of lhs is not yet implemented. Use run_mode=True')
+                raise NotImplementedError('Parallel implemented of lhs is not yet implemented. Use run_mode=True')
 
         else:
             for model_name in models:
                 for copy_number, mod in list(models[model_name].items()):
+                    print('is doing a run')
                     LOG.info(f'running model {model_name}: {copy_number}')
                     Run(mod, mode=self.config.settings.run_mode, task='scan')
 
@@ -5087,6 +5093,7 @@ class ParameterEstimation(_ParameterEstimationBase):
 
             self.defaults = ParameterEstimation._Defaults()
 
+
         def __enter__(self):
             return self
 
@@ -5101,7 +5108,6 @@ class ParameterEstimation(_ParameterEstimationBase):
             Set the value of :code:`parameter` to :code:`value`.
 
             Looks for the first instance of :code:`parameter` and sets its value to :code:`value`.
-            To set all values of a parameter, see :py:meth:`ParameterEstimation.Config.set_all`
 
 
             Args:
@@ -5165,6 +5171,7 @@ class ParameterEstimation(_ParameterEstimationBase):
         def get_config_simple(self):
             ## update the config
             self._add_models(self.models)
+
             self._add_settings(self.settings)
             self._add_experiments(self.experiments)
             self._add_validation_experiments(self.validation_experiments)
@@ -5507,6 +5514,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                 setattr(self, 'settings', {})
             self.settings[setting] = value
 
+
         def _add_settings(self, settings):
             """
 
@@ -5518,6 +5526,7 @@ class ParameterEstimation(_ParameterEstimationBase):
             """
             if not isinstance(settings, dict):
                 raise TypeError(f'add_settings expects a dict as argument. Got "{type(settings)}"')
+
             self.settings.update(settings)
 
 
