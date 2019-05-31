@@ -4995,7 +4995,7 @@ class ParameterEstimation(_ParameterEstimationBase):
         elif not self.config.settings.run_mode:
             pass
 
-        else:
+        if self.config.settings.run_mode not in ['sge', 'slurm', 'parallel', True, False]:
             raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
     def duplicate_for_every_experiment(self, model, fit_items, lower_bounds, start_values, upper_bounds):
