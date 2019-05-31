@@ -4958,8 +4958,18 @@ class ParameterEstimation(_ParameterEstimationBase):
                 check_call('qhost')
             except errors.NotImplementedError:
                 LOG.warning(
-                    'Attempting to run in SGE mode but SGE specific commands are unavailable. Switching to \'parallel\' mode')
-                self.config.settings.run_mode = 'parallel'
+                    'Attempting to run in "sge" mode but SGE specific commands are unavailable. '
+                    'Switching to False mode -- parameter estimations have been configured but not run.')
+                self.config.settings.run_mode = True
+
+        elif self.config.settings.run_mode == 'slurm':
+            try:
+                check_call('squeue')
+            except errors.NotImplementedError:
+                LOG.warning(
+                    'Attempting to run in "slurm" mode but slurm specific commands are unavailable. '
+                    'Switching to False mode -- parameter estimations have been configured but not run.')
+                self.config.settings.run_mode = False
 
         if self.config.settings.run_mode == 'parallel':
             if self.config.settings.context != 'lhs':
