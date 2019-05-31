@@ -436,9 +436,11 @@ class Run(_Task):
 
         >>> Run(model, task='parameter_estimation', mode=True)
 
-        >>> Run(model, task='parameter_estimation', mode='multiprocess')
+        >>> Run(model, task='parameter_estimation', mode='parallel')
 
         >>> Run(model, task='scan', mode='sge')
+
+        >>> Run(model, task='scan', mode='slurm')
     """
 
     def __init__(self, model, **kwargs):
@@ -467,8 +469,6 @@ class Run(_Task):
         if self.sge_job_filename is None:
             self.sge_job_filename = os.path.join(os.getcwd(), 'sge_job_file.sh')
 
-        # if self.mode is 'slurm':
-        #     self.copasi_location = r'COPASI/4.22.170'
 
         self.model = self.set_task()
         self.model.save()
@@ -4952,6 +4952,8 @@ class ParameterEstimation(_ParameterEstimationBase):
           param models: dict of models. Output from _setup()
 
         """
+        if self.config.settings.run_mode not in ['sge', 'slurm', 'parallel', True, False]:
+            raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
         if self.config.settings.run_mode == 'sge':
             try:
@@ -4961,6 +4963,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                     'Attempting to run in "sge" mode but SGE specific commands are unavailable. '
                     'Switching to False mode -- parameter estimations have been configured but not run.')
                 self.config.settings.run_mode = True
+
 
         if self.config.settings.run_mode == 'slurm':
             try:
@@ -4982,21 +4985,14 @@ class ParameterEstimation(_ParameterEstimationBase):
             else:
                 raise NotImplementedError('Parallel implelentation of lhs is not yet implemented. Use run_mode=True')
 
-        elif self.config.settings.run_mode is True:
-            if self.config.settings.context != 'lhs':
-                for model_name in models:
-                    for copy_number, mod in list(models[model_name].items()):
-                        LOG.info(f'running model {model_name}: {copy_number}')
-                        Run(mod, mode=self.config.settings.run_mode, task='scan')
-            else:
-                self.lhs_run(models)
+        if self.config.settings.context != 'lhs':
+            for model_name in models:
+                for copy_number, mod in list(models[model_name].items()):
+                    LOG.info(f'running model {model_name}: {copy_number}')
+                    Run(mod, mode=self.config.settings.run_mode, task='scan')
+        else:
+            self.lhs_run(models)
 
-
-        elif not self.config.settings.run_mode:
-            pass
-
-        if self.config.settings.run_mode not in ['sge', 'slurm', 'parallel', True, False]:
-            raise ValueError('"{}" is not a valid argument'.format(self.config.settings.run_mode))
 
     def duplicate_for_every_experiment(self, model, fit_items, lower_bounds, start_values, upper_bounds):
         """
