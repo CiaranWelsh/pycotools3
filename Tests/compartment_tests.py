@@ -22,7 +22,7 @@
 
 """
 
-from pycotools3.model import Compartment
+from pycotools3.model import _Compartment
 from Tests import _test_base
 import unittest
 
@@ -30,8 +30,8 @@ import unittest
 class TestCompartments(_test_base._BaseTest):
     def setUp(self):
         super(TestCompartments, self).setUp()
-        self.comp = Compartment(self.model, name='Nucleus', initial_value=5,
-                                simulation_type='fixed', key='compartment_1')
+        self.comp = _Compartment(self.model, name='Nucleus', initial_value=5,
+                                 simulation_type='fixed', key='compartment_1')
 
     def test_checks(self):
         """

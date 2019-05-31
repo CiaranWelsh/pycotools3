@@ -3446,7 +3446,7 @@ class ParameterEstimation(_ParameterEstimationBase):
             list of strings of metabolites in the model
 
         """
-        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.Metabolite)]
+        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model._Metabolite)]
 
     @property
     def local_parameters(self):
@@ -3456,7 +3456,7 @@ class ParameterEstimation(_ParameterEstimationBase):
             list of strings of local parameters in the model
 
         """
-        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.LocalParameter)]
+        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model._LocalParameter)]
 
     @property
     def global_quantities(self):
@@ -3466,7 +3466,7 @@ class ParameterEstimation(_ParameterEstimationBase):
             list of strings of global quantities present in the models
 
         """
-        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model.GlobalQuantity)]
+        return [i.name for i in self.get_model_objects_from_strings() if isinstance(i, model._GlobalQuantity)]
 
     @property
     def _report_arguments(self):
@@ -3619,7 +3619,7 @@ class ParameterEstimation(_ParameterEstimationBase):
         Returns:
             etree.Element containing COAPSI reference to metabolite
         """
-        if not isinstance(metabolite, model.Metabolite):
+        if not isinstance(metabolite, model._Metabolite):
             raise ValueError('Input should be "model.Metabolite" class. Got "{}"'.format(type(metabolite)))
 
         if role == 'independent':
@@ -3649,7 +3649,7 @@ class ParameterEstimation(_ParameterEstimationBase):
         Returns:
 
         """
-        if not isinstance(local_parameter, model.LocalParameter):
+        if not isinstance(local_parameter, model._LocalParameter):
             raise ValueError('Input should be "model.LocalParameter" class. Got "{}"'.format(type(local_parameter)))
 
         if role == 'independent':
@@ -3690,7 +3690,7 @@ class ParameterEstimation(_ParameterEstimationBase):
         Returns:
             etree.Element containing COAPSI reference to metabolite
         """
-        if not isinstance(global_quantity, model.GlobalQuantity):
+        if not isinstance(global_quantity, model._GlobalQuantity):
             raise ValueError('Input should be "model.GlobalQuantity" class. Got "{}"'.format(type(global_quantity)))
 
         if role == 'independent':
@@ -4521,7 +4521,7 @@ class ParameterEstimation(_ParameterEstimationBase):
 
                 ## Now begin creating the object map.
                 # for IC parameters
-                if isinstance(component, model.Metabolite):
+                if isinstance(component, model._Metabolite):
                     if self.config.settings.quantity_type == 'concentration':
                         subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(mod.reference,
                                                                                               component.compartment.reference,
@@ -4533,17 +4533,17 @@ class ParameterEstimation(_ParameterEstimationBase):
                             component.initial_particle_reference
                         )}
 
-                elif isinstance(component, model.LocalParameter):
+                elif isinstance(component, model._LocalParameter):
                     subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{},{}'.format(
                         mod.reference,
                         mod.get('reaction', component.reaction_name, by='name').reference,
                         component.value_reference)}
 
-                elif isinstance(component, model.GlobalQuantity):
+                elif isinstance(component, model._GlobalQuantity):
                     subA4 = {'type': 'cn', 'name': 'ObjectCN', 'value': '{},{}'.format(mod.reference,
                                                                                        component.initial_reference)}
 
-                elif isinstance(component, model.Compartment):
+                elif isinstance(component, model._Compartment):
                     subA4 = {'type': 'cn',
                              'name': 'ObjectCN',
                              'value': '{},{}'.format(mod.reference,
@@ -4829,16 +4829,16 @@ class ParameterEstimation(_ParameterEstimationBase):
         if self.config.settings.context == 'pl':
             scan_variable = os.path.split(mod.copasi_file)[1][:-4]
             scan_obj = mod.get_model_object(scan_variable)
-            if isinstance(scan_obj, model.Metabolite):
+            if isinstance(scan_obj, model._Metabolite):
                 if self.config.settings.quantity_type == 'concentration':
                     scan_obj_init_value = scan_obj.concentration
                 else:
                     scan_obj_init_value = scan_obj.particle_numbers
-            elif isinstance(scan_obj, model.GlobalQuantity):
+            elif isinstance(scan_obj, model._GlobalQuantity):
                 scan_obj_init_value = scan_obj.initial_value
-            elif isinstance(scan_obj, model.Compartment):
+            elif isinstance(scan_obj, model._Compartment):
                 scan_obj_init_value = scan_obj.initial_value
-            elif isinstance(scan_obj, model.LocalParameter):
+            elif isinstance(scan_obj, model._LocalParameter):
                 scan_obj_init_value = scan_obj.value
             q.put(Scan(
                 mod,

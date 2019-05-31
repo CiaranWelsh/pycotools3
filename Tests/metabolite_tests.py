@@ -31,13 +31,13 @@ import unittest
 class TestMetabolites(_test_base._BaseTest):
     def setUp(self):
         super(TestMetabolites, self).setUp()
-        self.nucleus = pycotools3.model.Compartment(self.model,
-                                                    name='Nuc', initial_value=5,
-                                                    simulation_type='fixed', key='compartment_1')
-        self.A = pycotools3.model.Metabolite(self.model,
-                                             name='A',
-                                             compartment=self.nucleus,
-                                             concentration=5)
+        self.nucleus = pycotools3.model._Compartment(self.model,
+                                                     name='Nuc', initial_value=5,
+                                                     simulation_type='fixed', key='compartment_1')
+        self.A = pycotools3.model._Metabolite(self.model,
+                                              name='A',
+                                              compartment=self.nucleus,
+                                              concentration=5)
     def test_string_method(self):
         """
 
@@ -74,8 +74,8 @@ class TestMetabolites(_test_base._BaseTest):
         self.assertEqual(self.A.transient_reference, 'Vector=Metabolites[A],Reference=Concentration')
 
     def test_particle_numbers(self):
-        A = pycotools3.model.Metabolite(self.model,
-                                        particle_numbers=10e23, compartment=self.nucleus)
+        A = pycotools3.model._Metabolite(self.model,
+                                         particle_numbers=10e23, compartment=self.nucleus)
         self.assertTrue(A.particle_numbers, 10e23)
 
     def test_concentration(self):
@@ -87,21 +87,21 @@ class TestMetabolites(_test_base._BaseTest):
         :param self:
         :return:
         """
-        A = pycotools3.model.Metabolite(self.model,
-                                        concentration=5,
-                                        compartment=self.nucleus)
+        A = pycotools3.model._Metabolite(self.model,
+                                         concentration=5,
+                                         compartment=self.nucleus)
         self.assertTrue(A.concentration, 5)
 
 
 class TestSubstrate(_test_base._BaseTest):
     def setUp(self):
         super(TestSubstrate, self).setUp()
-        self.nucleus = pycotools3.model.Compartment(self.model, name='Nuc',
-                                                    initial_value=5,
-                                                    simulation_type='fixed', key='compartment_1')
-        self.A = pycotools3.model.Substrate(self.model,
-                                            name='A', compartment=self.nucleus,
-                                            concentration=5)
+        self.nucleus = pycotools3.model._Compartment(self.model, name='Nuc',
+                                                     initial_value=5,
+                                                     simulation_type='fixed', key='compartment_1')
+        self.A = pycotools3.model._Substrate(self.model,
+                                             name='A', compartment=self.nucleus,
+                                             concentration=5)
 
     def test_name(self):
         self.assertEqual(self.A.name, 'A')
@@ -114,19 +114,19 @@ class TestSubstrate(_test_base._BaseTest):
 
     def test_to_substrate(self):
         # print self.B.to_substrate()
-        self.assertTrue(isinstance(self.A.to_substrate(), pycotools3.model.Substrate))
+        self.assertTrue(isinstance(self.A.to_substrate(), pycotools3.model._Substrate))
 
 
 class TestProduct(_test_base._BaseTest):
     def setUp(self):
         super(TestProduct, self).setUp()
-        self.nucleus = pycotools3.model.Compartment(self.model,
-                                                    name='Nuc',
-                                                    initial_value=5,
-                                                    simulation_type='fixed', key='compartment_1')
-        self.B = pycotools3.model.Product(self.model,
-                                          name='B', compartment=self.nucleus,
-                                          concentration=60)
+        self.nucleus = pycotools3.model._Compartment(self.model,
+                                                     name='Nuc',
+                                                     initial_value=5,
+                                                     simulation_type='fixed', key='compartment_1')
+        self.B = pycotools3.model._Product(self.model,
+                                           name='B', compartment=self.nucleus,
+                                           concentration=60)
 
     def test_name(self):
         self.assertEqual(self.B.name, 'B')
