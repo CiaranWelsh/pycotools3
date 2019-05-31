@@ -55,7 +55,7 @@ setup(
     requires=['lxml', 'argparse', 'pandas', 'numpy', 'scipy',
               'matplotlib', 'scipy', 'seaborn', 'sklearn',
               'retrying', 'psutil', 'tellurium', 'pyyaml', 'json',
-              'deprecated'
+              'deprecated', 'pyyaml', 'pyqt5'
               ],
     author_email='ciaran.welsh@newcastle.ac.uk',
     url='https://github.com/CiaranWelsh/pycotools3',
