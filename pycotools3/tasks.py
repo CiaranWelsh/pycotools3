@@ -4962,7 +4962,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                     'Switching to False mode -- parameter estimations have been configured but not run.')
                 self.config.settings.run_mode = True
 
-        elif self.config.settings.run_mode == 'slurm':
+        if self.config.settings.run_mode == 'slurm':
             try:
                 check_call('squeue')
             except errors.NotImplementedError:
