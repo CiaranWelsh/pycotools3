@@ -194,7 +194,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
 
     def test_metabolites2(self):
         for i in self.model.metabolites:
-            self.assertTrue(isinstance(i, pycotools3.model._Metabolite))
+            self.assertTrue(isinstance(i, pycotools3.model.Metabolite))
 
     def test_metabolites3(self):
         check = True
@@ -231,7 +231,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
     #
     def test_local_parameters2(self):
         for i in self.model.constants:
-            self.assertTrue(isinstance(i, pycotools3.model._LocalParameter))
+            self.assertTrue(isinstance(i, pycotools3.model.LocalParameter))
 
     def test_local_parameters3(self):
         check = True
@@ -247,26 +247,26 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
 
         :return:
         """
-        k = pycotools3.model._KeyFactory(self.model, type='constant').generate()
-        L = pycotools3.model._LocalParameter(self.model,
-                                             key=k,
-                                             name='k1', reaction_name='v1',
-                                             global_name='(v1).k1')
+        k = pycotools3.model.KeyFactory(self.model, type='constant').generate()
+        L = pycotools3.model.LocalParameter(self.model,
+                                            key=k,
+                                            name='k1', reaction_name='v1',
+                                            global_name='(v1).k1')
         self.assertEqual(L.global_name, '(v1).k1')
 
     def test_local_parameters5(self):
-        k = pycotools3.model._KeyFactory(self.model, type='constant').generate()
-        L = pycotools3.model._LocalParameter(self.model,
-                                             key=k,
-                                             name='k1',
-                                             reaction_name='v1')
+        k = pycotools3.model.KeyFactory(self.model, type='constant').generate()
+        L = pycotools3.model.LocalParameter(self.model,
+                                            key=k,
+                                            name='k1',
+                                            reaction_name='v1')
         self.assertTrue('global_name' in list(L.__dict__.keys()))
 
     def test_functions(self):
         self.assertTrue(len(self.model.functions), 2)
 
     def test_functions2(self):
-        [self.assertTrue(isinstance(i, pycotools3.model._Function) for i in self.model.functions)]
+        [self.assertTrue(isinstance(i, pycotools3.model.Function) for i in self.model.functions)]
 
     def test_number_of_reactions(self):
         self.assertEqual(self.model.number_of_reactions, 4)
@@ -279,9 +279,9 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = pycotools3.model._Metabolite(self.model,
-                                             name='X',
-                                             concentration=123445)
+        metab = pycotools3.model.Metabolite(self.model,
+                                            name='X',
+                                            concentration=123445)
         self.assertEqual(str(metab.concentration), str(123445))
 
     def test_metabolite_concentration2(self):
@@ -289,9 +289,9 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = pycotools3.model._Metabolite(self.model,
-                                             name='X',
-                                             concentration=55)
+        metab = pycotools3.model.Metabolite(self.model,
+                                            name='X',
+                                            concentration=55)
         self.assertEqual(str(metab.particle_numbers), str(3.3121774713500003e+22))
 
     def test_get_model_object(self):
@@ -301,7 +301,7 @@ class ModelComponentAttributeTests(_test_base._BaseTest):
         """
         var = 'A2B'
         model_obj = self.model.get_model_object(var)
-        self.assertIsInstance(model_obj, pycotools3.model._GlobalQuantity)
+        self.assertIsInstance(model_obj, pycotools3.model.GlobalQuantity)
 
 
 class SetTests(_test_base._BaseTest):
@@ -326,8 +326,8 @@ class SetTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = pycotools3.model._Metabolite(self.model, name='F', particle_numbers=25,
-                                             compartment=self.model.compartments[0])
+        metab = pycotools3.model.Metabolite(self.model, name='F', particle_numbers=25,
+                                            compartment=self.model.compartments[0])
         self.model = self.model.add_metabolite(metab)
         check = False
         for i in self.model.metabolites:
@@ -350,7 +350,7 @@ class SetTests(_test_base._BaseTest):
 
         :return:
         """
-        glob = pycotools3.model._GlobalQuantity(self.model, name='X', initial_value=1)
+        glob = pycotools3.model.GlobalQuantity(self.model, name='X', initial_value=1)
         self.model = self.model.add_global_quantity(glob)
         self.model.save()
         assert glob.name in [i.name for i in self.model.global_quantities]
@@ -363,8 +363,8 @@ class SetTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = pycotools3.model._Metabolite(self.model, name='X',
-                                             particle_numbers=1000)
+        metab = pycotools3.model.Metabolite(self.model, name='X',
+                                            particle_numbers=1000)
         model = self.model.add_component('metabolite', metab)
         model = self.model.set('metabolite', 'X', 1234, 'name', 'particle_numbers')
         metab = self.model.get('metabolite', 'X', by='name')
@@ -375,8 +375,8 @@ class SetTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = pycotools3.model._Metabolite(self.model, name='X',
-                                             concentration=1000)
+        metab = pycotools3.model.Metabolite(self.model, name='X',
+                                            concentration=1000)
         model = self.model.add_component('metabolite', metab)
         model = self.model.set('metabolite', 'X', str(1234), 'name', 'concentration')
         metab = self.model.get('metabolite', 'X', by='name')
@@ -387,8 +387,8 @@ class SetTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = pycotools3.model._Metabolite(self.model, name='X',
-                                             particle_numbers=1000)
+        metab = pycotools3.model.Metabolite(self.model, name='X',
+                                            particle_numbers=1000)
         model = self.model.add_component('metabolite', metab)
         model = self.model.set('metabolite',
                                match_value='X',
@@ -404,8 +404,8 @@ class SetTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = pycotools3.model._Metabolite(self.model, name='X',
-                                             concentration=1000)
+        metab = pycotools3.model.Metabolite(self.model, name='X',
+                                            concentration=1000)
         model = self.model.add_component('metabolite', metab)
         model = self.model.set('metabolite',
                                match_value='X',
@@ -568,8 +568,8 @@ class RemoveTests(_test_base._BaseTest):
         :return:
         """
         ##TODO fix concentration attribute in set_metabolites
-        metab = pycotools3.model._Metabolite(self.model, name='F', particle_numbers=25,
-                                             compartment=self.model.compartments[0])
+        metab = pycotools3.model.Metabolite(self.model, name='F', particle_numbers=25,
+                                            compartment=self.model.compartments[0])
         self.model = self.model.add_metabolite(metab)
         F = self.model.get('metabolite', 'F', by='name')
         self.model = self.model.remove_metabolite('F', by='name')
@@ -581,8 +581,8 @@ class RemoveTests(_test_base._BaseTest):
 
         :return:
         """
-        comp = pycotools3.model._Compartment(self.model,
-                                             name='Medium', initial_value=6)
+        comp = pycotools3.model.Compartment(self.model,
+                                            name='Medium', initial_value=6)
         self.model = self.model.add_compartment(comp)
         comp = self.model.get('compartment', 'Medium', 'name')
         assert comp != []
@@ -591,9 +591,9 @@ class RemoveTests(_test_base._BaseTest):
         self.assertEqual(comp, [])
 
     def test_remove_functions(self):
-        fun = pycotools3.model._Function(self.model, name='new_funct',
-                                         expression='K*M*S',
-                                         roles={'K': 'parameter',
+        fun = pycotools3.model.Function(self.model, name='new_funct',
+                                        expression='K*M*S',
+                                        roles={'K': 'parameter',
                                                'M': 'modifier',
                                                'S': 'substrate'})
         self.model = self.model.add_function(fun)
@@ -609,7 +609,7 @@ class RemoveTests(_test_base._BaseTest):
 
         :return:
         """
-        glob = pycotools3.model._GlobalQuantity(self.model, name='X')
+        glob = pycotools3.model.GlobalQuantity(self.model, name='X')
         self.model = self.model.add_global_quantity(glob)
         assert 'X' in [i.name for i in self.model.global_quantities]
         self.model = self.model.remove('global_quantity', 'X')
@@ -624,7 +624,7 @@ class RemoveTests(_test_base._BaseTest):
 
         :return:
         """
-        comp = pycotools3.model._Compartment(self.model, name='Cell')
+        comp = pycotools3.model.Compartment(self.model, name='Cell')
         self.model = self.model.add_compartment(comp)
         assert 'Cell' in [i.name for i in self.model.compartments]
         self.model = self.model.remove('compartment', 'Cell')
@@ -639,10 +639,10 @@ class RemoveTests(_test_base._BaseTest):
         Test different reaction
         :return:
         """
-        r = pycotools3.model._Reaction(self.model,
-                                       name='fake_reaction2',
-                                       expression='A + B -> C',
-                                       rate_law='k * A * B')
+        r = pycotools3.model.Reaction(self.model,
+                                      name='fake_reaction2',
+                                      expression='A + B -> C',
+                                      rate_law='k * A * B')
         self.model = self.model.add_reaction(r)
         self.model = self.model.remove_reaction('fake_reaction2', by='name')
         # self.model = self.model.remove('reaction', 'fake_reaction2')
@@ -671,8 +671,8 @@ class AddTests(_test_base._BaseTest):
 
         :return:
         """
-        comp = pycotools3.model._Compartment(self.model,
-                                             name='Medium', initial_value=6)
+        comp = pycotools3.model.Compartment(self.model,
+                                            name='Medium', initial_value=6)
         compartment_model = self.model.add_compartment(comp)
         comp_filename = os.path.join(os.path.dirname(self.model.copasi_file), 'comp_model.cps')
         compartment_model.save(comp_filename)
@@ -695,7 +695,7 @@ class AddTests(_test_base._BaseTest):
 
         :return:
         """
-        comp = pycotools3.model._Compartment(self.model, name='X')
+        comp = pycotools3.model.Compartment(self.model, name='X')
         self.model = self.model.add_component('compartment', comp)
         boolean = False
 
@@ -721,8 +721,8 @@ class AddTests(_test_base._BaseTest):
 
         :return:
         """
-        global_quantity = pycotools3.model._GlobalQuantity(self.model, name='NewGlobal',
-                                                           initial_value=5)
+        global_quantity = pycotools3.model.GlobalQuantity(self.model, name='NewGlobal',
+                                                          initial_value=5)
         new_model = self.model.add_global_quantity(global_quantity)
 
         new_global = new_model.get('global_quantity', 'NewGlobal',
@@ -734,8 +734,8 @@ class AddTests(_test_base._BaseTest):
 
         :return:
         """
-        global_quantity = pycotools3.model._GlobalQuantity(self.model, name='NewGlobal',
-                                                           initial_value=5)
+        global_quantity = pycotools3.model.GlobalQuantity(self.model, name='NewGlobal',
+                                                          initial_value=5)
         new_model = self.model.add_global_quantity(global_quantity)
         new_global = new_model.get('global_quantity', 'NewGlobal')
         assert new_global != []
@@ -745,7 +745,7 @@ class AddTests(_test_base._BaseTest):
 
     def test_get_list_of_call_parameters(self):
         for i in self.model.parameter_descriptions:
-            self.assertTrue(isinstance(i, pycotools3.model._ParameterDescription))
+            self.assertTrue(isinstance(i, pycotools3.model.ParameterDescription))
 
     def test_mass_action_class(self):
         ma = pycotools3.model.MassAction(self.model, reversible=True)
@@ -759,7 +759,7 @@ class AddTests(_test_base._BaseTest):
         ##todo find better test condition
 
     def test_create_parameter_description_key(self):
-        KF = pycotools3.model._KeyFactory(self.model, type='function_parameter')
+        KF = pycotools3.model.KeyFactory(self.model, type='function_parameter')
         self.assertEqual(len(KF.create_function_parameter_key(n=4)), 4)
 
     def test_function_user_defined1(self):
@@ -768,23 +768,23 @@ class AddTests(_test_base._BaseTest):
         (function parameters)
         :return:
         """
-        fun = pycotools3.model._Function(self.model, name='new_funct',
-                                         expression='K*M*S',
-                                         roles={'K': 'parameter',
+        fun = pycotools3.model.Function(self.model, name='new_funct',
+                                        expression='K*M*S',
+                                        roles={'K': 'parameter',
                                                'M': 'modifier',
                                                'S': 'substrate'})
 
         for i in fun.list_of_parameter_descriptions:
-            self.assertTrue(isinstance(i, pycotools3.model._ParameterDescription))
+            self.assertTrue(isinstance(i, pycotools3.model.ParameterDescription))
 
     def test_add_function(self):
         """
 
         :return:
         """
-        fun = pycotools3.model._Function(self.model, name='new_funct',
-                                         expression='K*M*S',
-                                         roles={'K': 'parameter',
+        fun = pycotools3.model.Function(self.model, name='new_funct',
+                                        expression='K*M*S',
+                                        roles={'K': 'parameter',
                                                'M': 'modifier',
                                                'S': 'substrate'})
         self.model = self.model.add_function(fun)
@@ -800,10 +800,10 @@ class AddTests(_test_base._BaseTest):
         Test the reaction name is correct
         :return:
         """
-        r = pycotools3.model._Reaction(self.model,
-                                       name='fake_reaction',
-                                       expression='A + B + C + D -> E + F',
-                                       rate_law='k * A * B * C / D')
+        r = pycotools3.model.Reaction(self.model,
+                                      name='fake_reaction',
+                                      expression='A + B + C + D -> E + F',
+                                      rate_law='k * A * B * C / D')
 
         self.model = self.model.add_reaction(r)
         self.model.save()
@@ -823,10 +823,10 @@ class AddTests(_test_base._BaseTest):
         Test correct number of substrates
         :return:
         """
-        r = pycotools3.model._Reaction(self.model,
-                                       name='fake_reaction',
-                                       expression='A + B + C + D -> E + F',
-                                       rate_law='k * A * B * C / D')
+        r = pycotools3.model.Reaction(self.model,
+                                      name='fake_reaction',
+                                      expression='A + B + C + D -> E + F',
+                                      rate_law='k * A * B * C / D')
         self.model.add_reaction(r)
         self.model.save()
         xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -845,10 +845,10 @@ class AddTests(_test_base._BaseTest):
         Test correct number of products
         :return:
         """
-        r = pycotools3.model._Reaction(self.model,
-                                       name='fake_reaction',
-                                       expression='A + B + C + D -> E + F',
-                                       rate_law='k * A * B * C / D')
+        r = pycotools3.model.Reaction(self.model,
+                                      name='fake_reaction',
+                                      expression='A + B + C + D -> E + F',
+                                      rate_law='k * A * B * C / D')
         self.model.add_reaction(r)
         self.model.save()
         xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -867,10 +867,10 @@ class AddTests(_test_base._BaseTest):
         Test correct number of constants
         :return:
         """
-        r = pycotools3.model._Reaction(self.model,
-                                       name='fake_reaction',
-                                       expression='A + B + C + D -> E + F',
-                                       rate_law='k * A * B * C / D')
+        r = pycotools3.model.Reaction(self.model,
+                                      name='fake_reaction',
+                                      expression='A + B + C + D -> E + F',
+                                      rate_law='k * A * B * C / D')
         self.model.add_reaction(r)
         self.model.save()
         xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -889,10 +889,10 @@ class AddTests(_test_base._BaseTest):
         Test different reaction
         :return:
         """
-        r = pycotools3.model._Reaction(self.model,
-                                       name='fake_reaction2',
-                                       expression='A + F + irs -> ; G',
-                                       rate_law='k * A * B * C / D')
+        r = pycotools3.model.Reaction(self.model,
+                                      name='fake_reaction2',
+                                      expression='A + F + irs -> ; G',
+                                      rate_law='k * A * B * C / D')
         self.model.add_reaction(r)
         self.model.save()
         xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -911,10 +911,10 @@ class AddTests(_test_base._BaseTest):
         Test different reaction
         :return:
         """
-        r = pycotools3.model._Reaction(self.model,
-                                       name='fake_reaction2',
-                                       expression='A + F + irs -> ; G',
-                                       rate_law='k * A * F / irs + G')
+        r = pycotools3.model.Reaction(self.model,
+                                      name='fake_reaction2',
+                                      expression='A + F + irs -> ; G',
+                                      rate_law='k * A * F / irs + G')
         self.model = self.model.add_reaction(r)
         self.model.save()
         xml = pycotools3.tasks.CopasiMLParser(self.model.copasi_file).xml
@@ -935,7 +935,7 @@ class AddTests(_test_base._BaseTest):
         self.assertEqual(r.expression, 'A -> B')
 
     def test_add_metabolite(self):
-        metab = pycotools3.model._Metabolite(
+        metab = pycotools3.model.Metabolite(
             self.model, 'metab'
         )
         self.model.add_component('metabolite', metab)
@@ -966,7 +966,7 @@ class AddTests(_test_base._BaseTest):
 
         :return:
         """
-        glo = pycotools3.model._GlobalQuantity(self.model, 'X')
+        glo = pycotools3.model.GlobalQuantity(self.model, 'X')
         self.model.add_component('global_quantity', glo)
         self.assertEqual(self.model.get('global_quantity', 'X', by='name').name, 'X')
 
@@ -975,7 +975,7 @@ class AddTests(_test_base._BaseTest):
 
         :return:
         """
-        glo = pycotools3.model._GlobalQuantity(self.model, 'X')
+        glo = pycotools3.model.GlobalQuantity(self.model, 'X')
         self.model.add('global_quantity', name='X', initial_value=50)
         g = self.model.get('global_quantity', 'X')
         self.assertEqual(g.name, 'X')
@@ -1000,19 +1000,19 @@ class TranslatorTests(_test_base._BaseTest):
         self.model = pycotools3.model.Model(self.copasi_file)
 
     def test_translator(self):
-        trans = pycotools3.model._Translator(self.model, '-> B')
+        trans = pycotools3.model.Translator(self.model, '-> B')
         self.assertTrue(isinstance(trans.all_components, list))
 
     def test_translator2(self):
-        trans = pycotools3.model._Translator(self.model, 'A -> B')
+        trans = pycotools3.model.Translator(self.model, 'A -> B')
         self.assertTrue(isinstance(trans.all_components, list))
 
     def test_translator3(self):
-        trans = pycotools3.model._Translator(self.model, 'A + A + B -> B; C D')
+        trans = pycotools3.model.Translator(self.model, 'A + A + B -> B; C D')
         self.assertTrue(isinstance(trans.all_components, list))
 
     def test_translator4(self):
-        trans = pycotools3.model._Translator(self.model, 'B ->')
+        trans = pycotools3.model.Translator(self.model, 'B ->')
         self.assertTrue(isinstance(trans.all_components, list))
 
     def test_local_parameters(self):
@@ -1023,19 +1023,19 @@ class TranslatorTests(_test_base._BaseTest):
 
         :return:
         """
-        p = pycotools3.model._KeyFactory(self.model, type='constant').generate(2)
+        p = pycotools3.model.KeyFactory(self.model, type='constant').generate(2)
         self.assertEqual(len(p), 2)
 
     def test_translater_again(self):
-        trans = pycotools3.model._Translator(self.model, 'A + F + irs -> ;G')
+        trans = pycotools3.model.Translator(self.model, 'A + F + irs -> ;G')
         self.assertEqual(trans.products, [])
 
     def test_translater_again2(self):
-        trans = pycotools3.model._Translator(self.model, 'A ->')
+        trans = pycotools3.model.Translator(self.model, 'A ->')
         self.assertEqual(trans.products, [])
 
     def test_translater_again3(self):
-        trans = pycotools3.model._Translator(self.model, 'A -> B; C ')
+        trans = pycotools3.model.Translator(self.model, 'A -> B; C ')
         self.assertEqual(trans.modifiers[0].name, 'C')
 
     def test_metabolite_concentration(self):
@@ -1043,8 +1043,8 @@ class TranslatorTests(_test_base._BaseTest):
 
         :return:
         """
-        metab = pycotools3.model._Metabolite(self.model,
-                                             name='X')
+        metab = pycotools3.model.Metabolite(self.model,
+                                            name='X')
         self.assertEqual(str(metab.concentration), str(float(1)))
 
 
@@ -1329,28 +1329,28 @@ class TestReactionStuff(unittest.TestCase):
         if os.path.isfile(self.cps):
             os.remove(self.cps)
         self.mod = pycotools3.model.Model(self.cps, new=True)
-        self.Y = pycotools3.model._Reaction(self.mod, 'Y', '-> Y; Z X', '-X*Z + r*X - Y')
-        self.X = pycotools3.model._Reaction(self.mod, 'X', '-> X; Y', 'sigma*(Y-X)')
-        self.Z = pycotools3.model._Reaction(self.mod, 'Z', '-> Z; X Y', 'X*Y - b*Z ')
+        self.Y = pycotools3.model.Reaction(self.mod, 'Y', '-> Y; Z X', '-X*Z + r*X - Y')
+        self.X = pycotools3.model.Reaction(self.mod, 'X', '-> X; Y', 'sigma*(Y-X)')
+        self.Z = pycotools3.model.Reaction(self.mod, 'Z', '-> Z; X Y', 'X*Y - b*Z ')
 
     def test_expression1(self):
         expr = 'sigma*(Y-X)'
-        E = pycotools3.model._Expression(expr)
+        E = pycotools3.model.Expression(expr)
         self.assertListEqual(
             E.to_list(), sorted(['sigma', 'Y', 'X']
                                 ))
 
     def test_expression2(self):
         expr = '-X*Z + r*X -Y'
-        E = pycotools3.model._Expression(expr)
+        E = pycotools3.model.Expression(expr)
         self.assertListEqual(
             E.to_list(), sorted(['X', 'Y', 'Z', 'r'])
         )
 
     def test_add_two_reactions(self):
-        r1 = pycotools3.model._Reaction(self.mod, '1', 'q -> w', 'k*k2*q')
+        r1 = pycotools3.model.Reaction(self.mod, '1', 'q -> w', 'k*k2*q')
         self.mod.add_reaction(r1)
-        r2 = pycotools3.model._Reaction(self.mod, '2', 'e -> r', 'k3*k4*e')
+        r2 = pycotools3.model.Reaction(self.mod, '2', 'e -> r', 'k3*k4*e')
         self.mod.add_reaction(r2)
         self.assertEqual(len(self.mod.reactions), 2)
 

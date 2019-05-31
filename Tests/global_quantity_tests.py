@@ -39,19 +39,19 @@ class TestGlobalQuantities(_test_base._BaseTest):
         #                  A.__str__())
 
     def test_fixed_type(self):
-        A = pycotools3.model._GlobalQuantity(self.model, name='A', simulation_type='fixed', initial_value=5)
+        A = pycotools3.model.GlobalQuantity(self.model, name='A', simulation_type='fixed', initial_value=5)
         self.assertTrue(A.simulation_type=='fixed')
 
     def test_fixed_type2(self):
-        A = pycotools3.model._GlobalQuantity(self.model, name='A', simulation_type='fixed', initial_value=5)
+        A = pycotools3.model.GlobalQuantity(self.model, name='A', simulation_type='fixed', initial_value=5)
         self.assertTrue(isinstance(A.initial_value, (int, float)) )
 
     def test_reference_transient(self):
-        A = pycotools3.model._GlobalQuantity(self.model, name='A', simulation_type='fixed', initial_value=5)
+        A = pycotools3.model.GlobalQuantity(self.model, name='A', simulation_type='fixed', initial_value=5)
         self.assertTrue(A.transient_reference, 'Vector=Values[A],Reference=Value')
 
     def test_reference_initial(self):
-        A = pycotools3.model._GlobalQuantity(self.model, name='A', simulation_type='fixed', initial_value=5)
+        A = pycotools3.model.GlobalQuantity(self.model, name='A', simulation_type='fixed', initial_value=5)
         self.assertTrue(A.initial_reference, 'Vector=Values[A],Reference=InitialValue')
 
 

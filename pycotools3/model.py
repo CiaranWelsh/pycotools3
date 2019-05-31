@@ -156,7 +156,7 @@ class GetModelComponentFromStringMixin(Mixin):
           model.<component>`
 
         """
-        if isinstance(component, _LocalParameter):
+        if isinstance(component, LocalParameter):
             return model.get(component, string, by='global_name')
         else:
             return model.get(component, string, by='name')
@@ -952,11 +952,11 @@ class Model(_base._Base):
             if i.tag == '{http://www.copasi.org/static/schema}ListOfCompartments':
                 df_list = []
                 for j in i:
-                    lst.append(_Compartment(self,
-                                            key=j.attrib['key'],
-                                            name=j.attrib['name'],
-                                            simulation_type=j.attrib['simulationType'],
-                                            initial_value=float(self.states[j.attrib['key']])))
+                    lst.append(Compartment(self,
+                                           key=j.attrib['key'],
+                                           name=j.attrib['name'],
+                                           simulation_type=j.attrib['simulationType'],
+                                           initial_value=float(self.states[j.attrib['key']])))
         if 'compartments' in self.__dict__:
             del self.__dict__['compartments']
 
@@ -973,9 +973,9 @@ class Model(_base._Base):
 
         """
         if isinstance(compartment, str):
-            compartment = _Compartment(self, compartment)
+            compartment = Compartment(self, compartment)
 
-        if not isinstance(compartment, _Compartment):
+        if not isinstance(compartment, Compartment):
             raise errors.InputError(
                 'Expecting "{}" but '
                 'got "{}" instead'.format('Compartment', type(compartment))
@@ -1324,13 +1324,13 @@ class Model(_base._Base):
         lst = []
         for key in metabs:
             comp = self.get('compartment', metabs[key]['compartment'], 'key')
-            lst.append(_Metabolite(self, name=metabs[key]['name'],
-                                   compartment=comp,
-                                   key=metabs[key]['key'],
-                                   particle_numbers=metabs[key]['particle_numbers'],
-                                   concentration=self.convert_particles_to_molar(
+            lst.append(Metabolite(self, name=metabs[key]['name'],
+                                  compartment=comp,
+                                  key=metabs[key]['key'],
+                                  particle_numbers=metabs[key]['particle_numbers'],
+                                  concentration=self.convert_particles_to_molar(
                                       metabs[key]['particle_numbers'], self.quantity_unit, comp.initial_value),
-                                   simulation_type=metabs[key]['simulationType']))
+                                  simulation_type=metabs[key]['simulationType']))
 
         return lst
 
@@ -1358,12 +1358,12 @@ class Model(_base._Base):
         ## This must occur before deleting
         ## the metabolites cache
         if isinstance(metab, str):
-            metab = _Metabolite(self, metab)
+            metab = Metabolite(self, metab)
 
         if 'metabolites' in self.__dict__:
             del self.__dict__['metabolites']
 
-        if not isinstance(metab, _Metabolite):
+        if not isinstance(metab, Metabolite):
             raise errors.InputError('Input must be Metabolite class')
 
         ## if ListOfCompartment tag not exist, create
@@ -1447,9 +1447,9 @@ class Model(_base._Base):
 
         ## accept str arguments
         if isinstance(global_quantity, str):
-            global_quantity = _GlobalQuantity(self, global_quantity)
+            global_quantity = GlobalQuantity(self, global_quantity)
 
-        if not isinstance(global_quantity, _GlobalQuantity):
+        if not isinstance(global_quantity, GlobalQuantity):
             raise errors.InputError('Input must be a GlobalQuantity')
 
         ## try and get existing
@@ -1509,10 +1509,10 @@ class Model(_base._Base):
 
         lst = []
         for key in model_values:
-            lst.append(_GlobalQuantity(self, name=model_values[key]['name'],
-                                       key=model_values[key]['key'],
-                                       simulation_type=model_values[key]['simulationType'],
-                                       initial_value=model_values[key]['initial_value']))
+            lst.append(GlobalQuantity(self, name=model_values[key]['name'],
+                                      key=model_values[key]['key'],
+                                      simulation_type=model_values[key]['simulationType'],
+                                      initial_value=model_values[key]['initial_value']))
         return lst
 
     def remove_global_quantity(self, value, by='name'):
@@ -1570,18 +1570,18 @@ class Model(_base._Base):
                         if grandchild.tag == '{http://www.copasi.org/static/schema}ListOfParameterDescriptions':
                             for greatgrandchild in grandchild:
                                 list_of_parameter_descriptions.append(
-                                    _ParameterDescription(self,
-                                                          name=greatgrandchild.attrib['name'],
-                                                          key=greatgrandchild.attrib['key'],
-                                                          order=greatgrandchild.attrib['order'],
-                                                          role=greatgrandchild.attrib['role']))
-                    lst.append(_Function(self,
-                                         name=name,
-                                         key=key,
-                                         type=type,
-                                         expression=expression,
-                                         reversible=reversible,
-                                         list_of_parameter_descriptions=list_of_parameter_descriptions))
+                                    ParameterDescription(self,
+                                                         name=greatgrandchild.attrib['name'],
+                                                         key=greatgrandchild.attrib['key'],
+                                                         order=greatgrandchild.attrib['order'],
+                                                         role=greatgrandchild.attrib['role']))
+                    lst.append(Function(self,
+                                        name=name,
+                                        key=key,
+                                        type=type,
+                                        expression=expression,
+                                        reversible=reversible,
+                                        list_of_parameter_descriptions=list_of_parameter_descriptions))
         return lst
 
     @property
@@ -1597,11 +1597,11 @@ class Model(_base._Base):
         lst = []
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ParameterDescription':
-                lst.append(_ParameterDescription(self,
-                                                 name=i.attrib['name'],
-                                                 key=i.attrib['key'],
-                                                 order=i.attrib['order'],
-                                                 role=i.attrib['role']))
+                lst.append(ParameterDescription(self,
+                                                name=i.attrib['name'],
+                                                key=i.attrib['key'],
+                                                order=i.attrib['order'],
+                                                role=i.attrib['role']))
         return lst
 
     def add_function(self, function):
@@ -1716,14 +1716,14 @@ class Model(_base._Base):
                                 parameter_name = l.attrib['name']
                                 global_name = "({}).{}".format(reaction_name, parameter_name)
                                 parameter_key = l.attrib['key']
-                                loc = _LocalParameter(self,
-                                                      name=dct[global_name]['parameter_name'],
-                                                      value=dct[global_name]['value'],
-                                                      key=parameter_key,
-                                                      reaction_name=dct[global_name]['reaction_name'],
-                                                      global_name=global_name,
-                                                      simulation_type=dct[global_name]['simulation_type']
-                                                      )
+                                loc = LocalParameter(self,
+                                                     name=dct[global_name]['parameter_name'],
+                                                     value=dct[global_name]['value'],
+                                                     key=parameter_key,
+                                                     reaction_name=dct[global_name]['reaction_name'],
+                                                     global_name=global_name,
+                                                     simulation_type=dct[global_name]['simulation_type']
+                                                     )
                                 res.append(loc)
 
         return res
@@ -1862,17 +1862,17 @@ class Model(_base._Base):
         for i, dct in list(reactions_dict.items()):
             ## skip the skipped reactions
             # if i not in skipped:
-            r = _Reaction(self,
-                          name=dct['name'].strip(),
-                          key=dct['key'],
-                          expression=dct['expression'],
-                          rate_law=dct['function'],
-                          reversible=dct['reversible'],
-                          substrates=dct['substrates'],
-                          products=dct['products'],
-                          parameters=dct['constants'],
-                          parameters_dict={j.name: j for j in dct['constants']},
-                          )
+            r = Reaction(self,
+                         name=dct['name'].strip(),
+                         key=dct['key'],
+                         expression=dct['expression'],
+                         rate_law=dct['function'],
+                         reversible=dct['reversible'],
+                         substrates=dct['substrates'],
+                         products=dct['products'],
+                         parameters=dct['constants'],
+                         parameters_dict={j.name: j for j in dct['constants']},
+                         )
             lst.append(r)
 
         # self.reset_cache('reactions')
@@ -1892,7 +1892,7 @@ class Model(_base._Base):
           py:class:`Model`
 
         """
-        if not isinstance(reaction, _Reaction):
+        if not isinstance(reaction, Reaction):
             if not isinstance(reaction, str):
                 raise errors.InputError(
                     'Expecting Reaction or string as'
@@ -1906,7 +1906,7 @@ class Model(_base._Base):
                         'to add_reaction, the expression and '
                         'rate law arguments must be specified'
                     )
-                reaction = _Reaction(self, reaction, expression, rate_law)
+                reaction = Reaction(self, reaction, expression, rate_law)
         ## try and get existing
         existing = self.get('reaction', reaction.name, by='name')
         if existing != []:
@@ -1965,7 +1965,7 @@ class Model(_base._Base):
         # self.save()
         for local_parameter in reaction.parameters:
             if local_parameter.key in [i.key for i in self.local_parameters]:
-                local_parameter.key = _KeyFactory(self, 'parameter').generate()
+                local_parameter.key = KeyFactory(self, 'parameter').generate()
             self.add_local_parameter(local_parameter)
         return self.refresh()
 
@@ -2269,23 +2269,23 @@ class Model(_base._Base):
                 '"{}" not valid. These are valid: {}'.format(component_name, self._model_components()))
 
         if component_name == 'metabolite':
-            metab = _Metabolite(self, **kwargs)
+            metab = Metabolite(self, **kwargs)
             return self.add_metabolite(metab)
 
         elif component_name == 'function':
-            f = _Function(self, **kwargs)
+            f = Function(self, **kwargs)
             return self.add_function(f)
 
         elif component_name == 'reaction':
-            react = _Reaction(self, **kwargs)
+            react = Reaction(self, **kwargs)
             return self.add_reaction(react)
 
         elif component_name == 'global_quantity':
-            global_q = _GlobalQuantity(self, **kwargs)
+            global_q = GlobalQuantity(self, **kwargs)
             return self.add_global_quantity(global_q)
 
         elif component_name == 'compartment':
-            comp = _Compartment(self, **kwargs)
+            comp = Compartment(self, **kwargs)
             return self.add_compartment(comp)
 
     def remove(self, component, name):
@@ -2762,7 +2762,7 @@ class InsertParameters(object):
 
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
-class _Compartment(object):
+class Compartment(object):
     """ """
 
     def __init__(self, model, name=None, initial_value=None,
@@ -2794,7 +2794,7 @@ class _Compartment(object):
 
         """
         if self.key is None:
-            self.key = _KeyFactory(self.model, type='compartment').generate()
+            self.key = KeyFactory(self.model, type='compartment').generate()
 
         if self.name is None:
             LOG.warning('name attribute for compartment not set. Defaulting to key --> {}'.format(self.key))
@@ -2818,7 +2818,7 @@ class _Compartment(object):
     def to_xml(self):
         """:return:"""
         if self.key == None:
-            self.key = _KeyFactory(self.model, type='compartment').generate()
+            self.key = KeyFactory(self.model, type='compartment').generate()
 
         simulation_types = ['reactions', 'ode', 'fixed', 'assignment']
         if self.simulation_type not in simulation_types:
@@ -2834,7 +2834,7 @@ class _Compartment(object):
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
 @mixin(ComparisonMethodsMixin)
-class _Metabolite(object):
+class Metabolite(object):
     """ """
 
     def __init__(self, model, name='new_metabolite', particle_numbers=None,
@@ -2922,7 +2922,7 @@ class _Metabolite(object):
                 # assert len(self.compartment) == 1
                 # self.compartment = self.compartment[0]
             else:
-                if isinstance(self.compartment, _Compartment) != True:
+                if isinstance(self.compartment, Compartment) != True:
                     raise errors.InputError('compartment argument should be of type PyCoTools.tasks.Compartment')
 
         if ('particle_numbers' not in list(self.__dict__.keys())) and (
@@ -2950,7 +2950,7 @@ class _Metabolite(object):
             )
 
         if self.key is None:
-            self.key = _KeyFactory(self.model, type='metabolite').generate()
+            self.key = KeyFactory(self.model, type='metabolite').generate()
 
         if not isinstance(self.particle_numbers, (float, int, str)):
             raise errors.InputError('particle number should be float or int or string of numbers')
@@ -3038,7 +3038,7 @@ class _Metabolite(object):
         Returns:
 
         """
-        return _Substrate(
+        return Substrate(
             self.model, name=self.name,
             particle_numbers=self.particle_numbers,
             concentration=self.concentration,
@@ -3057,7 +3057,7 @@ class _Metabolite(object):
         Returns:
 
         """
-        return _Product(
+        return Product(
             self.model, name=self.name,
             particle_numbers=self.particle_numbers,
             concentration=self.concentration,
@@ -3076,7 +3076,7 @@ class _Metabolite(object):
         Returns:
 
         """
-        return _Modifier(
+        return Modifier(
             self.model, name=self.name,
             particle_numbers=self.particle_numbers,
             concentration=self.concentration,
@@ -3116,7 +3116,7 @@ class _Metabolite(object):
         return self.compartment
 
 
-class _Substrate(_Metabolite):
+class Substrate(Metabolite):
     """Inherits from Metabolite. Takes the same argument as Metabolite."""
 
     def __init__(self, model, name='new_metabolite', particle_numbers=None,
@@ -3128,7 +3128,7 @@ class _Substrate(_Metabolite):
         self.compartment = compartment
         self.simulation_type = simulation_type
         self.key = key
-        super(_Substrate, self).__init__(
+        super(Substrate, self).__init__(
             model, name=self.name,
             particle_numbers=self.particle_numbers,
             concentration=self.concentration,
@@ -3146,7 +3146,7 @@ class _Substrate(_Metabolite):
         return self.__str__()
 
 
-class _Product(_Metabolite):
+class Product(Metabolite):
     """Inherits from Metabolite. Takes the same argument as Metabolite."""
 
     def __init__(self, model, name='new_metabolite', particle_numbers=None,
@@ -3158,7 +3158,7 @@ class _Product(_Metabolite):
         self.compartment = compartment
         self.simulation_type = simulation_type
         self.key = key
-        super(_Product, self).__init__(
+        super(Product, self).__init__(
             model, name=self.name,
             particle_numbers=self.particle_numbers,
             concentration=self.concentration,
@@ -3176,7 +3176,7 @@ class _Product(_Metabolite):
         return self.__str__()
 
 
-class _Modifier(_Metabolite):
+class Modifier(Metabolite):
     """Inherits from Metabolite. Takes the same argument as Metabolite."""
 
     def __init__(self, model, name='new_metabolite', particle_numbers=None,
@@ -3188,7 +3188,7 @@ class _Modifier(_Metabolite):
         self.compartment = compartment
         self.simulation_type = simulation_type
         self.key = key
-        super(_Modifier, self).__init__(
+        super(Modifier, self).__init__(
             model, name=self.name,
             particle_numbers=self.particle_numbers,
             concentration=self.concentration,
@@ -3208,7 +3208,7 @@ class _Modifier(_Metabolite):
 
 @mixin(ComparisonMethodsMixin)
 @mixin(ReadModelMixin)
-class _GlobalQuantity(object):
+class GlobalQuantity(object):
     """Create a global quantity.
     
     ##TODO:
@@ -3261,7 +3261,7 @@ class _GlobalQuantity(object):
             raise errors.InputError('name property cannot be None')
 
         if self.key == None:
-            self.key = _KeyFactory(self.model, type='global_quantity').generate()
+            self.key = KeyFactory(self.model, type='global_quantity').generate()
 
         if self.initial_value is None:
             self.initial_value = 1
@@ -3350,7 +3350,7 @@ class _GlobalQuantity(object):
 
         """
         if self.key == None:
-            self.key = _KeyFactory(self.model, type='global_quantity').generate()
+            self.key = KeyFactory(self.model, type='global_quantity').generate()
 
         if self.simulation_type == None:
             self.simulation_type = 'fixed'
@@ -3366,7 +3366,7 @@ class _GlobalQuantity(object):
 
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
-class _Reaction(object):
+class Reaction(object):
     """Build a copasi reaction.
     
     ##TODO remove parameters, parameters_dict, substrate, products
@@ -3467,7 +3467,7 @@ class _Reaction(object):
                     'type should be either fixed or assignment. ODE not supported as Reactions can be used.')
 
         if self.key is None:
-            self.key = _KeyFactory(self.model, type='reaction').generate()
+            self.key = KeyFactory(self.model, type='reaction').generate()
 
         if self.name is None:
             raise errors.InputError('name property cannot be None')
@@ -3482,7 +3482,7 @@ class _Reaction(object):
             raise errors.InputError('rate_law is a required argument')
 
         if self.key is None:
-            self.key = _KeyFactory(self.model, type='reaction').generate()
+            self.key = KeyFactory(self.model, type='reaction').generate()
 
         if self.name == None:
             self.name = self.key
@@ -3500,7 +3500,7 @@ class _Reaction(object):
 
         """
 
-        trans = _Translator(self.model, self.expression)
+        trans = Translator(self.model, self.expression)
         self.substrates = trans.substrates
         self.products = trans.products
         self.modifiers = trans.modifiers
@@ -3512,10 +3512,10 @@ class _Reaction(object):
             raise errors.InputError('rate_law is {}'.format(self.rate_law))
 
         if isinstance(self.rate_law, str):
-            expression_components = _Expression(self.rate_law).to_list()
+            expression_components = Expression(self.rate_law).to_list()
 
         ## for handling existing functions
-        elif isinstance(self.rate_law, _Function):
+        elif isinstance(self.rate_law, Function):
             if 'mass action' in self.rate_law.name.lower():
                 forward = reduce(
                     lambda x, y: '{}*{}'.format(
@@ -3529,16 +3529,16 @@ class _Reaction(object):
                     )
                     self.rate_law = 'k1*{}-k2*{}'.format(forward, backward)
 
-                expression_components = _Expression(self.rate_law).to_list()
+                expression_components = Expression(self.rate_law).to_list()
 
             else:
-                expression_components = _Expression(self.rate_law.expression).to_list()
+                expression_components = Expression(self.rate_law.expression).to_list()
         parameter_list = []
         for i in expression_components:
             if i not in reaction_components:
                 parameter_list.append(i)
 
-        local_keys = _KeyFactory(self.model, type='constant').generate(len(parameter_list))
+        local_keys = KeyFactory(self.model, type='constant').generate(len(parameter_list))
         if isinstance(local_keys, str):
             local_keys = [local_keys]
 
@@ -3550,21 +3550,21 @@ class _Reaction(object):
                 ## do not re-add a parameter if it already exists
                 # LOG.info('adding parameter called --> {}'.format(parameter_list[i]))
                 try:
-                    p = _LocalParameter(self.model,
-                                        name=parameter_list[i],
-                                        key=local_keys[i],
-                                        value=self.parameter_values[parameter_list[i]],
-                                        reaction_name=self.name,
-                                        global_name='({}).{}'.format(self.name, parameter_list[i]),
-                                        )
+                    p = LocalParameter(self.model,
+                                       name=parameter_list[i],
+                                       key=local_keys[i],
+                                       value=self.parameter_values[parameter_list[i]],
+                                       reaction_name=self.name,
+                                       global_name='({}).{}'.format(self.name, parameter_list[i]),
+                                       )
                 except KeyError:
-                    p = _LocalParameter(self.model,
-                                        name=parameter_list[i],
-                                        key=local_keys[i],
-                                        value=0.1,
-                                        reaction_name=self.name,
-                                        global_name='({}).{}'.format(self.name, parameter_list[i]),
-                                        )
+                    p = LocalParameter(self.model,
+                                       name=parameter_list[i],
+                                       key=local_keys[i],
+                                       value=0.1,
+                                       reaction_name=self.name,
+                                       global_name='({}).{}'.format(self.name, parameter_list[i]),
+                                       )
 
                 # LOG.warning('deleted simulation_type from local parameter definition. May cause bugs')
                 parameter_collection.append(p)
@@ -3590,10 +3590,10 @@ class _Reaction(object):
                 ma = MassAction(self.model, reversible=self.reversible)
                 return ma
             else:
-                exp = _Expression(self.rate_law).to_list()
-        elif isinstance(self.rate_law, _Function):
+                exp = Expression(self.rate_law).to_list()
+        elif isinstance(self.rate_law, Function):
             # return self.rate_law
-            exp = _Expression(self.rate_law.expression).to_list()
+            exp = Expression(self.rate_law.expression).to_list()
 
         role_dct = {}
 
@@ -3611,7 +3611,7 @@ class _Reaction(object):
                 role_dct[i] = 'constant'
 
         existing = self.model.get('function', self.rate_law, 'expression')
-        function = _Function(
+        function = Function(
             self.model,
             name="({}).{}".format(
                 self.name,
@@ -3721,7 +3721,7 @@ class _Reaction(object):
 
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
-class _Function(object):
+class Function(object):
     """Class to hold copasi function definitions for rate laws"""
 
     def __init__(self, model, name='function_1', expression=None,
@@ -3792,7 +3792,7 @@ class _Function(object):
             self.type = 'user_defined'
 
         if not self.key:
-            self.key = _KeyFactory(self.model, type='function').generate()
+            self.key = KeyFactory(self.model, type='function').generate()
 
         if self.name == None:
             self.name = self.key
@@ -3814,7 +3814,7 @@ class _Function(object):
         ## else reverse engineer new parameter descriptions
         ## from the info that we have
         else:
-            function_parameter_keys = _KeyFactory(
+            function_parameter_keys = KeyFactory(
                 self.model, type='function_parameter'
             ).generate(len(self.roles))
 
@@ -3829,11 +3829,11 @@ class _Function(object):
 
             for i in range(len(self.roles)):
                 self.list_of_parameter_descriptions.append(
-                    _ParameterDescription(self.model,
-                                          key=function_parameter_keys[i],
-                                          name=keys[i],
-                                          role=values[i],
-                                          order=i))
+                    ParameterDescription(self.model,
+                                         key=function_parameter_keys[i],
+                                         name=keys[i],
+                                         role=values[i],
+                                         order=i))
             return self.list_of_parameter_descriptions
 
     def to_xml(self):
@@ -3858,7 +3858,7 @@ class _Function(object):
         expression = etree.SubElement(func, '{http://www.copasi.org/static/schema}Expression')
         if isinstance(self.expression, str):
             expression.text = self.expression
-        elif isinstance(self.expression, _Function):
+        elif isinstance(self.expression, Function):
             expression.text = self.expression.expression
         else:
             raise TypeError(
@@ -3879,7 +3879,7 @@ class _Function(object):
 
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
-class _ParameterDescription(object):
+class ParameterDescription(object):
     """ParameterDescription objects are part of a function which in turn
     are used as rate laws.
 
@@ -3942,7 +3942,7 @@ class _ParameterDescription(object):
 
 @mixin(ReadModelMixin)
 @mixin(ComparisonMethodsMixin)
-class _LocalParameter(object):
+class LocalParameter(object):
     """A Parameter within the scope of a reaction"""
 
     def __init__(self, model, name='local_parameter', value=None,
@@ -3987,7 +3987,7 @@ class _LocalParameter(object):
             raise errors.InputError('Name is "{}"'.format(self.name))
 
         if self.key is None:
-            self.key = _KeyFactory(self.model, type='parameter')
+            self.key = KeyFactory(self.model, type='parameter')
             if self.key is None:
                 raise errors.InputError('Key is "{}"'.format(self.key))
 
@@ -4088,7 +4088,7 @@ class _LocalParameter(object):
 
 
 @mixin(ReadModelMixin)
-class _KeyFactory(object):
+class KeyFactory(object):
     """Class for generating all keys required by COPASI components"""
 
     def __init__(self, model, type='metabolite'):
@@ -4102,7 +4102,7 @@ class _KeyFactory(object):
         .. highlight::
 
             Generate one metabolite key
-            >>> KF = _KeyFactory(model, type='metabolite')
+            >>> KF = KeyFactory(model, type='metabolite')
             >>> KF.generate(n=1)
         """
         self.model = self.read_model(model)
@@ -4340,7 +4340,7 @@ class _KeyFactory(object):
 
 
 @mixin(ComparisonMethodsMixin)
-class _Expression(object):
+class Expression(object):
     """Convert a expression (i.e. rate law expression) into
     Expression object such that we can split by existing copasi
     operators.
@@ -4465,7 +4465,7 @@ class _Expression(object):
 
 
 @mixin(ReadModelMixin)
-class _Translator(object):
+class Translator(object):
     """Translate a copasi style reaction into
     lists of substrates, products and modifiers.
 
@@ -4649,18 +4649,18 @@ class _Translator(object):
             metab = self.model.get('metabolite', comp, by='name')
             if metab == []:
                 try:
-                    metab = _Metabolite(self.model, name=comp,
-                                        concentration=1,
-                                        compartment=self.model.compartments[0],
-                                        key=_KeyFactory(self.model,
-                                                       type='metabolite').generate())
+                    metab = Metabolite(self.model, name=comp,
+                                       concentration=1,
+                                       compartment=self.model.compartments[0],
+                                       key=KeyFactory(self.model,
+                                                      type='metabolite').generate())
                 except IndexError:
                     self.model.add_component('compartment', 'NewCompartment')
-                    metab = _Metabolite(self.model, name=comp,
-                                        concentration=1,
-                                        compartment=self.model.compartments[0],
-                                        key=_KeyFactory(self.model,
-                                                       type='metabolite').generate())
+                    metab = Metabolite(self.model, name=comp,
+                                       concentration=1,
+                                       compartment=self.model.compartments[0],
+                                       key=KeyFactory(self.model,
+                                                      type='metabolite').generate())
 
                 self.model = self.model.add_metabolite(metab)
 
@@ -4683,7 +4683,7 @@ class _Translator(object):
         return lst
 
 
-class MassAction(_Function):
+class MassAction(Function):
     """Recreates the COPASI MassAction rate law but didn't get used
     in main code.
 
@@ -4726,15 +4726,15 @@ class MassAction(_Function):
 
         """
 
-        self.key = _KeyFactory(self.model, type='function').generate()
+        self.key = KeyFactory(self.model, type='function').generate()
 
         if self.reversible == 'false':
             self.name = 'Mass action (irreversible)'
             self.type = 'MassAction'
-            substrate = _ParameterDescription(self.model, key='FunctionParameter_1000', name='substrate', order='1',
-                                              role='substrate')
-            parameter = _ParameterDescription(self.model, key='FunctionParameter_1001', name='k1', order='0',
-                                              role='constant')
+            substrate = ParameterDescription(self.model, key='FunctionParameter_1000', name='substrate', order='1',
+                                             role='substrate')
+            parameter = ParameterDescription(self.model, key='FunctionParameter_1001', name='k1', order='0',
+                                             role='constant')
             self.list_of_parameter_descriptions = [substrate, parameter]
             self.reversible = 'false'
             self.expression = 'k1*PRODUCT&lt;substrate_i>'
@@ -4746,12 +4746,12 @@ class MassAction(_Function):
             self.reversible = 'true'
             self.expression = 'k1*PRODUCT&lt;substrate_i>-k2*PRODUCT&lt;product_j>'
 
-            k1 = _ParameterDescription(self.model, key='FunctionParameter_1002', name='k1', order='0', role='constant')
-            s = _ParameterDescription(self.model, key='FunctionParameter_1003', name='substrate', order='1',
-                                      role='substrate')
-            k2 = _ParameterDescription(self.model, key='FunctionParameter_1004', name='k2', order='2', role='constant')
-            p = _ParameterDescription(self.model, key='FunctionParameter_1005', name='product', order='3',
-                                      role='product')
+            k1 = ParameterDescription(self.model, key='FunctionParameter_1002', name='k1', order='0', role='constant')
+            s = ParameterDescription(self.model, key='FunctionParameter_1003', name='substrate', order='1',
+                                     role='substrate')
+            k2 = ParameterDescription(self.model, key='FunctionParameter_1004', name='k2', order='2', role='constant')
+            p = ParameterDescription(self.model, key='FunctionParameter_1005', name='product', order='3',
+                                     role='product')
             self.list_of_parameter_descriptions = [k1, s, k2, p]
         return self
 
