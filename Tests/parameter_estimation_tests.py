@@ -2407,7 +2407,7 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
         actual_end = None
         actual_start = None
         mod = self.pe.config.models['first'].model
-        for i in mod.xml.xpath("//*[@name='dataset2_1']"):
+        for i in mod.xml.xpath("//*[@name='dataset2_MultiExperiment1']"):
             for j in list(i):
                 if j.attrib['name'] == 'First Row':
                     actual_start = int(j.attrib['value'])
@@ -2425,7 +2425,7 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
         actual_end = None
 
         mod = self.pe.config.models['first'].model
-        for i in mod.xml.xpath("//*[@name='dataset3_2']"):
+        for i in mod.xml.xpath("//*[@name='dataset3_MultiExperiment2']"):
             for j in list(i):
                 if j.attrib['name'] == 'First Row':
                     actual_start = int(j.attrib['value'])
