@@ -38,21 +38,53 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         self.fname = os.path.join(os.path.dirname(__file__), 'timecourse.txt')
         self.data = self.model.simulate(0, 10, 1, report_name=self.fname)
 
-    def test(self):
+        with tasks.ParameterEstimation.Context(
+                self.model, self.fname, context='s', parameters='g'
+        ) as context:
+            context.set('method', 'hooke_jeeves')
+            context.set('run_mode', True)
+            context.set('pe_number', 1)
+            config = context.get_config()
+        self.pe = tasks.ParameterEstimation(config)
+        self.pe_mod = self.pe.models['test_model'].model
+
+    def test_run(self):
         """
         Returns:
 
         """
         with tasks.ParameterEstimation.Context(
-                self.model, self.fname, context='pl', parameters='g'
+                self.pe_mod, self.fname, context='pl', parameters='g'
         ) as context:
             context.set('method', 'hooke_jeeves')
             context.set('run_mode', True)
+            context.set('pe_number', 12)
             config = context.get_config()
         pe = tasks.ParameterEstimation(config)
         expected = 11
         actual = viz.Parse(pe)['A2B'].shape[0]
         self.assertEqual(expected, actual)
+
+    def test_plot(self):
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'hooke_jeeves')
+            context.set('tolerance', 1e-1)
+            context.set('iteration_limit', 5)
+            context.set('run_mode', True)
+            context.set('pe_number', 10)
+            config = context.get_config()
+        pe = tasks.ParameterEstimation(config)
+        data = viz.Parse(pe).data
+        p = viz.PlotProfileLikelihoods(self.pe_mod, data)
+        p.plot1('A2B', best_rss=1.2)
+
+    def test(self):
+        from scipy.stats import chi2
+        print(chi2.ppf(0.95, df=6))
+
+
 
 
 if __name__ == '__main__':

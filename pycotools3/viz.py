@@ -372,80 +372,11 @@ class TruncateData(_Viz):
             return self.ranks()
 
 
-class ChiSquaredStatistics(object):
-    """ """
-
-    def __init__(self, rss, dof, num_data_points, alpha,
-                 plot_chi2=False, show=False):
-        self.alpha = alpha
-        self.dof = dof
-        self.rss = rss
-        self.num_data_points = num_data_points
-        self.CL = self.calc_chi2_CL()
-        self.show = show
-
-        if self.alpha > 1 or self.alpha < 0 or len(str(self.alpha)) > 4:
-            raise errors.InputError('alpha parameter should be between 0 and 1 and be '
-                                    'to 2 decimal places. I.e. 0.95')
-
-        if plot_chi2:
-            self.plot_chi2_CL()
-
-    def chi2_lookup_table(self, alpha):
-        """Looks at the cdf of a chi2 distribution at incriments of
-        0.1 between 0 and 100.
-        
-        Returns the x axis value at which the alpha interval has been crossed,
-        i.e. gets the cut off point for chi2 dist with dof and alpha .
-
-        Args:
-          alpha: 
-
-        Returns:
-
-        """
-        nums = numpy.arange(0, 100, 0.1)
-        table = list(zip(nums, scipy.stats.chi2.cdf(nums, self.dof)))
-        for i in table:
-            if i[1] <= alpha:
-                chi2_df_alpha = i[0]
-        return chi2_df_alpha
-
-    def get_chi2_alpha(self):
-        """ """
-        dct = {}
-        alphas = numpy.arange(0, 1, 0.01)
-        for i in alphas:
-            dct[round(i, 3)] = self.chi2_lookup_table(i)
-        return dct[self.alpha]
-
-    def plot_chi2_CL(self):
-        """Visualize where the alpha cut off is on the chi2 distribution"""
-        x = numpy.linspace(scipy.stats.chi2.ppf(0.01, self.dof), scipy.stats.chi2.ppf(0.99, self.dof), 100)
-
-        plt.figure()
-        plt.plot(x, scipy.stats.chi2.pdf(x, self.dof), 'k-', lw=4, label='chi2 pdf')
-
-        y_alpha = numpy.linspace(plt.ylim()[0], plt.ylim()[1])
-        x_alpha = [self.get_chi2_alpha()] * len(y_alpha)
-
-        plt.plot(x_alpha, y_alpha, '--', linewidth=4)
-        plt.xlabel('x', fontsize=22)
-        plt.ylabel('Probability', fontsize=22)
-        plt.title('Chi2 distribution with {} dof'.format(self.dof), fontsize=22)
-        if self.show:
-            plt.show()
-
-    def calc_chi2_CL(self):
-        """:return:"""
-        return self.rss * exponential_function((self.get_chi2_alpha() / self.num_data_points))
-
-
 class Parse(object):
     """General class for parsing copasi output into Python.
-    
+
     First argument is an instance of a pycotools3 class.
-    
+
     ==================================          ===========================
     instance                                       Description
     ==================================          ===========================
@@ -454,9 +385,6 @@ class Parse(object):
     tasks.ParameterEstimation                   Parse parameter estimation
                                                 data from PE.report_name into pandas.df
     tasks.Scan                                  Parse scan data from scan.report_name
-    tasks.MultiParameterEstimation              Parse folder of parameter estimation
-                                                data from MPE.results_directory into
-                                                pandas.df
     Parse                                       enable parsing from a parse instance.
                                                 Just returns itself
     str                                         Parse data from folder of parameter
@@ -747,7 +675,7 @@ class Parse(object):
         """:return:
 
         Args:
-          cls_instance: 
+          cls_instance:
           folder:  (Default value = None)
 
         Returns:
@@ -944,7 +872,7 @@ class Parse(object):
                 2 element `tuple`.
                 First element:
                     dict[model_number][parameter] = path/to/results.csv
-            
+
                 Second element:
                     dict[model_number][parameter] = fit item order for that model
 
@@ -1029,12 +957,12 @@ class Parse(object):
             """number of data points in your data files. Relies on
             being able to locate the experiment files from the
             copasi file
-            
+
             :return:
                 `int`.
 
             Args:
-              experiment_files: 
+              experiment_files:
 
             Returns:
 
@@ -1058,7 +986,7 @@ class Parse(object):
 
         def confidence_level(cls):
             """Get confidence level using ChiSquaredStatistics
-            
+
             :return:
                 dict[index][confidence_level]
 
@@ -1171,9 +1099,9 @@ class Parse(object):
 
 class PlotTimeCourse(_Viz):
     """Plot time course data
-    
+
     Time course kwargs:
-    
+
     ================    ======================================
     kwarg               Description
     ================    ======================================
@@ -1376,17 +1304,17 @@ class PlotTimeCourseEnsemble(_Viz):
     and copasi file are automatically extracted. If cls
     is a string, then it must point to a folder of parameter
     estimation data and a copasi file must be specified.
-    
+
     One by one the parameter sets are inserted into the copasi
     model and a time course is simulated. The data is aggregated
     using a :py:class:`seaborn.tsplot` using a statistic of
     the users choice (default is :py:meth:`numpy.mean`). Confidence
     intervals are estimated using a bootstrapping method which is
     built-in to :py:class:`seaborn.tsplot`
-    
-    
+
+
     kwargs
-    
+
     ================    ==========================================================
     kwarg               Description
     ================    ==========================================================
@@ -1426,14 +1354,14 @@ class PlotTimeCourseEnsemble(_Viz):
                         parameter estimation in order to extract parameter headers
     **kwargs            see :ref:`kwargs` for savefig options
     ================    ==========================================================
-    
-    
+
+
     #todo
     =====
     Currently initial values are used as starting conditions but in some situations
     like when independent variables are used to set starting parameters for an experiment
     this is not being captured in the ensemble time course.
-    
+
     Therefore, modify to follow directions in data files from independent data. Also run
     multiple times if you have multiple _experiments measuring the same varibale.
 
@@ -1888,6 +1816,152 @@ class PlotScan(_Viz):
         )
 
 
+class Boxplots(_Viz):
+    """Plot a boxplot for multi parameter estimation data.
+
+    ============    =================================================
+    kwarg           Description
+    ============    =================================================
+    num_per_plot    Number of parameter per plot. Remainder
+                    fills up another plot.
+    **kwargs        see :ref:`kwargs`  options
+    ============    =================================================
+
+    Args:
+
+    Returns:
+
+    """
+
+    def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            instance of tasks.MultiParameterEstimation or string .
+            Same as :py:class:`PlotTimeCourseEnsemble`
+
+
+        :param kwargs:
+        """
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+        self.default_properties = {'log10': False,
+                                   'truncate_mode': 'percent',
+                                   'theta': 100,
+                                   'num_per_plot': 6,
+                                   'xtick_rotation': 'vertical',
+                                   'ylabel': 'Estimated Parameter\n Value(Log10)',
+                                   'title': 'Parameter Distributions',
+                                   'savefig': False,
+                                   'results_directory': None,
+                                   'dpi': 400,
+                                   'show': False,
+                                   'despine': True,
+                                   'ext': 'png',
+                                   'context': 'talk',
+                                   'font_scale': 1.5,
+                                   'rc': None,
+                                   'copasi_file': None,
+                                   'filename': 'boxplot'
+                                   }
+        self.default_properties.update(self.plot_kwargs)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Boxplot'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+        self.divide_data()
+        if self.savefig:
+            self.results_directory = self.create_directory()
+        self.plot()
+
+    def _do_checks(self):
+        """ """
+        pass
+
+    def create_directory(self):
+        """:return:"""
+        dct = {}
+        for model_name in self.data:
+            if self.results_directory is None:
+                if type(self.cls) == Parse:
+                    dct[model_name] = os.path.join(
+                        os.path.dirname(
+                            self.cls.config.models[model_name].model.copasi_file
+                        ), 'Boxplots')
+                else:
+                    dct[model_name] = os.path.join(
+                        self.cls.models[model_name].model.root, 'Boxplots')
+                if not os.path.isdir(dct[model_name]):
+                    os.makedirs(dct[model_name])
+        return dct
+
+    def plot(self):
+        """Plot multiple parameter estimation data as boxplot
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        for model_name in self.data:
+            data = self.data[model_name]
+            labels = self.divide_data()[model_name]
+            for label_set in range(len(labels)):
+                fig = plt.figure()  #
+                plot_data = data[labels[label_set]]
+                seaborn.boxplot(data=plot_data)
+                plt.xticks(rotation=self.xtick_rotation)
+                if self.despine:
+                    seaborn.despine(fig=fig, top=True, right=True)
+                if self.title is not None:
+                    plt.title(self.title + '(n={})'.format(data.shape[0]))
+                plt.ylabel(self.ylabel)
+                if self.savefig:
+                    fle = os.path.join(self.results_directory[model_name],
+                                       '{}{}.{}'.format(self.filename, label_set, self.ext))
+                    plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+        if self.show:
+            plt.show()
+
+    def divide_data(self):
+        """split data into multi plot
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        dct = {}
+        for model_name in self.data:
+            data = self.data[model_name]
+            n_vars = len(list(data.keys()))
+            n_per_plot = self.num_per_plot
+            #        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
+            int_division = n_vars // n_per_plot
+            remainder = n_vars - (n_per_plot * int_division)
+
+            l = []
+            for i in range(int_division):
+                l.append(list(list(data.keys())[i * n_per_plot:(i + 1) * n_per_plot]))
+            if remainder is not 0:
+                l.append(list(list(data.keys())[-remainder:]))
+            dct[model_name] = l
+        return dct
+
+
 # class PlotParameterEstimation(_Viz, PlotKwargs):
 #     """Visualize parameter estimation runs against a single
 #     parameter estimation. Similar to PlotTimeCourseEnsemble
@@ -2144,151 +2218,23 @@ class PlotScan(_Viz):
 #         if self.show:
 #             plt.show()
 
+class ChiSquaredStatistics:
+    """ """
 
-class Boxplots(_Viz, PlotKwargs):
-    """Plot a boxplot for multi parameter estimation data.
-    
-    ============    =================================================
-    kwarg           Description
-    ============    =================================================
-    num_per_plot    Number of parameter per plot. Remainder
-                    fills up another plot.
-    **kwargs        see :ref:`kwargs`  options
-    ============    =================================================
+    def __init__(self, rss, dof, num_data_points, alpha,
+                 plot_chi2=False, show=False):
+        self.alpha = alpha
+        self.dof = dof
+        self.rss = rss
+        self.num_data_points = num_data_points
+        self.show = show
 
-    Args:
+        if self.alpha > 1 or self.alpha < 0:
+            raise TypeError('alpha parameter should be between 0 and 1. ')
 
-    Returns:
+    def calculate_chi2_of_alpha_df(self):
+        return scipy.stats.chi2.ppf(self.alpha, df=self.dof)
 
-    """
-
-    def __init__(self, cls, **kwargs):
-        """
-
-        :param cls:
-            instance of tasks.MultiParameterEstimation or string .
-            Same as :py:class:`PlotTimeCourseEnsemble`
-
-
-        :param kwargs:
-        """
-        self.cls = cls
-        self.kwargs = kwargs
-        self.plot_kwargs = self.plot_kwargs()
-
-        self.default_properties = {'log10': False,
-                                   'truncate_mode': 'percent',
-                                   'theta': 100,
-                                   'num_per_plot': 6,
-                                   'xtick_rotation': 'vertical',
-                                   'ylabel': 'Estimated Parameter\n Value(Log10)',
-                                   'title': 'Parameter Distributions',
-                                   'savefig': False,
-                                   'results_directory': None,
-                                   'dpi': 400,
-                                   'show': False,
-                                   'despine': True,
-                                   'ext': 'png',
-                                   'context': 'talk',
-                                   'font_scale': 1.5,
-                                   'rc': None,
-                                   'copasi_file': None,
-                                   'filename': 'boxplot'
-                                   }
-        self.default_properties.update(self.plot_kwargs)
-        for i in list(kwargs.keys()):
-            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Boxplot'.format(i)
-        self.kwargs = self.default_properties
-        self.default_properties.update(kwargs)
-        self.default_properties.update(self.plot_kwargs)
-        self.update_properties(self.default_properties)
-        self._do_checks()
-
-        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-
-        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
-
-        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-        self.divide_data()
-        if self.savefig:
-            self.results_directory = self.create_directory()
-        self.plot()
-
-    def _do_checks(self):
-        """ """
-        pass
-
-    def create_directory(self):
-        """:return:"""
-        dct = {}
-        for model_name in self.data:
-            if self.results_directory is None:
-                if type(self.cls) == Parse:
-                    dct[model_name] = os.path.join(
-                        os.path.dirname(
-                            self.cls.config.models[model_name].model.copasi_file
-                        ), 'Boxplots')
-                else:
-                    dct[model_name] = os.path.join(
-                        self.cls.models[model_name].model.root, 'Boxplots')
-                if not os.path.isdir(dct[model_name]):
-                    os.makedirs(dct[model_name])
-        return dct
-
-    def plot(self):
-        """Plot multiple parameter estimation data as boxplot
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        for model_name in self.data:
-            data = self.data[model_name]
-            labels = self.divide_data()[model_name]
-            for label_set in range(len(labels)):
-                fig = plt.figure()  #
-                plot_data = data[labels[label_set]]
-                seaborn.boxplot(data=plot_data)
-                plt.xticks(rotation=self.xtick_rotation)
-                if self.despine:
-                    seaborn.despine(fig=fig, top=True, right=True)
-                if self.title is not None:
-                    plt.title(self.title + '(n={})'.format(data.shape[0]))
-                plt.ylabel(self.ylabel)
-                if self.savefig:
-                    fle = os.path.join(self.results_directory[model_name],
-                                       '{}{}.{}'.format(self.filename, label_set, self.ext))
-                    plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
-        if self.show:
-            plt.show()
-
-    def divide_data(self):
-        """split data into multi plot
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        dct = {}
-        for model_name in self.data:
-            data = self.data[model_name]
-            n_vars = len(list(data.keys()))
-            n_per_plot = self.num_per_plot
-            #        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
-            int_division = n_vars // n_per_plot
-            remainder = n_vars - (n_per_plot * int_division)
-
-            l = []
-            for i in range(int_division):
-                l.append(list(list(data.keys())[i * n_per_plot:(i + 1) * n_per_plot]))
-            if remainder is not 0:
-                l.append(list(list(data.keys())[-remainder:]))
-            dct[model_name] = l
-        return dct
 
 
 # class LikelihoodRanks(_Viz, PlotKwargs):
@@ -4178,3 +4124,85 @@ class Boxplots(_Viz, PlotKwargs):
 #
 #         if self.show:
 #             plt.show()
+
+
+
+
+class PlotProfileLikelihoods(_Viz):
+
+    def __init__(self, mod, data):
+        if not isinstance(data, dict):
+            raise TypeError('expected a dictionary object but got a {}'.format(type(data)))
+
+        for k, v in data.items():
+            if not isinstance(v, pandas.DataFrame):
+                raise TypeError('expected a pandas.DataFrame object but got a {}'.format(type(v)))
+
+        self.mod = mod
+        self.data = data
+
+    def _get_number_of_estimated_parameters(self):
+        """
+        Counts the number of parameters that are present in the parameter estimation task
+        Returns:
+
+        """
+        query = '//*[@name="FitItem"]'
+        c = 0
+        for i in self.mod.xml.xpath(query):
+            c += 1
+        return c
+
+
+
+    def plot1(self, parameter, best_rss, alpha=0.95, selection='RSS', df=None):
+        """
+
+        Args:
+            selection:
+
+        Returns:
+
+        """
+        if isinstance(selection, str):
+            selection = [selection]
+
+        if not isinstance(selection, list):
+            raise TypeError
+
+        if parameter == selection:
+            raise ValueError
+
+        if df is None:
+            df = self._get_number_of_estimated_parameters()
+
+
+        cl = scipy.stats.chi2.ppf(alpha, df=df) + best_rss
+
+        data = pandas.concat(self.data)
+        data = data.loc[parameter][selection]
+
+        print(data)
+
+        # data = self.data['C2A_k1']
+        # print(data)
+
+    def calculate_cl(self):
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

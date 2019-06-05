@@ -2447,7 +2447,7 @@ class Model(_base._Base):
         if kwargs.get('show_parameters'):
             LOG.info('Parameter set that was inserted: \n\n{}'.format(I.parameters.transpose()))
 
-    def simulate(self, start, stop, by, species='m', **kwargs):
+    def simulate(self, start, stop, by, variables='m', **kwargs):
         for i in [start, stop, by]:
             if not isinstance(i, (float, int)):
                 raise TypeError(f'\"{i}" must be of type int or float. Got "{type(i)}"')
@@ -2457,7 +2457,7 @@ class Model(_base._Base):
                               intervals=stop * by - start,
                               **kwargs)
 
-        variables = self.get_variable_names(which=species, include_assignments=True)
+        variables = self.get_variable_names(which=variables, include_assignments=True)
 
         if not os.path.isfile(TC.report_name):
             raise RuntimeError('Time course did not simulate')

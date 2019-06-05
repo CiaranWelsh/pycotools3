@@ -67,7 +67,7 @@ The profile likelihood is calculated around the current parameter set in the mod
        context.set('method', 'hooke_jeeves')
        context.set('pl_lower_bound', 1000)
        context.set('pl_upper_bound', 1000)
-       context.set('number_of_steps', 25)
+       context.set('pe_number', 25) # number of steps in each profile likelihood
        context.set('run_mode', True)
        config = context.get_config()
 
