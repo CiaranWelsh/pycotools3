@@ -431,7 +431,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
         data1.to_csv(fname1, sep='\t')
         data2.to_csv(fname2, sep='\t')
 
-
         fname3 = os.path.join(os.path.dirname(__file__), 'report3.txt')
         df = pandas.read_csv(fname2, sep='\t')
         ## remove square brackets around species
@@ -886,7 +885,6 @@ class ExperimentMapperTests(_test_base._BaseTest):
                 if j.attrib['value'] == 'Experiment_report1':
                     actual = 'Experiment_report1'
         self.assertEqual(expected, actual)
-
 
 
 class ParameterEstimationTests(_test_base._BaseTest):
@@ -1506,7 +1504,6 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
                 if j.attrib['name'] == 'LowerBound':
                     l.append(j.attrib['value'])
         self.assertListEqual([0.1, 0.1, 0.1], [float(i) for i in l])
-
 
     def test_context_mappings_after_use_of_set(self):
         fname = os.path.join(os.path.dirname(__file__), 'timeseries.txt')
@@ -2395,7 +2392,7 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
         actual_end = None
         actual_start = None
         mod = self.pe.config.models['first'].model
-        for i in mod.xml.xpath("//*[@name='dataset2_1']"):
+        for i in mod.xml.xpath("//*[@name='dataset2_MultiExperiment1']"):
             for j in list(i):
                 if j.attrib['name'] == 'First Row':
                     actual_start = int(j.attrib['value'])
@@ -2421,7 +2418,6 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
         # ans = [(1, 2), (4, 4), (6, 6)]
         self.assertEqual((expected_start, expected_end), (actual_start, actual_end))
 
-
     def test_file_data_file3(self):
         expected = (10, 12)
 
@@ -2436,7 +2432,6 @@ class ParameterEstimationTestsWithDifferentTypesOfDataSet(_test_base._BaseTest):
                 elif j.attrib['name'] == 'Last Row':
                     actual_end = int(j.attrib['value'])
         self.assertEqual(expected, (actual_start, actual_end))
-
 
 
 class DuplicateForEachExperimentTests(_test_base._BaseTest):
@@ -2508,12 +2503,13 @@ class DuplicateForEachExperimentTests(_test_base._BaseTest):
 
         self.pe = ParameterEstimation(self.config)
 
-
     # def test(self):
     #     self.pe.duplicate_for_every_experiment(
     #         self.pe.models['first'].model,
     #         'A',
     #     )
+
+
 #
 
 

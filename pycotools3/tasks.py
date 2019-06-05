@@ -2850,7 +2850,7 @@ class ParameterEstimation(_ParameterEstimationBase):
             """
             for experiment_name in self.experiment_names:
                 # determine whether the experiment_name has been appended with a number for multi experiments per file (i.e. exp1_0)
-                match = re.findall('(.*)_\d+$', experiment_name)
+                match = re.findall('(.*)_MultiExperiment\d+$', experiment_name)
                 if match != []:
                     experiment_name = match[0]
                 for default_kwarg in self.defaults.experiments:
@@ -3212,7 +3212,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                         num_experiments = len(data_str.strip().split('\n\n'))
                         assert num_experiments > 1, "was expecting more than 1 experiment but got {}".format(num_experiments)
                 if multiple_experiments:
-                    experiment_names += [experiment_name+'_'+str(j) for j in range(num_experiments)]
+                    experiment_names += [experiment_name+'_MultiExperiment'+str(j) for j in range(num_experiments)]
                 else:
                     experiment_names.append(experiment_name)
             return experiment_names
@@ -3274,7 +3274,7 @@ class ParameterEstimation(_ParameterEstimationBase):
             """
             model_obj = []
             for i in self.experiment_names:
-                match = re.findall('(.*)_\d+$', i)
+                match = re.findall('(.*)_MultiExperiment\d+$', i)
                 if match != []:
                     i = match[0]
                 for j in self.experiments[i].mappings:
@@ -3765,7 +3765,7 @@ class ParameterEstimation(_ParameterEstimationBase):
 
         for experiment_name in experiment_names:
             ## if experiment_name exists, remove and reconfigure
-            match = re.findall('(.*)_\d+$', experiment_name)
+            match = re.findall('(.*)_MultiExperiment\d+$', experiment_name)
             try:
                 experiment = experiments[experiment_name]
             except KeyError:
@@ -3804,7 +3804,7 @@ class ParameterEstimation(_ParameterEstimationBase):
             else:
                 data, line_numbers = self._read_data_multiple_experiments(experiment.filename, experiment.separator)
                 # need to index the data here to match the current experiment key
-                idx = re.findall('.*_(\d+)?', experiment_name)
+                idx = re.findall('.*_MultiExperiment(\d+)?', experiment_name)
                 if idx == []:
                     raise ValueError
                 idx = int(idx[0])
@@ -4407,7 +4407,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                         for affected_experiment in item['affected_experiments']:
                             multi_experiments, num_experiments = self.config.multi_experiments
                             if affected_experiment in multi_experiments:
-                                new_affected_experiments += [affected_experiment+'_'+str(i) for i in range(num_experiments)]
+                                new_affected_experiments += [affected_experiment+'_MultiExperiment'+str(i) for i in range(num_experiments)]
                             else:
                                 new_affected_experiments.append(affected_experiment)
 
