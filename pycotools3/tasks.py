@@ -5236,7 +5236,10 @@ class ParameterEstimation(_ParameterEstimationBase):
                             new_file)
                 files[p] = os.path.abspath(new_file)
 
-            assert len(glob.glob(os.path.join(config.settings['problem'], '*.cps'))) == len(parameters)
+            if not len(glob.glob(os.path.join(config.settings['problem'], '*.cps'))) == len(parameters):
+                raise ValueError('num copasi files ({}) not equal to num parameters ({})'.format(
+                    len(glob.glob(os.path.join(config.settings['problem'], '*.cps'))), len(parameters)
+                ))
 
             ##change the models which appear in the config
             new_models_attr = {}
