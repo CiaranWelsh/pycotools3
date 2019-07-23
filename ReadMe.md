@@ -11,6 +11,9 @@ Pycotools3 is a set of tools for interacting with [COPASI simulation software](h
 
 Since publication, the pycotools project has moved to this pycotools3 repository, which is maintained separetly from pycotools. Since moving, the interface to COPASI's parameter estimation task has been significantly improved including inherent multi-model configuration and profile likelihood support - please refer to the **[pycotools3 documentation](http://pycotools3.readthedocs.io/en/latest/)** for more detail. Despite these improvements, there still a few things left to implement, namely full support for visualisation facilities.  For now, users are advised to checkout [matplotlib](https://matplotlib.org/contents.html) and [seaborn](https://seaborn.pydata.org/).
 
+## Documentation
+**[pycotools3 documentation](http://pycotools3.readthedocs.io/en/latest/)**
+
 ## Support 
 I get email notificatons fror stackoverflow questions tagged with `pycotools` so you can ask a question there. Additionally, you may contact me directly or post an issue.
 
