@@ -53,7 +53,7 @@ class ParseDataTests(_test_base._BaseTest):
         :return:
         """
         data = viz.Parse(self.pe).data
-        expected = [4, 6]
+        expected = [8, 6]
         actual = list(data['test_model'].shape)
         self.assertListEqual(expected, actual)
 
@@ -84,7 +84,7 @@ class TruncateDataTests(_test_base._BaseTest):
         :return:
         """
         data = viz.TruncateData(self.data, mode='percent', theta=50)
-        expected = [2, 6]
+        expected = [4, 6]
         actual = list(data['test_model'].shape)
         self.assertListEqual(expected, actual)
 
@@ -113,7 +113,7 @@ class TruncateDataTests(_test_base._BaseTest):
         """
         ##get best rank returns a series, not a dataframe
         data = viz.TruncateData(self.data, mode='below_theta', theta=100)
-        expected = [4, 6]
+        expected = [8, 6]
         actual = list(data['test_model'].shape)
         self.assertListEqual(expected, actual)
 
