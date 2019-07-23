@@ -25,13 +25,6 @@ Use:
 
 Remember to :bash:`source activate` your python 3.6 environment if you need to.
 
-.. warning::
-  
-  Currently Python 3.7 is not supported. This is because Pycotools3 depends on tellurium, which depends on other packages that do not support py3.6. 
-
-
-
-
 To install from `source <https://github.com/CiaranWelsh/pycotools3.git>`_:
 
 .. code-block:: bash
@@ -41,6 +34,27 @@ To install from `source <https://github.com/CiaranWelsh/pycotools3.git>`_:
   $ python setup.py install
 
 The procedure is the same in linux, mac and windows.
+
+Troubleshooting
+---------------
+
+### PyCoTools3 will not install
+Pycotools3 is only supported in Python 3 to Python 3.6. If you are using Python 2.7 or Python 3.7 please create a new conda Python3.7 environment. 
+
+.. code-block:: bash
+
+    $ conda create -n py36 python=3.6
+    $ conda activate py36
+    $ pip install pycotools3
+
+The same commands should work cross platform. 
+
+### You get errors when trying to build a model using :py:func:`pycotools3.model.loada`
+Make sure you have installed `Copasi <http://copasi.org/Download/_` and added the `Copasi/bin` directory to the path variable. 
+
+- `On Linux <https://unix.stackexchange.com/questions/26047/how-to-correctly-add-a-path-to-path_>`
+- `On Windows <https://stackoverflow.com/questions/9546324/adding-directory-to-path-environment-variable-in-windows>_`
+- `On Mac <https://stackoverflow.com/questions/7703041/editing-path-variable-on-mac_>`
 
 Documentation
 -------------
