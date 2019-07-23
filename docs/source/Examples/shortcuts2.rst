@@ -49,8 +49,7 @@ We first configure a model for the demonstration
     copasi_file = os.path.join(working_directory, 'example_model.cps')
 
     ## build model
-    with model.BuildAntimony(copasi_file) as builder:
-        mod = builder.load(antimony_string)
+    mod = model.loada(antimony_string, copasi_file)
 
     assert isinstance(mod, model.Model)
 

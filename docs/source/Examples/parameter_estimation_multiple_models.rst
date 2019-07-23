@@ -9,7 +9,8 @@ This is an example of how to configure a parameter estimation for multiple COPAS
     import matplotlib.pyplot as plt
     import seaborn
     from pycotools3 import model, tasks, viz
-
+    
+    # set seaborn context
     seaborn.set_context(context='talk')
 
     ## Choose a directory for our model and analysis
@@ -53,16 +54,18 @@ This is an example of how to configure a parameter estimation for multiple COPAS
         k6 = 0.1;
     end
     """
+    # create paths to where we want the two models
     copasi_file1 = os.path.join(working_directory, 'model1.cps')
     copasi_file2 = os.path.join(working_directory, 'model2.cps')
 
+    # Assemble into lists
     antimony_strings = [model1_string, model2_string]
     copasi_files = [copasi_file1, copasi_file2]
 
+    # create models
     model_list = []
     for i in range(len(copasi_files)):
-        with model.BuildAntimony(copasi_files[i]) as builder:
-            model_list.append(builder.load(antimony_strings[i]))
+        model_list.append(model.loada(antimony_strings[i], copasi_files[i])
 
     ## simulate some data, returns a pandas.DataFrame
     data = model_list[0].simulate(0, 20, 1)
@@ -71,6 +74,7 @@ This is an example of how to configure a parameter estimation for multiple COPAS
     experiment_filename = os.path.join(working_directory, 'data_from_model1.txt')
     data.to_csv(experiment_filename)
 
+    # Create the context, passing the model list rather than the Model object
     with tasks.ParameterEstimation.Context(model_list, experiment_filename, context='s', parameters='g') as context:
         context.set('separator', ',')
         context.set('run_mode', True)
@@ -81,10 +85,11 @@ This is an example of how to configure a parameter estimation for multiple COPAS
         context.set('upper_bound', 1e1)
 
         config = context.get_config()
-
+    
+    # Do the parameter estimation
     pe = tasks.ParameterEstimation(config)
 
+    # Parse the resulting data
     data = viz.Parse(pe).data
-
     print(data)
 

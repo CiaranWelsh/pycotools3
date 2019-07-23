@@ -9,9 +9,9 @@ This is an example of how to configure a simple parameter estimation using pycot
     import matplotlib.pyplot as plt
     import seaborn
     from pycotools3 import model, tasks, viz
-    seaborn.set_context(context='talk')
+    seaborn.set_context(context='talk')		# set seaborn context for formatting output of plots
 
-    ## Choose a directory for our model and analysis
+    ## Choose a directory for our model and analysis. Note this can be anywhere. 
     working_directory = os.path.dirname(__file__)
 
     ## In this model, A gets reversibly converted to B but the backwards reaction is additionally regulated by C.
@@ -43,12 +43,11 @@ This is an example of how to configure a simple parameter estimation using pycot
     end
     """
 
+    # Create a path to a copasi file
     copasi_file = os.path.join(working_directory, 'example_model.cps')
 
     ## build model
-    with model.BuildAntimony(copasi_file) as builder:
-        mod = builder.load(antimony_string)
-
+    mod = model.loada(antimony_string, copasi_file)
     assert isinstance(mod, model.Model)
 
     ## simulate some data, returns a pandas.DataFrame
