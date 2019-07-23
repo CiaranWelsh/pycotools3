@@ -7,6 +7,9 @@ Moreover, pycotools additionally supports the running of multiple copies of your
 .. code-block:: python
 
     from pycotools3 import model, tasks
+
+    working_directory = os.path.abspath('')
+
     antimony_string =  '''
         model negative_feedback()
             // define compartments
@@ -30,10 +33,10 @@ Moreover, pycotools additionally supports the running of multiple copies of your
         end
         '''
 
-     copasi_file = os.path.join(os.path.dirname(__file__), 'negative_fb.cps')
+     copasi_file = os.path.join(working_directory, 'negative_fb.cps')
      mod = model.loada(antimony_string, copasi_file )
 
-     data_fname = os.path.join(os.path.dirname(__file__), 'timecourse.txt')
+     data_fname = os.path.join(working_directory, 'timecourse.txt')
      mod.simulate(0, 10, 1, report_name=data_fname)
 
      assert os.path.isfile(data_fname)

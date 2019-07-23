@@ -12,7 +12,7 @@ This is an example of how to configure a simple parameter estimation using pycot
     seaborn.set_context(context='talk')		# set seaborn context for formatting output of plots
 
     ## Choose a directory for our model and analysis. Note this can be anywhere. 
-    working_directory = os.path.dirname(__file__)
+    working_directory = os.path.abspath('')
 
     ## In this model, A gets reversibly converted to B but the backwards reaction is additionally regulated by C.
     ## B is reversibly converted into C.

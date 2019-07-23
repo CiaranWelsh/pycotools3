@@ -12,7 +12,7 @@ Since a profile likelihood is just a parameter scan of parameter estimations, al
     import seaborn
     from pycotools3 import model, tasks, viz
 
-    working_directory = os.path.dirname(__file__)
+    working_directory = os.path.abspath('')
 
     antimony_string = """
     model simple_parameter_estimation()

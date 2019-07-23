@@ -10,6 +10,8 @@ Cross validation can help identify datasets which do and don't fit well together
     
     # imports and create our antimony model string
     from pycotools3 import model, tasks
+
+    working_directory = os.path.abspath('')
     antimony_string =  '''
         model negative_feedback()
             // define compartments
@@ -38,10 +40,10 @@ Cross validation can help identify datasets which do and don't fit well together
     mod = model.loada(antimony_string, copasi_file )  # create the pycotools model
 
     # create some filenames for experimental data
-    tc_fname1 = os.path.join(os.path.dirname(__file__), 'timecourse1.txt')
-    tc_fname2 = os.path.join(os.path.dirname(__file__), 'timecourse2.txt')
-    ss_fname1 = os.path.join(os.path.dirname(__file__), 'steady_state1.txt')
-    ss_fname2 = os.path.join(os.path.dirname(__file__), 'steady_state2.txt')
+    tc_fname1 = os.path.join(working_directory, 'timecourse1.txt')
+    tc_fname2 = os.path.join(working_directory, 'timecourse2.txt')
+    ss_fname1 = os.path.join(working_directory, 'steady_state1.txt')
+    ss_fname2 = os.path.join(working_directory, 'steady_state2.txt')
 
     # simulate/create some experimental data
     model.simulate(0, 5, 0.1, report_name=self.tc_fname1)

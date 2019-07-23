@@ -1,5 +1,5 @@
-Shortcuts
-=========
+Working from the model.Model class directly
+===========================================
 
 The pycotools3 tasks module contains classes for a bunch of copasi tasks that can be configured from python using pycotools. To simplify some of these tasks, wrappers have been build around these task classes in the :py:class:`model.Model` class so that they can be used like a regular method. Here I demonstrate some of these.
 
@@ -15,7 +15,7 @@ We first configure a model for the demonstration
     seaborn.set_context(context='talk')
 
     ## Choose a directory for our model and analysis
-    working_directory = os.path.dirname(__file__)
+    working_directory = os.path.abspath('')
 
     ## In this model, A gets reversibly converted to B but the backwards reaction is additionally regulated by C.
     ## B is reversibly converted into C.

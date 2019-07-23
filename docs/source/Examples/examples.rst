@@ -7,6 +7,7 @@ Examples
    :maxdepth: 2
    :name: examples-toc
 
+   make_model_from_existing_cps
    parameter_estimation_simple
    multiple_parameter_estimations
    parameter_estimation_with_prefix

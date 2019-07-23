@@ -14,7 +14,7 @@ This is an example of how to configure a parameter estimation for multiple COPAS
     seaborn.set_context(context='talk')
 
     ## Choose a directory for our model and analysis
-    working_directory = os.path.dirname(__file__)
+    working_directory = os.path.abspath('')
 
     model1_string = """
     model model1()

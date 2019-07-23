@@ -13,7 +13,7 @@ Sometimes we would like to select a set of parameters to estimate and leave the 
     seaborn.set_context(context='talk')
 
     ## Choose a directory for our model and analysis
-    working_directory = os.path.dirname(__file__)
+    working_directory = os.path.abspath('')
 
 The `prefix` argument will setup the configuration of a parameter estimation containing only parameters that start with `prefix`. While this can be anything, its quite useful to use the `_` character and then add an `_` to any parameters that you want estimated. In this way you can keep your estimated parameters marked.
 
