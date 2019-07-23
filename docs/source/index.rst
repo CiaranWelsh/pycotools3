@@ -25,9 +25,11 @@ Use:
 
 Remember to :bash:`source activate` your python 3.6 environment if you need to.
 
-.. note::
+.. warning::
+  
+  Currently Python 3.7 is not supported. This is because Pycotools3 depends on tellurium, which depends on other packages that do not support py3.6. 
 
-   Copasi (currently version 4.24) is distributed with pycotools3. The first time you use `import pycotools3`, the import statement will take some time to execute. This is because there is a configuration step that takes place. This will only happen once and then its business as usual thereafter.
+
 
 
 To install from `source <https://github.com/CiaranWelsh/pycotools3.git>`_:
