@@ -1662,7 +1662,7 @@ class ParameterEstimationContextTests(_test_base._BaseTest):
 
         pe = ParameterEstimation(config)
         data = pycotools3.viz.Parse(pe)
-        self.assertEqual(3, data['test_model'].shape[0])
+        self.assertEqual(5, data['test_model'].shape[0])
 
 
 class ParameterEstimationTestsWithDifferentModel(unittest.TestCase):
