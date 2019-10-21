@@ -540,10 +540,9 @@ class Parse(object):
             data = self.from_folder()
 
         if self.log10:
-            data = numpy.log10(data)
-            return data
-        else:
-            return data
+            for model_name, df in data.items():
+                data[model_name] = numpy.log10(data[model_name])
+        return data
 
     def from_timecourse(self):
         """read time course data into pandas dataframe. Remove

@@ -145,6 +145,14 @@ class BoxPlotTests(_test_base._BaseTest):
         b = pycotools3.viz.Boxplots(self.pe, savefig=True, num_per_plot=2)
         # self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 3)
 
+    def test_boxplot_is_saved2(self):
+        """
+        :return:
+        """
+        b = pycotools3.viz.Boxplots(self.pe, savefig=True, num_per_plot=2,
+                                    log10=True)
+        # self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 3)
+
 
 
 class WaterfallPlotTests(_test_base._BaseTest):
