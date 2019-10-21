@@ -146,6 +146,38 @@ class BoxPlotTests(_test_base._BaseTest):
         self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 3)
 
 
+
+class WaterfallPlotTests(_test_base._BaseTest):
+    def setUp(self):
+        super(WaterfallPlotTests, self).setUp()
+
+        fname = os.path.join(os.path.dirname(__file__), 'report1.txt')
+        data = self.model.simulate(0, 50, 1, report_name=fname)
+
+        with pycotools3.tasks.ParameterEstimation.Context(
+                self.model, fname, context='s', parameters='g',
+        ) as context:
+            context.set('method', 'genetic_algorithm')
+            context.set('population_size', 2)
+            context.set('number_of_generations', 5)
+            context.set('copy_number', 2)
+            context.set('pe_number', 2)
+            context.set('run_mode', True)
+            config = context.get_config()
+
+        self.pe = pycotools3.tasks.ParameterEstimation(config)
+
+    # def test_boxplot_is_saved(self):
+    #     """
+    #     :return:
+    #     """
+    #     b = pycotools3.viz.Boxplots(self.pe, savefig=True, num_per_plot=2)
+    #     self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 3)
+
+    def test(self):
+        print(viz.LikelihoodRanks(self.pe, savefig=True))
+
+
 # class PlotParameterEstimationTests(_test_base._BaseTest):
 #     def setUp(self):
 #         super(PlotParameterEstimationTests, self).setUp()

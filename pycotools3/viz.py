@@ -131,8 +131,8 @@ from collections import OrderedDict
 LOG = logging.getLogger(__name__)
 
 
-class PlotKwargs(object):
-    """ """
+class _Plotter:
+    """base  for all plotter classes"""
 
     def plot_kwargs(self):
         """ """
@@ -144,10 +144,6 @@ class PlotKwargs(object):
             'alpha': 0.5
         }
         return plot_kwargs
-
-
-class _Viz(PlotKwargs):
-    """base class for viz"""
 
     def context(context='poster', font_scale=3, rc=None):
         """
@@ -251,7 +247,36 @@ class _Viz(PlotKwargs):
         return results_directory
 
 
-class TruncateData(_Viz):
+class _ParameterEstimationPlotter(_Plotter):
+
+    def create_directory(self, cls, data_dict, dirname):
+        """
+        Create a directory to house some simulation output graphs.
+        Args:
+            cls: the first argument to the Parse class.
+            data_dict: Output from parameter estimation
+            dirname: Name of directory
+
+        Returns: Dict
+
+        """
+        dct = {}
+        for model_name in self.data:
+            if self.results_directory is None:
+                if type(self.cls) == Parse:
+                    dct[model_name] = os.path.join(
+                        os.path.dirname(
+                            self.cls.config.models[model_name].model.copasi_file
+                        ), dirname)
+                else:
+                    dct[model_name] = os.path.join(
+                        self.cls.models[model_name].model.root, 'Boxplots')
+                if not os.path.isdir(dct[model_name]):
+                    os.makedirs(dct[model_name])
+        return dct
+
+
+class TruncateData(_Plotter):
     """
     Truncates a parameter estimation dataset for a model
 
@@ -1097,7 +1122,7 @@ class Parse(object):
         return pandas.concat(self.data)
 
 
-class PlotTimeCourse(_Viz):
+class PlotTimeCourse(_Plotter):
     """Plot time course data
 
     Time course kwargs:
@@ -1297,7 +1322,7 @@ class PlotTimeCourse(_Viz):
         return figures
 
 
-class PlotTimeCourseEnsemble(_Viz):
+class PlotTimeCourseEnsemble(_Plotter):
     """Plot a time course ensemble from a model and
     parameter ensemble. If `cls` argument is a
     MultiParameterEstimation instance then the results
@@ -1766,7 +1791,7 @@ class PlotTimeCourseEnsemble(_Viz):
                 plt.show()
 
 
-class PlotScan(_Viz):
+class PlotScan(_Plotter):
     """TODO: Create visualization facilities for parameter scans."""
 
     def __init__(self, cls, **kwargs):
@@ -1816,7 +1841,7 @@ class PlotScan(_Viz):
         )
 
 
-class Boxplots(_Viz):
+class Boxplots(_Plotter):
     """Plot a boxplot for multi parameter estimation data.
 
     ============    =================================================
@@ -2236,148 +2261,168 @@ class ChiSquaredStatistics:
         return scipy.stats.chi2.ppf(self.alpha, df=self.dof)
 
 
+class LikelihoodRanks(_Plotter):
+    """Plot the ordered residual sum of squares (RSS) objective
+    function value against the RSS's rank of best fit.
+    See :ref:`kwargs` for list of keyword arguments.
 
-# class LikelihoodRanks(_Viz, PlotKwargs):
-#     """Plot the ordered residual sum of squares (RSS) objective
-#     function value against the RSS's rank of best fit.
-#     See :ref:`kwargs` for list of keyword arguments.
-#
-#     Args:
-#
-#     Returns:
-#
-#     """
-#
-#     def __init__(self, cls, **kwargs):
-#         """
-#
-#         :param cls:
-#             Instance of :py:class:`tasks.MultiParameterEstimation`
-#             Same as :py:class:`PlotTimeCourseEnsemble`
-#
-#         :param kwargs:
-#             see :ref:`kwargs`
-#         """
-#         self.cls = cls
-#         self.kwargs = kwargs
-#         # self.plot_kwargs = self.plot_kwargs()
-#
-#         self.default_properties = {'log10': False,
-#                                    'truncate_mode': 'percent',
-#                                    'theta': 100,
-#                                    'xtick_rotation': 'horizontal',
-#                                    'ylabel': None,
-#                                    'title': 'Likelihood-Ranks Plot',
-#                                    'savefig': False,
-#                                    'results_directory': None,
-#                                    'dpi': 400,
-#                                    'show': False,
-#                                    'filename': 'LikelihoodRanks',
-#                                    'despine': True,
-#                                    'ext': 'png',
-#                                    'line_transparency': 1,  ##passed to matplotlib alpha parameter
-#                                    'marker_transparency': 0.7,
-#                                    'color': '#004ADF',
-#                                    'markercolor': '#FF9709',
-#                                    'linewidth': 3,
-#                                    'markersize': 10,
-#                                    'context': 'talk',
-#                                    'font_scale': 1.5,
-#                                    'rc': None,
-#                                    'copasi_file': None,
-#                                    }
-#
-#         # self.default_properties.update(self.plot_kwargs)
-#         for i in list(kwargs.keys()):
-#             assert i in list(self.default_properties.keys()), '{} is not a keyword argument for RssVsIterations'.format(
-#                 i)
-#         self.kwargs = self.default_properties
-#         self.default_properties.update(kwargs)
-#         # self.default_properties.update(self.plot_kwargs)
-#         self.update_properties(self.default_properties)
-#         self._do_checks()
-#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-#
-#         self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
-#         self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
-#
-#         self.fig = self.plot()
-#
-#     def _do_checks(self):
-#         """:return:"""
-#         if self.log10:
-#             self.ylabel = 'log$_{10}$ RSS'
-#             self.xlabel = 'log$_{10}$ Rank of Best Fit'
-#         else:
-#             self.ylabel = 'RSS'
-#             self.xlabel = 'Rank of Best Fit'
-#
-#     def create_directory(self):
-#         """create a directory for the results
-#         :return:
-#
-#         Args:
-#
-#         Returns:
-#
-#         """
-#         if self.results_directory is None:
-#             if type(self.cls) == Parse:
-#                 self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'RssVsIterations')
-#             else:
-#                 self.results_directory = os.path.join(
-#                     self.cls.model.root, 'LikelihoodRank'
-#                 )
-#
-#         if not os.path.isdir(self.results_directory):
-#             os.makedirs(self.results_directory)
-#         return self.results_directory
-#
-#     def plot(self):
-#         """Plot Rss Vs rank of best fit
-#         :return:
-#             None
-#
-#         Args:
-#
-#         Returns:
-#
-#         """
-#
-#         fig = plt.figure()
-#         if self.log10:
-#             x = numpy.log10(list(range(self.data['RSS'].shape[0])))
-#         else:
-#             x = list(range(self.data['RSS'].shape[0]))
-#
-#         plt.plot(x,
-#                  self.data['RSS'].sort_values(ascending=True),
-#                  color=self.color, linewidth=self.linewidth,
-#                  alpha=self.line_transparency,
-#                  )
-#
-#         plt.plot(x,
-#                  self.data['RSS'].sort_values(ascending=True), 'o',
-#                  color=self.markercolor, markersize=self.markersize,
-#                  alpha=self.marker_transparency
-#                  )
-#
-#         plt.xticks(rotation=self.xtick_rotation)
-#         if self.title is not None:
-#             plt.title(self.title + '(n={})'.format(self.data.shape[0]))
-#         plt.ylabel(self.ylabel)
-#         plt.xlabel('Rank of Best Fit')
-#         if self.despine:
-#             seaborn.despine(fig=fig, top=True, right=True)
-#         if self.savefig:
-#             self.results_directory = self.create_directory()
-#             fle = os.path.join(self.results_directory, '{}.{}'.format(self.filename, self.ext))
-#             plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
-#
-#         if self.show:
-#             plt.show()
-#
-#         return fig
+    Args:
+
+    Returns:
+
+    """
+
+    def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            Instance of :py:class:`tasks.MultiParameterEstimation`
+            Same as :py:class:`PlotTimeCourseEnsemble`
+
+        :param kwargs:
+            see :ref:`kwargs`
+        """
+        self.cls = cls
+        self.kwargs = kwargs
+        # self.plot_kwargs = self.plot_kwargs()
+
+        self.default_properties = {'log10': False,
+                                   'truncate_mode': 'percent',
+                                   'theta': 100,
+                                   'xtick_rotation': 'horizontal',
+                                   'ylabel': None,
+                                   'title': 'Likelihood-Ranks Plot',
+                                   'savefig': False,
+                                   'results_directory': None,
+                                   'dpi': 400,
+                                   'show': False,
+                                   'filename': 'LikelihoodRanks',
+                                   'despine': True,
+                                   'ext': 'png',
+                                   'line_transparency': 1,  ##passed to matplotlib alpha parameter
+                                   'marker_transparency': 0.7,
+                                   'color': '#004ADF',
+                                   'markercolor': '#FF9709',
+                                   'linewidth': 3,
+                                   'markersize': 10,
+                                   'context': 'talk',
+                                   'font_scale': 1.5,
+                                   'rc': None,
+                                   'copasi_file': None,
+                                   }
+
+        # self.default_properties.update(self.plot_kwargs)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for RssVsIterations'.format(
+                i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        # self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+
+        self.fig = self.plot()
+
+    def _do_checks(self):
+        """:return:"""
+        if self.log10:
+            self.ylabel = 'log$_{10}$ RSS'
+            self.xlabel = 'log$_{10}$ Rank of Best Fit'
+        else:
+            self.ylabel = 'RSS'
+            self.xlabel = 'Rank of Best Fit'
+
+    def create_directory(self):
+        """create a directory for the results
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        if self.results_directory is None:
+            if type(self.cls) == Parse:
+                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'RssVsIterations')
+            else:
+                self.results_directory = os.path.join(
+                    self.cls.model.root, 'LikelihoodRanks'
+                )
+
+        if not os.path.isdir(self.results_directory):
+            os.makedirs(self.results_directory)
+        return self.results_directory
+
+    def create_directory(self):
+        """
+        Create a directory to house some simulation output graphs.
+        """
+        dct = {}
+        for model_name in self.data:
+            if self.results_directory is None:
+                if type(self.cls) == Parse:
+                    dct[model_name] = os.path.join(
+                        os.path.dirname(
+                            self.cls.config.models[model_name].model.copasi_file
+                        ), 'Boxplots')
+                else:
+                    dct[model_name] = os.path.join(
+                        self.cls.models[model_name].model.root, 'Boxplots')
+                if not os.path.isdir(dct[model_name]):
+                    os.makedirs(dct[model_name])
+        return dct
+
+    def plot(self):
+        """Plot Rss Vs rank of best fit
+        :return:
+            None
+
+        Args:
+
+        Returns:
+
+        """
+        figs = {}
+        for label, df in self.data.items():
+            figs[label] = plt.figure()
+            if self.log10:
+                x = numpy.log10(list(range(df['RSS'].shape[0])))
+            else:
+                x = list(range(df['RSS'].shape[0]))
+
+            plt.plot(x,
+                     df['RSS'].sort_values(ascending=True),
+                     color=self.color, linewidth=self.linewidth,
+                     alpha=self.line_transparency,
+                     )
+
+            plt.plot(x,
+                     df['RSS'].sort_values(ascending=True), 'o',
+                     color=self.markercolor, markersize=self.markersize,
+                     alpha=self.marker_transparency
+                     )
+
+            plt.xticks(rotation=self.xtick_rotation)
+            if self.title is not None:
+                plt.title(self.title + '(n={})'.format(df.shape[0]))
+            plt.ylabel(self.ylabel)
+            plt.xlabel('Rank of Best Fit')
+            if self.despine:
+                seaborn.despine(fig=figs[label], top=True, right=True)
+            if self.savefig:
+                self.results_directory = self.create_directory()
+                fle = os.path.join(self.results_directory, '{}_{}.{}'.format(self.filename, label, self.ext))
+                plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+                print('Saved to {}'.format(fle))
+
+            if self.show:
+                plt.show()
+
+        return figs
 
 
 # class Pca(_Viz, PlotKwargs):
@@ -4126,9 +4171,7 @@ class ChiSquaredStatistics:
 #             plt.show()
 
 
-
-
-class PlotProfileLikelihoods(_Viz):
+class PlotProfileLikelihoods(_Plotter):
 
     def __init__(self, mod, data):
         if not isinstance(data, dict):
@@ -4153,8 +4196,6 @@ class PlotProfileLikelihoods(_Viz):
             c += 1
         return c
 
-
-
     def plot1(self, parameter, best_rss, alpha=0.95, selection='RSS', df=None):
         """
 
@@ -4176,7 +4217,6 @@ class PlotProfileLikelihoods(_Viz):
         if df is None:
             df = self._get_number_of_estimated_parameters()
 
-
         cl = scipy.stats.chi2.ppf(alpha, df=df) + best_rss
 
         data = pandas.concat(self.data)
@@ -4189,20 +4229,3 @@ class PlotProfileLikelihoods(_Viz):
 
     def calculate_cl(self):
         pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

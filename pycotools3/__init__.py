@@ -42,3 +42,8 @@ except Exception:
             matplotlib.use('TkAgg')
         except Exception:
             pass
+
+
+#todo fix logging
+#todo steady state documentation
+#todo make explicit how  pe works
