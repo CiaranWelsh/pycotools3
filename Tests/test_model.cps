@@ -51,13 +51,13 @@ Reaction scheme where the products are created from the reactants and the change
       </ListOfParameterDescriptions>
     </Function>
   </ListOfFunctions>
-  <Model key="Model_1" name="TestModel1" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m&#178;" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.0221417899999999e+23">
+  <Model key="Model_1" name="NoName" simulationType="time" timeUnit="s" volumeUnit="ml" areaUnit="m&#178;" lengthUnit="m" quantityUnit="mmol" type="deterministic" avogadroConstant="6.0221417899999999e+23">
     <MiriamAnnotation>
       <rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
         <rdf:Description rdf:about="#Model_1">
           <dcterms:created>
             <rdf:Description>
-              <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+              <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
             </rdf:Description>
           </dcterms:created>
         </rdf:Description>
@@ -70,7 +70,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#Compartment_0">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -83,7 +83,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#Compartment_1">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -98,7 +98,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#Metabolite_0">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -111,7 +111,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#Metabolite_1">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -124,7 +124,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#Metabolite_2">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -139,14 +139,14 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#ModelValue_0">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
           </rdf:RDF>
         </MiriamAnnotation>
         <Expression>
-          &lt;CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=Value&gt;+&lt;CN=Root,Model=TestModel1,Vector=Values[B2C],Reference=Value&gt;
+          &lt;CN=Root,Model=NoName,Vector=Values[A2B],Reference=Value&gt;+&lt;CN=Root,Model=NoName,Vector=Values[B2C],Reference=Value&gt;
         </Expression>
       </ModelValue>
       <ModelValue key="ModelValue_1" name="A2B" simulationType="fixed" addNoise="false" initial_value="4.0">
@@ -155,7 +155,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#ModelValue_1">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -168,7 +168,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#ModelValue_2">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -181,7 +181,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#ModelValue_3">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -194,7 +194,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#ModelValue_4">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -207,7 +207,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#ModelValue_5">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -222,7 +222,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#Reaction_0">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -237,7 +237,7 @@ Reaction scheme where the products are created from the reactants and the change
         <ListOfConstants>
           <Constant key="Parameter_5013" name="k1" value="4"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=TestModel1,Vector=Compartments[nuc]">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=NoName,Vector=Compartments[nuc]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_80">
               <SourceParameter reference="ModelValue_1"/>
@@ -254,7 +254,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#Reaction_1">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -270,7 +270,7 @@ Reaction scheme where the products are created from the reactants and the change
           <Constant key="Parameter_5012" name="k1" value="9"/>
           <Constant key="Parameter_5011" name="k2" value="0.1"/>
         </ListOfConstants>
-        <KineticLaw function="Function_14" unitType="Default" scalingCompartment="CN=Root,Model=TestModel1,Vector=Compartments[nuc]">
+        <KineticLaw function="Function_14" unitType="Default" scalingCompartment="CN=Root,Model=NoName,Vector=Compartments[nuc]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_69">
               <SourceParameter reference="ModelValue_2"/>
@@ -293,7 +293,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#Reaction_2">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -308,7 +308,7 @@ Reaction scheme where the products are created from the reactants and the change
         <ListOfConstants>
           <Constant key="Parameter_5010" name="k1" value="0.1"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=TestModel1,Vector=Compartments[nuc]">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=NoName,Vector=Compartments[nuc]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_80">
               <SourceParameter reference="ModelValue_4"/>
@@ -325,7 +325,7 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#Reaction_3">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
@@ -337,7 +337,7 @@ Reaction scheme where the products are created from the reactants and the change
         <ListOfConstants>
           <Constant key="Parameter_5009" name="k1" value="0.1"/>
         </ListOfConstants>
-        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=TestModel1,Vector=Compartments[nuc]">
+        <KineticLaw function="Function_13" unitType="Default" scalingCompartment="CN=Root,Model=NoName,Vector=Compartments[nuc]">
           <ListOfCallParameters>
             <CallParameter functionParameter="FunctionParameter_80">
               <SourceParameter reference="ModelValue_5"/>
@@ -356,63 +356,63 @@ Reaction scheme where the products are created from the reactants and the change
             <rdf:Description rdf:about="#ModelParameterSet_1">
               <dcterms:created>
                 <rdf:Description>
-                  <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                  <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
                 </rdf:Description>
               </dcterms:created>
             </rdf:Description>
           </rdf:RDF>
         </MiriamAnnotation>
         <ModelParameterGroup cn="String=Initial Time" type="Group">
-          <ModelParameter cn="CN=Root,Model=TestModel1" value="0" type="Model" simulationType="time"/>
+          <ModelParameter cn="CN=Root,Model=NoName" value="0" type="Model" simulationType="time"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Compartment Sizes" type="Group">
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Compartments[nuc]" value="1" type="Compartment" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Compartments[cyt]" value="3" type="Compartment" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Compartments[nuc]" value="1" type="Compartment" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Compartments[cyt]" value="3" type="Compartment" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Species Values" type="Group">
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A]" value="6.0221417900000005e+20" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B]" value="6.0221417900000005e+20" type="Species" simulationType="reactions"/>
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[C]" value="6.0221417900000005e+20" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[A]" value="6.0221417900000005e+20" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[B]" value="6.0221417900000005e+20" type="Species" simulationType="reactions"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[C]" value="6.0221417900000005e+20" type="Species" simulationType="reactions"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Initial Global Quantities" type="Group">
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Values[ThisIsAssignment]" value="13" type="ModelValue" simulationType="assignment"/>
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Values[A2B]" value="4" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Values[B2C]" value="9" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Values[B2C_0_k2]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Values[C2A_k1]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
-          <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Values[ADeg_k1]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Values[ThisIsAssignment]" value="13" type="ModelValue" simulationType="assignment"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Values[A2B]" value="4" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Values[B2C]" value="9" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Values[B2C_0_k2]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Values[C2A_k1]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
+          <ModelParameter cn="CN=Root,Model=NoName,Vector=Values[ADeg_k1]" value="0.10000000000000001" type="ModelValue" simulationType="fixed"/>
         </ModelParameterGroup>
         <ModelParameterGroup cn="String=Kinetic Parameters" type="Group">
-          <ModelParameterGroup cn="CN=Root,Model=TestModel1,Vector=Reactions[A2B]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Reactions[A2B],ParameterGroup=Parameters,Parameter=k1" value="4" type="ReactionParameter" simulationType="assignment">
+          <ModelParameterGroup cn="CN=Root,Model=NoName,Vector=Reactions[A2B]" type="Reaction">
+            <ModelParameter cn="CN=Root,Model=NoName,Vector=Reactions[A2B],ParameterGroup=Parameters,Parameter=k1" value="4" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=NoName,Vector=Values[A2B],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=TestModel1,Vector=Reactions[B2C]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k1" value="9" type="ReactionParameter" simulationType="assignment">
+          <ModelParameterGroup cn="CN=Root,Model=NoName,Vector=Reactions[B2C]" type="Reaction">
+            <ModelParameter cn="CN=Root,Model=NoName,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k1" value="9" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=TestModel1,Vector=Values[B2C],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=NoName,Vector=Values[B2C],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
-            <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
+            <ModelParameter cn="CN=Root,Model=NoName,Vector=Reactions[B2C],ParameterGroup=Parameters,Parameter=k2" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=TestModel1,Vector=Values[B2C_0_k2],Reference=InitialValue&gt;
-              </InitialExpression>
-            </ModelParameter>
-          </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=TestModel1,Vector=Reactions[C2A]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
-              <InitialExpression>
-                &lt;CN=Root,Model=TestModel1,Vector=Values[C2A_k1],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=NoName,Vector=Values[B2C_0_k2],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
-          <ModelParameterGroup cn="CN=Root,Model=TestModel1,Vector=Reactions[ADeg]" type="Reaction">
-            <ModelParameter cn="CN=Root,Model=TestModel1,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
+          <ModelParameterGroup cn="CN=Root,Model=NoName,Vector=Reactions[C2A]" type="Reaction">
+            <ModelParameter cn="CN=Root,Model=NoName,Vector=Reactions[C2A],ParameterGroup=Parameters,Parameter=k1" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
               <InitialExpression>
-                &lt;CN=Root,Model=TestModel1,Vector=Values[ADeg_k1],Reference=InitialValue&gt;
+                &lt;CN=Root,Model=NoName,Vector=Values[C2A_k1],Reference=InitialValue&gt;
+              </InitialExpression>
+            </ModelParameter>
+          </ModelParameterGroup>
+          <ModelParameterGroup cn="CN=Root,Model=NoName,Vector=Reactions[ADeg]" type="Reaction">
+            <ModelParameter cn="CN=Root,Model=NoName,Vector=Reactions[ADeg],ParameterGroup=Parameters,Parameter=k1" value="0.10000000000000001" type="ReactionParameter" simulationType="assignment">
+              <InitialExpression>
+                &lt;CN=Root,Model=NoName,Vector=Values[ADeg_k1],Reference=InitialValue&gt;
               </InitialExpression>
             </ModelParameter>
           </ModelParameterGroup>
@@ -456,13 +456,13 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_100" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
-      <Report append="0" confirmOverwrite="0" reference="Report_30" target="/home/ncw135/Documents/pycotools3/Tests/timecourse.txt"/>
+    <Task key="Task_100" name="Time-Course" type="timeCourse" scheduled="true" update_model="false">
+      <Report append="0" target="D:\pycotools3\Tests\report1.txt" reference="Report_30" confirmOverwrite="0"/>
       <Problem>
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
-        <Parameter name="StepNumber" type="unsignedInteger" value="10"/>
+        <Parameter name="StepNumber" type="unsignedInteger" value="50"/>
         <Parameter name="StepSize" type="float" value="1"/>
-        <Parameter name="Duration" type="float" value="10"/>
+        <Parameter name="Duration" type="float" value="50"/>
         <Parameter name="TimeSeriesRequested" type="float" value="1"/>
         <Parameter name="OutputStartTime" type="float" value="0"/>
         <Parameter name="Output Event" type="bool" value="0"/>
@@ -476,13 +476,12 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="0">
-      <Report append="0" confirmOverwrite="0" reference="Report_99" target="/home/ncw135/Documents/pycotools3/Tests/Problem1/Fit1/test_model/ParameterEstimationData/PEData0.txt"/>
+    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
       <Problem>
-        <Parameter name="Subtask" type="unsignedInteger" value="5"/>
+        <Parameter name="Subtask" type="unsignedInteger" value="1"/>
         <ParameterGroup name="ScanItems">
-        <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="1"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
-        <Parameter name="Output in subtask" type="bool" value="0"/>
+        </ParameterGroup>
+        <Parameter name="Output in subtask" type="bool" value="1"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
       <Method name="Scan Framework" type="ScanFramework">
@@ -500,7 +499,6 @@ Reaction scheme where the products are created from the reactants and the change
       <Problem>
         <Parameter name="Subtask" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <ParameterText name="ObjectiveExpression" type="expression">
-          
         </ParameterText>
         <Parameter name="Maximize" type="bool" value="0"/>
         <Parameter name="Randomize Start Values" type="bool" value="0"/>
@@ -517,124 +515,31 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Seed" type="unsignedInteger" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="0">
+    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="False" updateModel="0">
       <Report reference="Report_32" target="PEData.txt" append="False" confirmOverwrite="False"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
         <Parameter name="Randomize Start Values" type="bool" value="0"/>
         <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Experiments"/>
-            <ParameterGroup name="Affected Cross Validation Experiments"/>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=InitialValue"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Experiments"/>
-            <ParameterGroup name="Affected Cross Validation Experiments"/>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[ADeg_k1],Reference=InitialValue"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Experiments"/>
-            <ParameterGroup name="Affected Cross Validation Experiments"/>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C],Reference=InitialValue"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Experiments"/>
-            <ParameterGroup name="Affected Cross Validation Experiments"/>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C_0_k2],Reference=InitialValue"/>
-          </ParameterGroup>
-          <ParameterGroup name="FitItem">
-            <ParameterGroup name="Affected Experiments"/>
-            <ParameterGroup name="Affected Cross Validation Experiments"/>
-            <Parameter name="LowerBound" type="cn" value="1e-06"/>
-            <Parameter name="UpperBound" type="cn" value="1000000"/>
-            <Parameter name="StartValue" type="float" value="0.1"/>
-            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[C2A_k1],Reference=InitialValue"/>
-          </ParameterGroup>
-        </ParameterGroup>
+        <ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter type="cn" name="LowerBound" value="1e-06"/><Parameter type="cn" name="UpperBound" value="1000000"/><Parameter type="float" name="StartValue" value="0.1"/><Parameter type="cn" name="ObjectCN" value="CN=Root,Model=NoName,Vector=Values[A2B],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter type="cn" name="LowerBound" value="1e-06"/><Parameter type="cn" name="UpperBound" value="1000000"/><Parameter type="float" name="StartValue" value="0.1"/><Parameter type="cn" name="ObjectCN" value="CN=Root,Model=NoName,Vector=Values[ADeg_k1],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter type="cn" name="LowerBound" value="1e-06"/><Parameter type="cn" name="UpperBound" value="1000000"/><Parameter type="float" name="StartValue" value="0.1"/><Parameter type="cn" name="ObjectCN" value="CN=Root,Model=NoName,Vector=Values[B2C],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter type="cn" name="LowerBound" value="1e-06"/><Parameter type="cn" name="UpperBound" value="1000000"/><Parameter type="float" name="StartValue" value="0.1"/><Parameter type="cn" name="ObjectCN" value="CN=Root,Model=NoName,Vector=Values[B2C_0_k2],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter type="cn" name="LowerBound" value="1e-06"/><Parameter type="cn" name="UpperBound" value="1000000"/><Parameter type="float" name="StartValue" value="0.1"/><Parameter type="cn" name="ObjectCN" value="CN=Root,Model=NoName,Vector=Values[C2A_k1],Reference=InitialValue"/></ParameterGroup></ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-          <ParameterGroup name="timecourse">
-            <Parameter name="Key" type="key" value="Experiment_timecourse"/>
-            <Parameter name="File Name" type="file" value="/home/ncw135/Documents/pycotools3/Tests/timecourse.txt"/>
-            <Parameter name="Data is Row Oriented" type="bool" value="1"/>
-            <Parameter name="First Row" type="unsignedInteger" value="1"/>
-            <Parameter name="Last Row" type="unsignedInteger" value="12"/>
-            <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
-            <Parameter name="Normalize Weights per Experiment" type="bool" value="1"/>
-            <Parameter name="Separator" type="string" value="&#9;"/>
-            <Parameter name="Weight Method" type="unsignedInteger" value="1"/>
-            <Parameter name="Row containing Names" type="unsignedInteger" value="1"/>
-            <Parameter name="Number of Columns" type="unsignedInteger" value="10"/>
-            <ParameterGroup name="Object Map">
-              <ParameterGroup name="0">
-                <Parameter name="Role" type="unsignedInteger" value="3"/>
-              </ParameterGroup>
-              <ParameterGroup name="1">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="2">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="3">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="4">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[ThisIsAssignment],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="5">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="6">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="7">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C_0_k2],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="8">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[C2A_k1],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-              <ParameterGroup name="9">
-                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[ADeg_k1],Reference=Value"/>
-                <Parameter name="Role" type="unsignedInteger" value="2"/>
-              </ParameterGroup>
-            </ParameterGroup>
-          </ParameterGroup>
-        </ParameterGroup>
+        <ParameterGroup name="report1"><Parameter type="key" name="Key" value="Experiment_report1"/><Parameter type="file" name="File Name" value="D:\pycotools3\Tests\report1.txt"/><Parameter type="bool" name="Data is Row Oriented" value="1"/><Parameter type="unsignedInteger" name="First Row" value="1"/><Parameter type="unsignedInteger" name="Last Row" value="52"/><Parameter type="unsignedInteger" name="Experiment Type" value="1"/><Parameter type="bool" name="Normalize Weights per Experiment" value="1"/><Parameter type="string" name="Separator" value="&#9;"/><Parameter type="unsignedInteger" name="Weight Method" value="1"/><Parameter type="unsignedInteger" name="Row containing Names" value="1"/><Parameter type="unsignedInteger" name="Number of Columns" value="10"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter type="unsignedInteger" name="Role" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter type="cn" name="Object CN" value="CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Parameter type="unsignedInteger" name="Role" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter type="cn" name="Object CN" value="CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Parameter type="unsignedInteger" name="Role" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter type="cn" name="Object CN" value="CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Parameter type="unsignedInteger" name="Role" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter type="cn" name="Object CN" value="CN=Root,Model=NoName,Vector=Values[ThisIsAssignment],Reference=Value"/><Parameter type="unsignedInteger" name="Role" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter type="cn" name="Object CN" value="CN=Root,Model=NoName,Vector=Values[A2B],Reference=Value"/><Parameter type="unsignedInteger" name="Role" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter type="cn" name="Object CN" value="CN=Root,Model=NoName,Vector=Values[B2C],Reference=Value"/><Parameter type="unsignedInteger" name="Role" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter type="cn" name="Object CN" value="CN=Root,Model=NoName,Vector=Values[B2C_0_k2],Reference=Value"/><Parameter type="unsignedInteger" name="Role" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter type="cn" name="Object CN" value="CN=Root,Model=NoName,Vector=Values[C2A_k1],Reference=Value"/><Parameter type="unsignedInteger" name="Role" value="2"/></ParameterGroup><ParameterGroup name="9"><Parameter type="cn" name="Object CN" value="CN=Root,Model=NoName,Vector=Values[ADeg_k1],Reference=Value"/><Parameter type="unsignedInteger" name="Role" value="2"/></ParameterGroup></ParameterGroup></ParameterGroup></ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
         </ParameterGroup>
       </Problem>
-      <Method name="Hooke &amp;amp; Jeeves" type="HookeJeeves">
-        <Parameter name="Iteration Limit" type="unsignedInteger" value="50"/>
-        <Parameter name="Tolerance" type="float" value="1e-05"/>
-        <Parameter name="Rho" type="float" value="0.2"/>
+      <Method name="Genetic Algorithm" type="GeneticAlgorithm">
+        <Parameter type="unsignedInteger" name="Number of Generations" value="5"/>
+        <Parameter type="unsignedInteger" name="Population Size" value="2"/>
+        <Parameter type="unsignedInteger" name="Random Number Generator" value="1"/>
+        <Parameter type="unsignedInteger" name="Seed" value="0"/>
       </Method>
     </Task>
     <Task key="Task_20" name="Metabolic Control Analysis" type="metabolicControlAnalysis" scheduled="false" updateModel="false">
@@ -729,7 +634,6 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="DelayOutputUntilConvergence" type="bool" value="0"/>
         <Parameter name="OutputConvergenceTolerance" type="float" value="9.9999999999999995e-07"/>
         <ParameterText name="TriggerExpression" type="expression">
-          
         </ParameterText>
         <Parameter name="SingleVariable" type="cn" value=""/>
       </Problem>
@@ -887,22 +791,22 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Vector=TaskList[Linear Noise Approximation],Object=Result"/>
       </Footer>
     </Report>
-    <Report key="Report_30" name="Time-Course" precision="6" separator="&#9;" taskType="Time-Course">
+    <Report precision="6" separator="&#9;" name="Time-Course" key="Report_30" taskType="Time-Course">
       <Comment/>
       <Table printTitle="1">
-        <Object cn="CN=Root,Model=TestModel1,Reference=Time"/>
-        <Object cn="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/>
-        <Object cn="CN=Root,Model=TestModel1,Vector=Values[ThisIsAssignment],Reference=Value"/>
-        <Object cn="CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=Value"/>
-        <Object cn="CN=Root,Model=TestModel1,Vector=Values[B2C],Reference=Value"/>
-        <Object cn="CN=Root,Model=TestModel1,Vector=Values[B2C_0_k2],Reference=Value"/>
-        <Object cn="CN=Root,Model=TestModel1,Vector=Values[C2A_k1],Reference=Value"/>
-        <Object cn="CN=Root,Model=TestModel1,Vector=Values[ADeg_k1],Reference=Value"/>
+        <Object cn="CN=Root,Model=NoName,Reference=Time"/>
+        <Object cn="CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/>
+        <Object cn="CN=Root,Model=NoName,Vector=Values[ThisIsAssignment],Reference=Value"/>
+        <Object cn="CN=Root,Model=NoName,Vector=Values[A2B],Reference=Value"/>
+        <Object cn="CN=Root,Model=NoName,Vector=Values[B2C],Reference=Value"/>
+        <Object cn="CN=Root,Model=NoName,Vector=Values[B2C_0_k2],Reference=Value"/>
+        <Object cn="CN=Root,Model=NoName,Vector=Values[C2A_k1],Reference=Value"/>
+        <Object cn="CN=Root,Model=NoName,Vector=Values[ADeg_k1],Reference=Value"/>
       </Table>
     </Report>
-    <Report precision="6" separator="&#9;" name="multi_parameter_estimation" key="Report_99" taskType="parameterFitting">
+    <Report precision="6" separator="&#9;" name="multi_parameter_estimation" key="Report_32" taskType="parameterFitting">
       <Comment/>
       <Table printTitle="1">
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>
@@ -934,7 +838,7 @@ Reaction scheme where the products are created from the reactants and the change
           <rdf:Description rdf:about="#Unit_0">
             <dcterms:created>
               <rdf:Description>
-                <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
               </rdf:Description>
             </dcterms:created>
           </rdf:Description>
@@ -950,7 +854,7 @@ Reaction scheme where the products are created from the reactants and the change
           <rdf:Description rdf:about="#Unit_4">
             <dcterms:created>
               <rdf:Description>
-                <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
               </rdf:Description>
             </dcterms:created>
           </rdf:Description>
@@ -966,7 +870,7 @@ Reaction scheme where the products are created from the reactants and the change
           <rdf:Description rdf:about="#Unit_12">
             <dcterms:created>
               <rdf:Description>
-                <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
               </rdf:Description>
             </dcterms:created>
           </rdf:Description>
@@ -982,7 +886,7 @@ Reaction scheme where the products are created from the reactants and the change
           <rdf:Description rdf:about="#Unit_16">
             <dcterms:created>
               <rdf:Description>
-                <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
               </rdf:Description>
             </dcterms:created>
           </rdf:Description>
@@ -998,7 +902,7 @@ Reaction scheme where the products are created from the reactants and the change
           <rdf:Description rdf:about="#Unit_34">
             <dcterms:created>
               <rdf:Description>
-                <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
               </rdf:Description>
             </dcterms:created>
           </rdf:Description>
@@ -1014,7 +918,7 @@ Reaction scheme where the products are created from the reactants and the change
           <rdf:Description rdf:about="#Unit_40">
             <dcterms:created>
               <rdf:Description>
-                <dcterms:W3CDTF>2019-06-03T16:07:37Z</dcterms:W3CDTF>
+                <dcterms:W3CDTF>2019-10-21T21:41:33Z</dcterms:W3CDTF>
               </rdf:Description>
             </dcterms:created>
           </rdf:Description>

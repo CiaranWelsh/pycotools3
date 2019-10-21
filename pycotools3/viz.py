@@ -1919,14 +1919,9 @@ class Boxplots(_Plotter):
         dct = {}
         for model_name in self.data:
             if self.results_directory is None:
-                if type(self.cls) == Parse:
-                    dct[model_name] = os.path.join(
-                        os.path.dirname(
-                            self.cls.config.models[model_name].model.copasi_file
-                        ), 'Boxplots')
-                else:
-                    dct[model_name] = os.path.join(
-                        self.cls.models[model_name].model.root, 'Boxplots')
+                dct[model_name] = os.path.join(
+                    os.path.dirname(self.cls.models_dir[model_name]), 'Boxplots')
+
                 if not os.path.isdir(dct[model_name]):
                     os.makedirs(dct[model_name])
         return dct
@@ -1987,262 +1982,6 @@ class Boxplots(_Plotter):
         return dct
 
 
-# class PlotParameterEstimation(_Viz, PlotKwargs):
-#     """Visualize parameter estimation runs against a single
-#     parameter estimation. Similar to PlotTimeCourseEnsemble
-#     but for a single parameter estimation run.
-#
-#
-#
-#     =========================================       =========================================
-#     kwarg                                           Description
-#     =========================================       =========================================
-#     y                                               `str` or list of `str`. Parameter for plotting
-#                                                     on y axis. Defaults to all estimated parameters.
-#     **savefig_kwargs                                see savefig_kwargs for savefig options
-#     =========================================       =========================================
-#
-#     Args:
-#
-#     Returns:
-#
-#     """
-#
-#     def __init__(self, cls, **kwargs):
-#         """
-#         :param cls:
-#             Instance of :py:class:`tasks.ParameterEstimation`
-#
-#         :param kwargs:
-#
-#         """
-#         self.cls = cls
-#         self.kwargs = kwargs
-#         self.plot_kwargs = self.plot_kwargs()
-#
-#         ## defaults to metabolites and global quantities with assignments
-#         default_y_dct = {}
-#         for model_name in self.cls.models:
-#             default_y_dct[model_name] = [i.name for i in self.cls.models[model_name].model.metabolites] + [i.name for i in self.cls.models[model_name].model.global_quantities if
-#                                                                     i.simulation_type == 'Assignment']
-#         self.default_properties = {
-#             'y': default_y_dct,
-#             'savefig': False,
-#             'results_directory': None,
-#             'title': 'TimeCourse',
-#             'xlabel': None,
-#             'ylabel': None,
-#             'show': False,
-#             'filename': None,
-#             'dpi': 400,
-#             'log10': False,
-#             'context': 'talk',
-#             'font_scale': 1.5,
-#             'rc': None,
-#             'copasi_file': None,
-#         }
-#         self.default_properties.update(self.plot_kwargs)
-#         for i in list(kwargs.keys()):
-#             assert i in list(
-#                 self.default_properties.keys()), '{} is not a keyword argument for "PlotParameterEstimation"'.format(i)
-#         self.kwargs = self.default_properties
-#         self.default_properties.update(kwargs)
-#         self.default_properties.update(self.plot_kwargs)
-#         self.update_properties(self.default_properties)
-#         self._do_checks()
-#
-#         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
-#
-#         self.data = self.parse(self.cls, self.log10, copasi_file=self.copasi_file)
-#
-#         self.exp_data = self.read_experimental_data()
-#         self.sim_data = self.simulate_time_course()
-#
-#         self.cls.model = self.update_parameters()
-#         self.plot()
-#
-#     def __str__(self):
-#         """
-#
-#         :return:
-#         """
-#         return "PlotParameterEstimation(x='{}', y={}, savefig={}, results_directory='{}'".format(
-#             self.x, self.y, self.savefig,
-#             self.results_directory
-#         )
-#
-#     def _do_checks(self):
-#         """ """
-#
-#         if not isinstance(self.cls, tasks.ParameterEstimation):
-#             raise errors.InputError('first argument should be ParameterEstimation calss. Got {}'.format(type(self.cls)))
-#
-#         if self.results_directory is None:
-#             dct = {}
-#             for model_name in self.cls.models:
-#                 dct[model_name] = os.path.join(
-#                     self.cls.models[model_name].model.root,
-#                     'ParameterEstimationPlots')
-#             self.results_directory = dct
-#         if not isinstance(self.y, list):
-#             self.y = [self.y]
-#
-#     def update_parameters(self):
-#         """Use the InsertParameters class to insert estimated
-#
-#         Args:
-#           return: Model
-#
-#         Returns:
-#
-#         """
-#         for model_name in self.cls.models:
-#             self.cls.models[model_name].insert_parameters(df=self.data, inplace=True)
-#         return self.cls.models
-#
-#     def create_directories(self):
-#         """
-#         create a place for parameter estiamtion plots on disk
-#
-#         """
-#         directories = {}
-#         for model_name in self.cls.models:
-#             directories[model_name] = {}
-#             for fle in self.cls.experiment_files:
-#                 _, fle = os.path.split(fle)
-#                 directories[model_name][fle] = os.path.join(self.results_directory[model_name], fle[:-4])
-#                 if not os.path.isdir(directories[model_name][fle]):
-#                     os.makedirs(directories[model_name][fle])
-#         return directories
-#
-#     def read_experimental_data(self):
-#         """read the experimental data in order to figure
-#         out how long a time course we need to simulate
-#         with the new parameters
-#         :return:
-#
-#         Args:
-#
-#         Returns:
-#
-#         """
-#
-#         dct = {}
-#         for model_name in self.cls.models:
-#             dct[model_name] = {}
-#             experiment_files = [self.cls.config.experiments[i].filename for i in self.cls.config.experiments]
-#             for i in experiment_files:
-#                 dct[model_name][i] = pandas.read_csv(i, sep='\t')
-#         return dct
-#
-#     def get_time(self):
-#         """get dict of _experiments and max time
-#         :return:
-#
-#         Args:
-#
-#         Returns:
-#
-#         """
-#         dct = {}
-#         for model_name in self.cls.models:
-#             dct[model_name] = {}
-#             for i in self.exp_data:
-#                 print('i is', self.exp_data[i])
-#                 for j in self.exp_data[i]:
-#
-#                 # print(i, self.exp_data[model_name])
-#                 # print(self.exp_data[i]['Time'])
-#                 dct[model_name][i] = self.exp_data[i]['Time'].max()
-#         return dct
-#
-#     def simulate_time_course(self):
-#         """simulate a timecourse for each experiment
-#         which may have different simulation lengths
-#         :return:
-#
-#         Args:
-#
-#         Returns:
-#
-#         """
-#         d = {}
-#         for model_name in self.cls.models:
-#             time_dct = self.get_time()
-#             step_size = 1
-#             d[model_name] = {}
-#             for exp in time_dct:
-#                 indep_dct = {}
-#                 for exp_key in list(self.exp_data[exp].keys()):
-#                     if exp_key[-6:] == '_indep':
-#                         indep_dct[exp_key[:-6]] = self.exp_data[exp][exp_key].iloc[0]
-#
-#                     ## Insert independent vars
-#                     model.InsertParameters(self.cls.model, parameter_dict=indep_dct, inplace=True)
-#
-#                 TC = tasks.TimeCourse(
-#                     self.cls.models[model_name], end=time_dct[exp], step_size=step_size,
-#                     intervals=time_dct[exp] / step_size,
-#                 )
-#                 d[exp] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
-#
-#         return d
-#
-#     def plot(self):
-#         """plot experimental data versus best parameter sets
-#         :return:
-#
-#         Args:
-#
-#         Returns:
-#
-#         """
-#         ## filter out y values which are not in the data file
-#         for model_name in self.cls.models:
-#             newy = []
-#             for y in self.y:
-#                 if y in list(list(self.read_experimental_data().values())[0].keys()):
-#                     newy.append(y)
-#
-#             self.y = newy
-#
-#             for exp in self.exp_data:
-#                 for sim in self.sim_data[model_name]:
-#                     if exp == sim:
-#
-#                         for key in self.y:
-#
-#                             plt.figure()
-#                             plt.plot(
-#                                 self.exp_data[exp]['Time'], self.exp_data[exp][key],
-#                                 label='Exp', linestyle=self.linestyle,
-#                                 marker=self.marker, linewidth=self.linewidth,
-#                                 markersize=self.markersize,
-#                                 alpha=0.5,
-#                                 color='#0E00FA',
-#                             )
-#                             plt.plot(
-#                                 self.sim_data[model_name][sim]['Time'], self.sim_data[model_name][sim][key],
-#                                 label='Sim', linestyle=self.linestyle,
-#                                 marker=self.marker, linewidth=self.linewidth,
-#                                 markersize=self.markersize,
-#                                 alpha=0.5,
-#                                 color='#FC0077'
-#                             )
-#
-#                             plt.legend(loc=(1, 0.5))
-#                             plt.title(key)
-#                             plt.xlabel('Time({})'.format(self.cls.model.time_unit))
-#                             plt.ylabel('Abundance\n({})'.format(self.cls.model.quantity_unit))
-#                             if self.savefig:
-#                                 dirs = self.create_directories()
-#                                 exp_key = os.path.split(exp)[1]
-#                                 fle = os.path.join(dirs[exp_key], '{}.png'.format(key))
-#                                 plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
-#                                 LOG.info('figure saved to "{}"'.format(fle))
-#         if self.show:
-#             plt.show()
-
 class ChiSquaredStatistics:
     """ """
 
@@ -2261,7 +2000,7 @@ class ChiSquaredStatistics:
         return scipy.stats.chi2.ppf(self.alpha, df=self.dof)
 
 
-class LikelihoodRanks(_Plotter):
+class WaterfallPlot(_Plotter):
     """Plot the ordered residual sum of squares (RSS) objective
     function value against the RSS's rank of best fit.
     See :ref:`kwargs` for list of keyword arguments.
@@ -2296,7 +2035,7 @@ class LikelihoodRanks(_Plotter):
                                    'results_directory': None,
                                    'dpi': 400,
                                    'show': False,
-                                   'filename': 'LikelihoodRanks',
+                                   'filename': 'WaterfallPlot',
                                    'despine': True,
                                    'ext': 'png',
                                    'line_transparency': 1,  ##passed to matplotlib alpha parameter
@@ -2337,41 +2076,15 @@ class LikelihoodRanks(_Plotter):
             self.xlabel = 'Rank of Best Fit'
 
     def create_directory(self):
-        """create a directory for the results
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        if self.results_directory is None:
-            if type(self.cls) == Parse:
-                self.results_directory = os.path.join(os.path.dirname(self.cls.copasi_file), 'RssVsIterations')
-            else:
-                self.results_directory = os.path.join(
-                    self.cls.model.root, 'LikelihoodRanks'
-                )
-
-        if not os.path.isdir(self.results_directory):
-            os.makedirs(self.results_directory)
-        return self.results_directory
-
-    def create_directory(self):
         """
         Create a directory to house some simulation output graphs.
         """
+
         dct = {}
         for model_name in self.data:
             if self.results_directory is None:
-                if type(self.cls) == Parse:
-                    dct[model_name] = os.path.join(
-                        os.path.dirname(
-                            self.cls.config.models[model_name].model.copasi_file
-                        ), 'Boxplots')
-                else:
-                    dct[model_name] = os.path.join(
-                        self.cls.models[model_name].model.root, 'Boxplots')
+                dct[model_name] = os.path.join(
+                    self.cls.models_dir[model_name], 'WaterfallPlots')
                 if not os.path.isdir(dct[model_name]):
                     os.makedirs(dct[model_name])
         return dct
@@ -2415,15 +2128,322 @@ class LikelihoodRanks(_Plotter):
                 seaborn.despine(fig=figs[label], top=True, right=True)
             if self.savefig:
                 self.results_directory = self.create_directory()
-                fle = os.path.join(self.results_directory, '{}_{}.{}'.format(self.filename, label, self.ext))
-                plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
-                print('Saved to {}'.format(fle))
+                for model_name, folder in self.results_directory.items():
+                    fle = os.path.join(folder, '{}_{}.{}'.format(self.filename, model_name, self.ext))
+                    plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+                    print('Saved to {}'.format(fle))
 
             if self.show:
                 plt.show()
 
         return figs
 
+
+class PlotProfileLikelihoods(_Plotter):
+
+    def __init__(self, mod, data):
+        if not isinstance(data, dict):
+            raise TypeError('expected a dictionary object but got a {}'.format(type(data)))
+
+        for k, v in data.items():
+            if not isinstance(v, pandas.DataFrame):
+                raise TypeError('expected a pandas.DataFrame object but got a {}'.format(type(v)))
+
+        self.mod = mod
+        self.data = data
+
+    def _get_number_of_estimated_parameters(self):
+        """
+        Counts the number of parameters that are present in the parameter estimation task
+        Returns:
+
+        """
+        query = '//*[@name="FitItem"]'
+        c = 0
+        for i in self.mod.xml.xpath(query):
+            c += 1
+        return c
+
+    def plot1(self, parameter, best_rss, alpha=0.95, selection='RSS', df=None):
+        """
+
+        Args:
+            selection:
+
+        Returns:
+
+        """
+        if isinstance(selection, str):
+            selection = [selection]
+
+        if not isinstance(selection, list):
+            raise TypeError
+
+        if parameter == selection:
+            raise ValueError
+
+        if df is None:
+            df = self._get_number_of_estimated_parameters()
+
+        cl = scipy.stats.chi2.ppf(alpha, df=df) + best_rss
+
+        data = pandas.concat(self.data)
+        data = data.loc[parameter][selection]
+
+    def calculate_cl(self):
+        pass
+
+class PlotParameterEstimation(_ParameterEstimationPlotter):
+    """Visualize parameter estimation runs against a single
+    parameter estimation. Similar to PlotTimeCourseEnsemble
+    but for a single parameter estimation run.
+
+
+
+    =========================================       =========================================
+    kwarg                                           Description
+    =========================================       =========================================
+    y                                               `str` or list of `str`. Parameter for plotting
+                                                    on y axis. Defaults to all estimated parameters.
+    **savefig_kwargs                                see savefig_kwargs for savefig options
+    =========================================       =========================================
+
+    Args:
+
+    Returns:
+
+    """
+
+    def __init__(self, cls, **kwargs):
+        """
+        :param cls:
+            Instance of :py:class:`tasks.ParameterEstimation`
+
+        :param kwargs:
+
+        """
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+        ## defaults to metabolites and global quantities with assignments
+        # default_y_dct = {}
+        # for model_name in self.cls.models:
+        #     default_y_dct[model_name] = [i.name for i in self.cls.models[model_name].model.metabolites] + [i.name for i in self.cls.models[model_name].model.global_quantities if
+        #                                                             i.simulation_type == 'Assignment']
+        self.default_properties = {
+            'y': None,
+            'savefig': False,
+            'results_directory': None,
+            'title': 'TimeCourse',
+            'xlabel': None,
+            'ylabel': None,
+            'show': False,
+            'filename': None,
+            'dpi': 400,
+            'log10': False,
+            'context': 'talk',
+            'font_scale': 1.5,
+            'rc': None,
+            'copasi_file': None,
+        }
+        self.default_properties.update(self.plot_kwargs)
+        for i in list(kwargs.keys()):
+            assert i in list(
+                self.default_properties.keys()), '{} is not a keyword argument for "PlotParameterEstimation"'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
+        self.data = self.parse(self.cls, self.log10, copasi_file=self.copasi_file)
+
+        self.cls.models = self.update_parameters()
+        self.exp_data = self.read_experimental_data()
+        self.sim_data = self.simulate_time_course()
+
+        self.plot()
+
+    def __str__(self):
+        """
+
+        :return:
+        """
+        return "PlotParameterEstimation(x='{}', y={}, savefig={}, results_directory='{}'".format(
+            self.x, self.y, self.savefig,
+            self.results_directory
+        )
+
+    def _do_checks(self):
+        """ """
+
+        if not isinstance(self.cls, tasks.ParameterEstimation):
+            raise errors.InputError('first argument should be ParameterEstimation calss. Got {}'.format(type(self.cls)))
+
+        if self.results_directory is None:
+            dct = {}
+            for model_name in self.cls.models:
+                dct[model_name] = os.path.join(
+                    self.cls.models[model_name].model.root,
+                    'ParameterEstimationPlots')
+            self.results_directory = dct
+        # if not isinstance(self.y, list):
+        #     self.y = [self.y]
+
+    def update_parameters(self):
+        """Use the InsertParameters class to insert estimated
+
+        Args:
+          return: Model
+
+        Returns:
+
+        """
+        for model_name in self.cls.models:
+            self.cls.models[model_name].model.insert_parameters(df=self.data[model_name], inplace=True)
+        return self.cls.models
+
+    def create_directories(self):
+        """
+        create a place for parameter estiamtion plots on disk
+
+        """
+        directories = {}
+        for model_name in self.cls.models:
+            directories[model_name] = {}
+            for fle in self.cls.config.experiment_filenames:
+                _, fle = os.path.split(fle)
+                directories[model_name][fle] = os.path.join(self.results_directory[model_name], fle[:-4])
+                if not os.path.isdir(directories[model_name][fle]):
+                    os.makedirs(directories[model_name][fle])
+        return directories
+
+    def read_experimental_data(self):
+        """read the experimental data in order to figure
+        out how long a time course we need to simulate
+        with the new parameters
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+
+        dct = {}
+        for model_name in self.cls.models:
+            dct[model_name] = {}
+            experiment_files = [self.cls.config.experiments[i].filename for i in self.cls.config.experiments]
+            for i in experiment_files:
+                dct[model_name][i] = pandas.read_csv(i, sep='\t')
+        return dct
+
+    def get_time(self):
+        """get dict of _experiments and max time
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        dct = {}
+        for k, v in self.exp_data.items():
+            dct[k] = {}
+            for k2, v2 in v.items():
+                dct[k][k2] = (min(v2['Time']), max(v2['Time']))
+        return dct
+
+    def simulate_time_course(self):
+        """simulate a timecourse for each experiment
+        which may have different simulation lengths
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        d = {}
+        time_dct = self.get_time()
+        for model_name in self.cls.models:
+            step_size = 1
+            d[model_name] = {}
+            for experiment_file, (min_time, max_time) in time_dct[model_name].items():
+                indep_dct = {}
+                for exp_key in list(self.exp_data[model_name][experiment_file].keys()):
+                    if exp_key[-6:] == '_indep':
+                        indep_dct[exp_key[:-6]] = self.exp_data[model_name][experiment_file][exp_key].iloc[0]
+
+                    ## Insert independent vars
+                    model.InsertParameters(self.cls.models[model_name].model, parameter_dict=indep_dct, inplace=True)
+
+                TC = tasks.TimeCourse(
+                    self.cls.models[model_name].model, start=min_time, end=max_time, step_size=step_size,
+                    intervals=(max_time - min_time) / step_size,
+                )
+                d[model_name][experiment_file] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
+
+        return d
+
+    def plot(self):
+        """plot experimental data versus best parameter sets
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        ## filter out y values which are not in the data file
+        for model_name in self.cls.models:
+            newy = []
+            # for y in self.y:
+            #     if y not in self.exp_data[model_name].columns:
+            #         raise ValueError()
+            for exp in self.exp_data[model_name]:
+                for sim in self.sim_data[model_name]:
+                    if exp == sim:
+                        plot_data_exp = self.exp_data[model_name][exp]
+                        plot_data_sim = self.sim_data[model_name][sim]
+
+                        for y in plot_data_exp.columns:
+
+                            fig = plt.figure()
+                            plt.plot(
+                                plot_data_exp['Time'], plot_data_exp[y],
+                                label='Exp', linestyle=self.linestyle,
+                                marker=self.marker, linewidth=self.linewidth,
+                                markersize=self.markersize,
+                                alpha=0.5,
+                                color='#0E00FA',
+                            )
+                            plt.plot(
+                                plot_data_sim['Time'], plot_data_sim[y],
+                                label='Sim', linestyle=self.linestyle,
+                                marker=self.marker, linewidth=self.linewidth,
+                                markersize=self.markersize,
+                                alpha=0.5,
+                                color='#FC0077'
+                            )
+
+                            plt.legend(loc=(1, 0.5))
+                            plt.title(y)
+                            plt.xlabel('Time({})'.format(self.cls.models[model_name].model.time_unit))
+                            plt.ylabel('Abundance\n({})'.format(self.cls.models[model_name].model.quantity_unit))
+                            seaborn.despine(fig=fig, top=True, right=True)
+                            if self.savefig:
+                                dirs = self.create_directories()
+                                exp_key = os.path.split(exp)[1]
+                                fle = os.path.join(dirs[model_name][exp_key], '{}.png'.format(y))
+                                plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+                                print('figure saved to "{}"'.format(fle))
+
+        if self.show:
+            plt.show()
 
 # class Pca(_Viz, PlotKwargs):
 #     """Use the :py:class:`PCA` function to conduct
@@ -4169,63 +4189,3 @@ class LikelihoodRanks(_Plotter):
 #
 #         if self.show:
 #             plt.show()
-
-
-class PlotProfileLikelihoods(_Plotter):
-
-    def __init__(self, mod, data):
-        if not isinstance(data, dict):
-            raise TypeError('expected a dictionary object but got a {}'.format(type(data)))
-
-        for k, v in data.items():
-            if not isinstance(v, pandas.DataFrame):
-                raise TypeError('expected a pandas.DataFrame object but got a {}'.format(type(v)))
-
-        self.mod = mod
-        self.data = data
-
-    def _get_number_of_estimated_parameters(self):
-        """
-        Counts the number of parameters that are present in the parameter estimation task
-        Returns:
-
-        """
-        query = '//*[@name="FitItem"]'
-        c = 0
-        for i in self.mod.xml.xpath(query):
-            c += 1
-        return c
-
-    def plot1(self, parameter, best_rss, alpha=0.95, selection='RSS', df=None):
-        """
-
-        Args:
-            selection:
-
-        Returns:
-
-        """
-        if isinstance(selection, str):
-            selection = [selection]
-
-        if not isinstance(selection, list):
-            raise TypeError
-
-        if parameter == selection:
-            raise ValueError
-
-        if df is None:
-            df = self._get_number_of_estimated_parameters()
-
-        cl = scipy.stats.chi2.ppf(alpha, df=df) + best_rss
-
-        data = pandas.concat(self.data)
-        data = data.loc[parameter][selection]
-
-        print(data)
-
-        # data = self.data['C2A_k1']
-        # print(data)
-
-    def calculate_cl(self):
-        pass
