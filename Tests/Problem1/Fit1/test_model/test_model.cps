@@ -456,7 +456,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Maximum duration for backward integration" type="unsignedFloat" value="1000000"/>
       </Method>
     </Task>
-    <Task key="Task_100" name="Time-Course" scheduled="true" type="timeCourse" update_model="false">
+    <Task key="Task_100" name="Time-Course" scheduled="false" type="timeCourse" update_model="false">
       <Report append="0" confirmOverwrite="0" reference="Report_30" target="/home/ncw135/Documents/pycotools3/Tests/report1.txt"/>
       <Problem>
         <Parameter name="AutomaticStepSize" type="bool" value="0"/>
@@ -476,12 +476,13 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Max Internal Step Size" type="unsignedFloat" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_16" name="Scan" type="scan" scheduled="false" updateModel="false">
+    <Task key="Task_16" name="Scan" type="scan" scheduled="true" updateModel="0">
+      <Report append="0" confirmOverwrite="0" reference="Report_96" target="/home/ncw135/Documents/pycotools3/Tests/Problem1/Fit1/test_model/ParameterEstimationData/PEData0.txt"/>
       <Problem>
-        <Parameter name="Subtask" type="unsignedInteger" value="1"/>
+        <Parameter name="Subtask" type="unsignedInteger" value="5"/>
         <ParameterGroup name="ScanItems">
-        </ParameterGroup>
-        <Parameter name="Output in subtask" type="bool" value="1"/>
+        <ParameterGroup name="ScanItem"><Parameter name="Number of steps" type="unsignedInteger" value="2"/><Parameter name="Type" type="unsignedInteger" value="0"/><Parameter name="Object" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration"/></ParameterGroup></ParameterGroup>
+        <Parameter name="Output in subtask" type="bool" value="0"/>
         <Parameter name="Adjust initial conditions" type="bool" value="0"/>
       </Problem>
       <Method name="Scan Framework" type="ScanFramework">
@@ -516,21 +517,115 @@ Reaction scheme where the products are created from the reactants and the change
         <Parameter name="Seed" type="unsignedInteger" value="0"/>
       </Method>
     </Task>
-    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="False" updateModel="0">
+    <Task key="Task_19" name="Parameter Estimation" type="parameterFitting" scheduled="false" updateModel="0">
       <Report reference="Report_32" target="PEData.txt" append="False" confirmOverwrite="False"/>
       <Problem>
         <Parameter name="Maximize" type="bool" value="0"/>
         <Parameter name="Randomize Start Values" type="bool" value="0"/>
         <Parameter name="Calculate Statistics" type="bool" value="0"/>
         <ParameterGroup name="OptimizationItemList">
-        <ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="StartValue" type="float" value="0.1"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="StartValue" type="float" value="0.1"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[ADeg_k1],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="StartValue" type="float" value="0.1"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="StartValue" type="float" value="0.1"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C_0_k2],Reference=InitialValue"/></ParameterGroup><ParameterGroup name="FitItem"><ParameterGroup name="Affected Experiments"/><ParameterGroup name="Affected Cross Validation Experiments"/><Parameter name="LowerBound" type="cn" value="1e-06"/><Parameter name="UpperBound" type="cn" value="1000000"/><Parameter name="StartValue" type="float" value="0.1"/><Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[C2A_k1],Reference=InitialValue"/></ParameterGroup></ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Experiments"/>
+            <ParameterGroup name="Affected Cross Validation Experiments"/>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+            <Parameter name="StartValue" type="float" value="0.1"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=InitialValue"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Experiments"/>
+            <ParameterGroup name="Affected Cross Validation Experiments"/>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+            <Parameter name="StartValue" type="float" value="0.1"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[ADeg_k1],Reference=InitialValue"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Experiments"/>
+            <ParameterGroup name="Affected Cross Validation Experiments"/>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+            <Parameter name="StartValue" type="float" value="0.1"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C],Reference=InitialValue"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Experiments"/>
+            <ParameterGroup name="Affected Cross Validation Experiments"/>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+            <Parameter name="StartValue" type="float" value="0.1"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C_0_k2],Reference=InitialValue"/>
+          </ParameterGroup>
+          <ParameterGroup name="FitItem">
+            <ParameterGroup name="Affected Experiments"/>
+            <ParameterGroup name="Affected Cross Validation Experiments"/>
+            <Parameter name="LowerBound" type="cn" value="1e-06"/>
+            <Parameter name="UpperBound" type="cn" value="1000000"/>
+            <Parameter name="StartValue" type="float" value="0.1"/>
+            <Parameter name="ObjectCN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[C2A_k1],Reference=InitialValue"/>
+          </ParameterGroup>
+        </ParameterGroup>
         <ParameterGroup name="OptimizationConstraintList">
         </ParameterGroup>
         <Parameter name="Steady-State" type="cn" value="CN=Root,Vector=TaskList[Steady-State]"/>
         <Parameter name="Time-Course" type="cn" value="CN=Root,Vector=TaskList[Time-Course]"/>
         <Parameter name="Create Parameter Sets" type="bool" value="0"/>
         <ParameterGroup name="Experiment Set">
-        <ParameterGroup name="report1"><Parameter name="Key" type="key" value="Experiment_report1"/><Parameter name="File Name" type="file" value="/home/ncw135/Documents/pycotools3/Tests/report1.txt"/><Parameter name="Data is Row Oriented" type="bool" value="1"/><Parameter name="First Row" type="unsignedInteger" value="1"/><Parameter name="Last Row" type="unsignedInteger" value="52"/><Parameter name="Experiment Type" type="unsignedInteger" value="1"/><Parameter name="Normalize Weights per Experiment" type="bool" value="1"/><Parameter name="Separator" type="string" value="&#9;"/><Parameter name="Weight Method" type="unsignedInteger" value="1"/><Parameter name="Row containing Names" type="unsignedInteger" value="1"/><Parameter name="Number of Columns" type="unsignedInteger" value="10"/><ParameterGroup name="Object Map"><ParameterGroup name="0"><Parameter name="Role" type="unsignedInteger" value="3"/></ParameterGroup><ParameterGroup name="1"><Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="2"><Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="3"><Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="4"><Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[ThisIsAssignment],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="5"><Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="6"><Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="7"><Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C_0_k2],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="8"><Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[C2A_k1],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup><ParameterGroup name="9"><Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[ADeg_k1],Reference=Value"/><Parameter name="Role" type="unsignedInteger" value="2"/></ParameterGroup></ParameterGroup></ParameterGroup></ParameterGroup>
+          <ParameterGroup name="report1">
+            <Parameter name="Key" type="key" value="Experiment_report1"/>
+            <Parameter name="File Name" type="file" value="/home/ncw135/Documents/pycotools3/Tests/report1.txt"/>
+            <Parameter name="Data is Row Oriented" type="bool" value="1"/>
+            <Parameter name="First Row" type="unsignedInteger" value="1"/>
+            <Parameter name="Last Row" type="unsignedInteger" value="52"/>
+            <Parameter name="Experiment Type" type="unsignedInteger" value="1"/>
+            <Parameter name="Normalize Weights per Experiment" type="bool" value="1"/>
+            <Parameter name="Separator" type="string" value="&#9;"/>
+            <Parameter name="Weight Method" type="unsignedInteger" value="1"/>
+            <Parameter name="Row containing Names" type="unsignedInteger" value="1"/>
+            <Parameter name="Number of Columns" type="unsignedInteger" value="10"/>
+            <ParameterGroup name="Object Map">
+              <ParameterGroup name="0">
+                <Parameter name="Role" type="unsignedInteger" value="3"/>
+              </ParameterGroup>
+              <ParameterGroup name="1">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="2">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[B],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="3">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Compartments[nuc],Vector=Metabolites[C],Reference=Concentration"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="4">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[ThisIsAssignment],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="5">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[A2B],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="6">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="7">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[B2C_0_k2],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="8">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[C2A_k1],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+              <ParameterGroup name="9">
+                <Parameter name="Object CN" type="cn" value="CN=Root,Model=TestModel1,Vector=Values[ADeg_k1],Reference=Value"/>
+                <Parameter name="Role" type="unsignedInteger" value="2"/>
+              </ParameterGroup>
+            </ParameterGroup>
+          </ParameterGroup>
+        </ParameterGroup>
         <ParameterGroup name="Validation Set">
           <Parameter name="Weight" type="unsignedFloat" value="1"/>
           <Parameter name="Threshold" type="unsignedInteger" value="5"/>
@@ -808,7 +903,7 @@ Reaction scheme where the products are created from the reactants and the change
         <Object cn="CN=Root,Model=TestModel1,Vector=Values[ADeg_k1],Reference=Value"/>
       </Table>
     </Report>
-    <Report precision="6" separator="&#9;" name="multi_parameter_estimation" key="Report_32" taskType="parameterFitting">
+    <Report precision="6" separator="&#9;" name="multi_parameter_estimation" key="Report_96" taskType="parameterFitting">
       <Comment/>
       <Table printTitle="1">
         <Object cn="CN=Root,Vector=TaskList[Parameter Estimation],Problem=Parameter Estimation,Reference=Best Parameters"/>

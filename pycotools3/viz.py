@@ -2332,12 +2332,18 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
 
         """
 
+        import csv
+        sniffer = csv.Sniffer()
+
         dct = {}
         for model_name in self.cls.models:
             dct[model_name] = {}
             experiment_files = [self.cls.config.experiments[i].filename for i in self.cls.config.experiments]
             for i in experiment_files:
-                dct[model_name][i] = pandas.read_csv(i, sep='\t')
+                with open(i) as f:
+                    line = f.readline()
+                delimiter = sniffer.sniff(line).delimiter
+                dct[model_name][i] = pandas.read_csv(i, sep=delimiter)
         return dct
 
     def get_time(self):
@@ -2352,13 +2358,18 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
         dct = {}
         for k, v in self.exp_data.items():
             dct[k] = {}
-            for k2, v2 in v.items():
-                dct[k][k2] = (min(v2['Time']), max(v2['Time']))
+            for filename, data in v.items():
+                if 'time'.lower() not in [i.lower() for i in data]:
+                    LOG.warning(f'Experiment "{filename}" not plotted because it does not '
+                                f'have a Time variable. This could be because '
+                                f'this is a steady state experiment, which is '
+                                f'not currently supported by pycotools3.')
+                    continue
+                dct[k][filename] = (min(data['time']), max(data['time']))
         return dct
 
     def simulate_time_course(self):
         """simulate a timecourse for each experiment
-        which may have different simulation lengths
         :return:
 
         Args:
@@ -2369,19 +2380,55 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
         d = {}
         time_dct = self.get_time()
         for model_name in self.cls.models:
+            mod = self.cls.models[model_name].model
             step_size = 1
             d[model_name] = {}
             for experiment_file, (min_time, max_time) in time_dct[model_name].items():
                 indep_dct = {}
                 for exp_key in list(self.exp_data[model_name][experiment_file].keys()):
-                    if exp_key[-6:] == '_indep':
+                    print('exp key', exp_key)
+                    if exp_key[-6:] == '_indep' and exp_key[:-6] in mod:
                         indep_dct[exp_key[:-6]] = self.exp_data[model_name][experiment_file][exp_key].iloc[0]
-
+                    print('INDEP vars dict:', indep_dct)
                     ## Insert independent vars
-                    model.InsertParameters(self.cls.models[model_name].model, parameter_dict=indep_dct, inplace=True)
+                    mod.insert_parameters(parameter_dict=indep_dct, inplace=True)
 
                 TC = tasks.TimeCourse(
-                    self.cls.models[model_name].model, start=min_time, end=max_time, step_size=step_size,
+                    mod, start=min_time, end=max_time, step_size=step_size,
+                    intervals=(max_time - min_time) / step_size,
+                )
+                d[model_name][experiment_file] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
+
+        return d
+
+    def simulate_steadystate(self):
+        """simulate a steadystate for each experiment
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        d = {}
+        time_dct = self.get_time()
+        for model_name in self.cls.models:
+            mod = self.cls.models[model_name].model
+            ant_mod
+            step_size = 1
+            d[model_name] = {}
+            for experiment_file, (min_time, max_time) in time_dct[model_name].items():
+                indep_dct = {}
+                for exp_key in list(self.exp_data[model_name][experiment_file].keys()):
+                    print('exp key', exp_key)
+                    if exp_key[-6:] == '_indep' and exp_key[:-6] in mod:
+                        indep_dct[exp_key[:-6]] = self.exp_data[model_name][experiment_file][exp_key].iloc[0]
+                    print('INDEP vars dict:', indep_dct)
+                    ## Insert independent vars
+                    mod.insert_parameters(parameter_dict=indep_dct, inplace=True)
+
+                TC = tasks.TimeCourse(
+                    mod, start=min_time, end=max_time, step_size=step_size,
                     intervals=(max_time - min_time) / step_size,
                 )
                 d[model_name][experiment_file] = self.parse(TC, self.log10, copasi_file=self.copasi_file)
@@ -2406,14 +2453,27 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
             for exp in self.exp_data[model_name]:
                 for sim in self.sim_data[model_name]:
                     if exp == sim:
-                        plot_data_exp = self.exp_data[model_name][exp]
-                        plot_data_sim = self.sim_data[model_name][sim]
+                        plot_data_exp = self.exp_data[model_name][exp].rename(columns={'Time': 'time'})
+                        plot_data_sim = self.sim_data[model_name][sim].rename(columns={'Time': 'time'})
 
                         for y in plot_data_exp.columns:
+                            # sometimes we have data in file that doesn't have a matching simulated variable
+                            #  and vice versa. In this situation just continue with a warning
+                            if y not in plot_data_exp:
+                                LOG.warning(f'Skipping "{y}" as it is not in the experimental data.')
+                                continue
+
+                            if y not in plot_data_sim:
+                                LOG.warning(f'Skipping "{y}" as it is not in your model.')
+                                continue
+
+                            # do not plot time
+                            if y.lower() == 'time':
+                                continue
 
                             fig = plt.figure()
                             plt.plot(
-                                plot_data_exp['Time'], plot_data_exp[y],
+                                plot_data_exp['time'], plot_data_exp[y],
                                 label='Exp', linestyle=self.linestyle,
                                 marker=self.marker, linewidth=self.linewidth,
                                 markersize=self.markersize,
@@ -2421,7 +2481,7 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                                 color='#0E00FA',
                             )
                             plt.plot(
-                                plot_data_sim['Time'], plot_data_sim[y],
+                                plot_data_sim['time'], plot_data_sim[y],
                                 label='Sim', linestyle=self.linestyle,
                                 marker=self.marker, linewidth=self.linewidth,
                                 markersize=self.markersize,

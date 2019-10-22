@@ -155,6 +155,7 @@ class BoxPlotTests(_test_base._BaseTest):
 
 
 
+
 class WaterfallPlotTests(_test_base._BaseTest):
     def setUp(self):
         super(WaterfallPlotTests, self).setUp()
@@ -248,19 +249,13 @@ class PlotParameterEstimationTests(_test_base._BaseTest):
         # for i in pl.create_directories():
         #     self.assertEqual(len(glob.glob(pl.create_directories()[i] + '/*')), 6)
 
-    # def test_plot2(self):
-    #     """
-    #     test y argument works
-    #     :return:
-    #     """
-    #     pl = pycotools3.viz.PlotParameterEstimation(self.pe,
-    #                                                 savefig=True,
-    #                                                 show=False,
-    #                                                 y=['A', 'B'])
-    #     pl.plot()
-        # for i in pl.create_directories():
-        #     self.assertEqual(len(glob.glob(pl.create_directories()[i] + '/*')), 2)
-#
+    def test_ss(self):
+        pl = pycotools3.viz.PlotParameterEstimation(
+            self.pe,
+            savefig=True,
+            show=False,
+        )
+
 
 # class PlotTimeCourseTests(_test_base._BaseTest):
 #
