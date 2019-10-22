@@ -613,6 +613,14 @@ class Model(_base._Base):
         os.remove(sbml_file)
         return antimony
 
+    def to_tellurium(self):
+        """
+        return a roadrunner model via the tellurium package
+        Returns:
+
+        """
+        return te.loada(self.to_antimony())
+
     @property
     def root(self):
         """Root directory for model. The directory

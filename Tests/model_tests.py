@@ -1283,6 +1283,12 @@ class NewModelTests(unittest.TestCase):
         model = pycotools3.model.Model(self.cps_file, new=True)
         model.save()
 
+    def test_to_tellurium(self):
+        model = pycotools3.model.Model(self.cps_file, new=True)
+        mod = model.to_tellurium()
+        import roadrunner
+        self.assertIsInstance(mod, roadrunner.RoadRunner)
+
     # def test_compartment(self):
     #     """
     #     Test we can make a new compartment

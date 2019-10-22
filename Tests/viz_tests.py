@@ -193,9 +193,12 @@ class PlotParameterEstimationTests(_test_base._BaseTest):
 
         fname = os.path.join(os.path.dirname(__file__), 'report1.txt')
         data = self.model.simulate(0, 50, 1, report_name=fname)
+        ss_fname = os.path.join(os.path.dirname(__file__), 'ss.txt')
+        df = pandas.DataFrame({'A': 5, 'B': 5, 'C': 5}, index=[0])
+        df.to_csv(ss_fname, index=False, sep='\t')
 
         with pycotools3.tasks.ParameterEstimation.Context(
-                self.model, fname, context='s', parameters='g',
+                self.model, [fname, ss_fname], context='s', parameters='g',
         ) as context:
             context.set('method', 'genetic_algorithm')
             context.set('population_size', 2)
@@ -209,6 +212,8 @@ class PlotParameterEstimationTests(_test_base._BaseTest):
             config = context.get_config()
 
         self.pe = pycotools3.tasks.ParameterEstimation(config)
+        self.mod = self.pe.models['test_model'].model
+        # self.mod.open()
 
     def test_create_directory(self):
         """
@@ -246,6 +251,7 @@ class PlotParameterEstimationTests(_test_base._BaseTest):
             savefig=True,
             show=False,
         )
+        pl.plot()
         # for i in pl.create_directories():
         #     self.assertEqual(len(glob.glob(pl.create_directories()[i] + '/*')), 6)
 
@@ -255,6 +261,7 @@ class PlotParameterEstimationTests(_test_base._BaseTest):
             savefig=True,
             show=False,
         )
+        pl.simulate_steadystate()
 
 
 # class PlotTimeCourseTests(_test_base._BaseTest):
