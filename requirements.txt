@@ -60,5 +60,5 @@ tesbml==5.15.0.1
 tesedml==0.4.3
 tornado==5.1.1
 traitlets==4.3.2
-urllib3==1.24.1
+urllib3==1.24.2
 wcwidth==0.1.7
