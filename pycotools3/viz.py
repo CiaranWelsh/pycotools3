@@ -2194,6 +2194,7 @@ class PlotProfileLikelihoods(_Plotter):
     def calculate_cl(self):
         pass
 
+
 class PlotParameterEstimation(_ParameterEstimationPlotter):
     """Visualize parameter estimation runs against a single
     parameter estimation. Similar to PlotTimeCourseEnsemble
@@ -2265,8 +2266,8 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
         self.cls.models = self.update_parameters()
         self.exp_data = self.read_experimental_data()
         self.sim_data = self.simulate()
-        #
-        # self.plot()
+
+        self.plot()
 
     def __str__(self):
         """
@@ -2288,8 +2289,12 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
             dct = {}
             for model_name in self.cls.models:
                 dct[model_name] = os.path.join(
-                    self.cls.models[model_name].model.root,
+                    os.path.join(
+                        os.path.join(
+                            self.cls.models[model_name].model.root, self.cls.config.settings.problem),
+                        f'Fit{self.cls.config.settings.fit}',
                     'ParameterEstimationPlots')
+                )
             self.results_directory = dct
         # if not isinstance(self.y, list):
         #     self.y = [self.y]
@@ -2394,14 +2399,12 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                 # now simulate a steady state or timeseries depending on whether the time column exists in the
                 #  experimental data or not
                 if time is None:
-                    #simulate steady state using tellurium, since steadystate is not yet supported in pycotools
-                    # roadrunner.Config.setValue(roadrunner.Config.LOADSBMLOPTIONS_CONSERVED_MOIETIES, True)
-                    roadrunner.conservedMoietyAnalysis = True
+                    # simulate steady state using tellurium, since steadystate is not yet supported in pycotools
                     te_mod = mod.to_tellurium()
-                    # This should be set to True, but currently there
-                    # iss a bug in tellurium. Submitted an issue here:
-                    # https://github.com/sys-bio/roadrunner/issues/571
-                    te_mod.conservedMoietyAnalysis = False
+                    te_mod.reset()
+                    te_mod.conservedMoietyAnalysis = True
+                    te_mod.steadyStateSolver.allow_precomputation = True
+                    te_mod.steadyStateSolver.allow_approx = True
 
                     te_mod.steadyState()
                     ss = dict(zip(
@@ -2410,7 +2413,7 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                     ))
                     d[model_name][experiment_file] = pandas.DataFrame(ss, index=[0])
                 else:
-                    #simulate time series
+                    # simulate time series
                     d[model_name][experiment_file] = mod.simulate(time[0], time[1], step_size)
 
         return d
@@ -2430,8 +2433,14 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
             for exp in self.exp_data[model_name]:
                 for sim in self.sim_data[model_name]:
                     if exp == sim:
-                        plot_data_exp = self.exp_data[model_name][exp].rename(columns={'Time': 'time'})
-                        plot_data_sim = self.sim_data[model_name][sim].rename(columns={'Time': 'time'})
+                        plot_data_exp = self.exp_data[model_name][exp]
+                        plot_data_sim = self.sim_data[model_name][sim]
+
+                        if plot_data_sim is None:
+                            continue
+
+                        plot_data_exp = plot_data_exp.rename(columns={'Time': 'time'})
+                        plot_data_sim = plot_data_sim.rename(columns={'Time': 'time'})
 
                         if 'time' in plot_data_exp:
 
@@ -2481,7 +2490,6 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                                     print('figure saved to "{}"'.format(fle))
 
                         else:
-                            print('plotting steady state')
                             for y in plot_data_exp.columns:
                                 # sometimes we have data in file that doesn't have a matching simulated variable
                                 #  and vice versa. In this situation just continue with a warning
@@ -2494,7 +2502,8 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                                     continue
 
                             # get only variables that exist in both
-                            ys_in_both = sorted(list(set(plot_data_sim.columns).intersection(set(plot_data_exp.columns))))
+                            ys_in_both = sorted(
+                                list(set(plot_data_sim.columns).intersection(set(plot_data_exp.columns))))
                             plot_data_exp = plot_data_exp[ys_in_both]
                             plot_data_sim = plot_data_sim[ys_in_both]
 
@@ -2529,8 +2538,6 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
 
     def plot_scatters(self, x, y):
         pass
-
-    
 
 # class Pca(_Viz, PlotKwargs):
 #     """Use the :py:class:`PCA` function to conduct

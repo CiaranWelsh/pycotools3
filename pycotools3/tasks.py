@@ -24,7 +24,7 @@
 from . import viz
 from . import errors
 from . import model
-from .munch import Munch
+from .munch import Bunch
 from . import munch
 import time
 import threading
@@ -2512,12 +2512,20 @@ class ParameterEstimation(_ParameterEstimationBase):
             }
 
     @staticmethod
-    class Config(_ParameterEstimationBase, Munch):
+    class Config(_ParameterEstimationBase, Bunch):
         """
-        A class for holding a parameter estimation configuration
+        A parameter estimation configuration class
 
-        Stores all the settings needed for configuration of a parameter estimation
-        using COPASI.
+        Stores as attibutes all the settings needed for configuration of a parameter estimation
+        using COPASI. Base class is a :py:class:`Bunch`
+
+        Structure of a :py:class:`ParameterEstimation.Config` Object has four main sections:
+            - models
+            - datasets
+            - items
+            - settings
+
+
 
         Examples:
             >>> ## create a model
@@ -2532,12 +2540,12 @@ class ParameterEstimation(_ParameterEstimationBase):
             ...             end
             ...             '''
             >>> copasi_filename = os.path.join(os.path.dirname(__file__), 'example_model.cps')
-            >>> with model.BuildAntimony(copasi_filename) as loader:
-            ...     mod = loader.load(antimony_string)
+            >>> mod = moddel.loada(antimony_string, copasi_filename)
             >>> ## Simulate some data from the model and write to file
             >>> fname = os.path.join(os.path.dirname(__file__), 'timeseries.txt')
             >>> data = self.model.simulate(0, 10, 11)
             >>> data.to_csv(fname)
+            >>>
             >>> ## create nested dict containing all the relevant arguments for your configuration
             >>> config_dict = dict(
             ...        models=dict(
@@ -2597,6 +2605,7 @@ class ParameterEstimation(_ParameterEstimationBase):
         def __init__(self, models, datasets, items, settings={}, defaults=None):
             """
             Initialisation method for Config class
+
             Args:
                 models (dict):
                     Dict containing model names and paths to copasi files
@@ -2608,6 +2617,9 @@ class ParameterEstimation(_ParameterEstimationBase):
                     Dict containing all other settings for parameter estimation
                 defaults(ParameterEstimation._Defaults):
                     Custom set of Defaults to use for unspecified arguments
+
+            Returns:
+
             """
             self.models = models
             self.datasets = datasets
@@ -2621,7 +2633,7 @@ class ParameterEstimation(_ParameterEstimationBase):
             if not isinstance(self.defaults, ParameterEstimation._Defaults):
                 raise TypeError('incorrect defaults argument')
 
-            self.kwargs = Munch.fromDict({
+            self.kwargs = Bunch.fromDict({
                 'models': self.models,
                 'datasets': self.datasets,
                 'items': self.items,
@@ -2867,7 +2879,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                         self.datasets.experiments[experiment_name]['affected_models']]
 
                 if self.datasets.experiments[experiment_name].mappings == {}:
-                    self.datasets.experiments[experiment_name].mappings = Munch.fromDict(self.defaults._mappings(
+                    self.datasets.experiments[experiment_name].mappings = Bunch.fromDict(self.defaults._mappings(
                         self.datasets.experiments[experiment_name].filename,
                         self.datasets.experiments[experiment_name].separator)
                     )
@@ -2922,7 +2934,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                         self.models.keys()) == 1 else list(self.models.keys())
 
                 if validation_dataset.mappings == {}:
-                    validation_dataset.mappings = Munch.fromDict(self.defaults._mappings(
+                    validation_dataset.mappings = Bunch.fromDict(self.defaults._mappings(
                         validation_dataset.filename, validation_dataset.separator)
                     )
 
@@ -3020,7 +3032,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                         item['affected_models'] = [i for i in self.models if fit_item in self.models[model_name].model]
                     dct[fit_item] = item
 
-            self.items.fit_items = Munch.fromDict(dct)
+            self.items.fit_items = Bunch.fromDict(dct)
 
         def set_default_fit_items_dct(self):
             """
@@ -3069,7 +3081,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                 if item['affected_models'] == 'all':
                     item['affected_models'] = list(self.models.keys())
 
-                self.items.fit_items[fit_item] = Munch.fromDict(item)  #
+                self.items.fit_items[fit_item] = Bunch.fromDict(item)  #
 
             ## caters for the situation where we define a config file but
             ## need to update it due to a change in prefix argument
@@ -3079,7 +3091,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                     raise TypeError(f'config.settings.prefix argument should be of type "str"')
                 tmp = {fit_item: self.items.fit_items[fit_item] for fit_item in self.items.fit_items if
                        fit_item.startswith(self.settings.prefix)}
-                self.items.fit_items = Munch.fromDict(tmp)
+                self.items.fit_items = Bunch.fromDict(tmp)
 
         def _set_default_constraint_items(self):
             """ 
@@ -3121,7 +3133,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                     if item.affected_models == 'all':
                         item.affected_models = list(self.models.keys())
 
-                self.items.constraint_items[constraint_item] = Munch.fromDict(item)
+                self.items.constraint_items[constraint_item] = Bunch.fromDict(item)
             # else:
             #     self.items['constraint_items'] = {}
 

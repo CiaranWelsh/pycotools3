@@ -26,14 +26,14 @@ Original code is available here:
 
 Munch is a subclass of dict with attribute-style access.
 
->>> b = Munch()
+>>> b = Bunch()
 >>> b.hello = 'world'
 >>> b.hello
 'world'
 >>> b['hello'] += "!"
 >>> b.hello
 'world!'
->>> b.foo = Munch(lol=True)
+>>> b.foo = Bunch(lol=True)
 >>> b.foo.lol
 True
 >>> b.foo is b['foo']
@@ -50,7 +50,7 @@ converted via Munch.to/fromDict().
 __version__ = '2.3.2'
 VERSION = tuple(map(int, __version__.split('.')))
 
-__all__ = ('Munch', 'munchify', 'DefaultMunch', 'DefaultFactoryMunch', 'unmunchify')
+__all__ = ('Bunch', 'munchify', 'DefaultMunch', 'DefaultFactoryMunch', 'unmunchify')
 
 
 from collections import defaultdict
@@ -59,17 +59,17 @@ from collections import defaultdict
 
 from six import u, iteritems, iterkeys # pylint: disable=unused-import
 
-class Munch(dict):
+class Bunch(dict):
     """ A dictionary that provides attribute-style access.
 
-        >>> b = Munch()
+        >>> b = Bunch()
         >>> b.hello = 'world'
         >>> b.hello
         'world'
         >>> b['hello'] += "!"
         >>> b.hello
         'world!'
-        >>> b.foo = Munch(lol=True)
+        >>> b.foo = Bunch(lol=True)
         >>> b.foo.lol
         True
         >>> b.foo is b['foo']
@@ -93,7 +93,7 @@ class Munch(dict):
 
         And "splats".
 
-        >>> "The {knights} who say {ni}!".format(**Munch(knights='lolcats', ni='can haz'))
+        >>> "The {knights} who say {ni}!".format(**Bunch(knights='lolcats', ni='can haz'))
         'The lolcats who say can haz!'
 
         See unmunchify/Munch.toDict, munchify/Munch.fromDict for notes about conversion.
@@ -105,7 +105,7 @@ class Munch(dict):
 
             nb. __getattr__ is only called if key is not found in normal places.
 
-            >>> b = Munch(bar='baz', lol={})
+            >>> b = Bunch(bar='baz', lol={})
             >>> b.foo
             Traceback (most recent call last):
                 ...
@@ -138,7 +138,7 @@ class Munch(dict):
             raised by set-item (only likely if you subclass Munch) will
             propagate as an AttributeError instead.
 
-            >>> b = Munch(foo='bar', this_is='useful when subclassing')
+            >>> b = Bunch(foo='bar', this_is='useful when subclassing')
             >>> hasattr(b.values, '__call__')
             True
             >>> b.values = 'uh oh'
@@ -165,7 +165,7 @@ class Munch(dict):
             raised by deleting the key--such as when the key is missing--will
             propagate as an AttributeError instead.
 
-            >>> b = Munch(lol=42)
+            >>> b = Bunch(lol=42)
             >>> del b.lol
             >>> b.lol
             Traceback (most recent call last):
@@ -186,7 +186,7 @@ class Munch(dict):
     def toDict(self):
         """ Recursively converts a munch back into a dictionary.
 
-            >>> b = Munch(foo=Munch(lol=True), hello=42, ponies='are pretty!')
+            >>> b = Bunch(foo=Bunch(lol=True), hello=42, ponies='are pretty!')
             >>> sorted(b.toDict().items())
             [('foo', {'lol': True}), ('hello', 42), ('ponies', 'are pretty!')]
 
@@ -201,13 +201,13 @@ class Munch(dict):
     def __repr__(self):
         """ Invertible* string-form of a Munch.
 
-            >>> b = Munch(foo=Munch(lol=True), hello=42, ponies='are pretty!')
+            >>> b = Bunch(foo=Bunch(lol=True), hello=42, ponies='are pretty!')
             >>> print (repr(b))
             Munch({'ponies': 'are pretty!', 'foo': Munch({'lol': True}), 'hello': 42})
             >>> eval(repr(b))
             Munch({'ponies': 'are pretty!', 'foo': Munch({'lol': True}), 'hello': 42})
 
-            >>> with_spaces = Munch({1: 2, 'a b': 9, 'c': Munch({'simple': 5})})
+            >>> with_spaces = Bunch({1: 2, 'a b': 9, 'c': Bunch({'simple': 5})})
             >>> print (repr(with_spaces))
             Munch({'a b': 9, 1: 2, 'c': Munch({'simple': 5})})
             >>> eval(repr(with_spaces))
@@ -241,7 +241,7 @@ class Munch(dict):
     def fromDict(cls, d):
         """ Recursively transforms a dictionary into a Munch via copy.
 
-            >>> b = Munch.fromDict({'urmom': {'sez': {'what': 'what'}}})
+            >>> b = Bunch.fromDict({'urmom': {'sez': {'what': 'what'}}})
             >>> b.urmom.sez.what
             'what'
 
@@ -253,17 +253,17 @@ class Munch(dict):
         return type(self).fromDict(self)
 
 
-class AutoMunch(Munch):
+class AutoMunch(Bunch):
     def __setattr__(self, k, v):
         """ Works the same as Munch.__setattr__ but if you supply
             a dictionary as value it will convert it to another Munch.
         """
-        if isinstance(v, dict) and not isinstance(v, (AutoMunch, Munch)):
+        if isinstance(v, dict) and not isinstance(v, (AutoMunch, Bunch)):
             v = munchify(v, AutoMunch)
         super(AutoMunch, self).__setattr__(k, v)
 
 
-class DefaultMunch(Munch):
+class DefaultMunch(Bunch):
     """
     A Munch that returns a user-specified value for missing keys.
     """
@@ -332,7 +332,7 @@ class DefaultMunch(Munch):
             type(self).__name__, self.__undefined__, dict.__repr__(self))
 
 
-class DefaultFactoryMunch(defaultdict, Munch):
+class DefaultFactoryMunch(defaultdict, Bunch):
     """ A Munch that calls a user-specified function to generate values for
         missing keys like collections.defaultdict.
 
@@ -371,7 +371,7 @@ class DefaultFactoryMunch(defaultdict, Munch):
 # Should you disagree, it is not difficult to duplicate this function with
 # more aggressive coercion to suit your own purposes.
 
-def munchify(x, factory=Munch):
+def munchify(x, factory=Bunch):
     """ Recursively transforms a dictionary into a Munch via copy.
 
         >>> b = munchify({'urmom': {'sez': {'what': 'what'}}})
@@ -401,15 +401,15 @@ def munchify(x, factory=Munch):
 def unmunchify(x):
     """ Recursively converts a Munch into a dictionary.
 
-        >>> b = Munch(foo=Munch(lol=True), hello=42, ponies='are pretty!')
+        >>> b = Bunch(foo=Bunch(lol=True), hello=42, ponies='are pretty!')
         >>> sorted(unmunchify(b).items())
         [('foo', {'lol': True}), ('hello', 42), ('ponies', 'are pretty!')]
 
         unmunchify will handle intermediary dicts, lists and tuples (as well as
         their subclasses), but ymmv on custom datatypes.
 
-        >>> b = Munch(foo=['bar', Munch(lol=True)], hello=42,
-        ...         ponies=('are pretty!', Munch(lies='are trouble!')))
+        >>> b = Bunch(foo=['bar', Bunch(lol=True)], hello=42,
+        ...         ponies=('are pretty!', Bunch(lies='are trouble!')))
         >>> sorted(unmunchify(b).items()) #doctest: +NORMALIZE_WHITESPACE
         [('foo', ['bar', {'lol': True}]), ('hello', 42), ('ponies', ('are pretty!', {'lies': 'are trouble!'}))]
 
@@ -434,13 +434,13 @@ try:
     def toJSON(self, **options):
         """ Serializes this Munch to JSON. Accepts the same keyword options as `json.dumps()`.
 
-            >>> b = Munch(foo=Munch(lol=True), hello=42, ponies='are pretty!')
+            >>> b = Bunch(foo=Bunch(lol=True), hello=42, ponies='are pretty!')
             >>> json.dumps(b) == b.toJSON()
             True
         """
         return json.dumps(self, **options)
 
-    Munch.toJSON = toJSON
+    Bunch.toJSON = toJSON
 
 except ImportError:
     pass
@@ -469,7 +469,7 @@ try:
             subclasses. Should you want to customize the representation of a subclass,
             simply register it with PyYAML yourself.
         """
-        data = Munch()
+        data = Bunch()
         yield data
         value = loader.construct_mapping(node)
         data.update(value)
@@ -478,7 +478,7 @@ try:
         """ Converts Munch to a normal mapping node, making it appear as a
             dict in the YAML output.
 
-            >>> b = Munch(foo=['bar', Munch(lol=True)], hello=42)
+            >>> b = Bunch(foo=['bar', Bunch(lol=True)], hello=42)
             >>> import yaml
             >>> yaml.safe_dump(b, default_flow_style=True)
             '{foo: [bar, {lol: true}], hello: 42}\\n'
@@ -488,7 +488,7 @@ try:
     def to_yaml(dumper, data):
         """ Converts Munch to a representation node.
 
-            >>> b = Munch(foo=['bar', Munch(lol=True)], hello=42)
+            >>> b = Bunch(foo=['bar', Bunch(lol=True)], hello=42)
             >>> import yaml
             >>> yaml.dump(b, default_flow_style=True)
             '!munch.Munch {foo: [bar, !munch.Munch {lol: true}], hello: 42}\\n'
@@ -498,18 +498,18 @@ try:
     yaml.add_constructor(u('!munch'), from_yaml)
     yaml.add_constructor(u('!munch.Munch'), from_yaml)
 
-    SafeRepresenter.add_representer(Munch, to_yaml_safe)
-    SafeRepresenter.add_multi_representer(Munch, to_yaml_safe)
+    SafeRepresenter.add_representer(Bunch, to_yaml_safe)
+    SafeRepresenter.add_multi_representer(Bunch, to_yaml_safe)
 
-    Representer.add_representer(Munch, to_yaml)
-    Representer.add_multi_representer(Munch, to_yaml)
+    Representer.add_representer(Bunch, to_yaml)
+    Representer.add_multi_representer(Bunch, to_yaml)
 
     # Instance methods for YAML conversion
     def toYAML(self, **options):
         """ Serializes this Munch to YAML, using `yaml.safe_dump()` if
             no `Dumper` is provided. See the PyYAML documentation for more info.
 
-            >>> b = Munch(foo=['bar', Munch(lol=True)], hello=42)
+            >>> b = Bunch(foo=['bar', Bunch(lol=True)], hello=42)
             >>> import yaml
             >>> yaml.safe_dump(b, default_flow_style=True)
             '{foo: [bar, {lol: true}], hello: 42}\\n'
@@ -531,8 +531,8 @@ try:
     def fromYAML(*args, **kwargs):
         return munchify(yaml.load(*args, **kwargs))
 
-    Munch.toYAML = toYAML
-    Munch.fromYAML = staticmethod(fromYAML)
+    Bunch.toYAML = toYAML
+    Bunch.fromYAML = staticmethod(fromYAML)
 
 except ImportError:
     pass
