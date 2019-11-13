@@ -21,35 +21,35 @@
  Time:  13:33
 
 """
-from . import viz
+import glob
+import itertools
+import json
+import logging
+import os
+import queue as queue
+import re
+import shutil
+import subprocess
+import threading
+import time
+from collections import OrderedDict
+from copy import deepcopy
+from functools import reduce
+from io import StringIO
+from multiprocessing import Process, cpu_count
+from subprocess import check_call
+
+import numpy
+import pandas
+import psutil
+import seaborn as sns
+from lxml import etree
+
+from . import bunch
 from . import errors
 from . import model
 from .bunch import Bunch
-from . import bunch
-import time
-import threading
-import queue as queue
-import psutil
-import shutil
-import numpy
-import pandas
-from lxml import etree
-from io import StringIO
-import logging
-import os
-import subprocess
-import re
-from multiprocessing import Process, cpu_count
-import glob
-import seaborn as sns
-from copy import deepcopy
-from subprocess import check_call
-from collections import OrderedDict, Mapping
 from .mixin import mixin
-from functools import reduce
-import yaml, json
-import sys
-import itertools
 
 LOG = logging.getLogger(__name__)
 

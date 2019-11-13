@@ -24,33 +24,26 @@
 
 import logging
 import os
+import re
+import subprocess
 from collections import OrderedDict, Counter
+from copy import deepcopy
+from functools import reduce
 from random import randint
-
-from lxml import etree
-
-# site.addsitedir('C:\Users\Ciaran\Documents\PyCoTools')
-# import PyCoTools
-from . import errors
-from . import viz
-from . import misc
-# import errors, misc, viz
-from . import _base
-from . import tasks
-from .utils import format_timecourse_data
+from shutil import copy
+from subprocess import check_call
 
 import pandas
-import re
-import sys, inspect
-from copy import deepcopy
-from .mixin import mixin, Mixin
-from functools import wraps
-from .cached_property import cached_property_with_ttl, cached_property
-from subprocess import check_call, call
-from shutil import copy
-from functools import reduce
+from lxml import etree
 
-import sys
+from . import _base
+from . import errors
+from . import misc
+from . import tasks
+from . import viz
+from .cached_property import cached_property
+from .mixin import mixin, Mixin
+from .utils import format_timecourse_data
 
 LOG = logging.getLogger(__name__)
 
@@ -378,13 +371,14 @@ def loada(antimony_str, copasi_file):
         raise errors.FileDoesNotExistError('Sbml file does not exist')
 
     ## Perform conversion wtih CopasiSE using copasi_file as save argument
-    cmd = f"CopasiSE -i {sbml_file} -s {copasi_file}"
+    cmd = ["CopasiSE", "-i", sbml_file,
+           "-s", copasi_file]
+
 
     # known bug:
     #  it appears that when using the -s flag for copasi, the name is lost
     #  in the translation of sbml to copasi. I'll not worry about this for now.
-    import subprocess
-    subprocess.check_call([cmd])
+    subprocess.check_call(cmd)
 
     if not os.path.isfile(copasi_file):
         raise FileNotFoundError('The file you are trying to create "{}"'
