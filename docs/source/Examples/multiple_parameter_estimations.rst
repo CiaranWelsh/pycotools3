@@ -4,7 +4,7 @@ Configuring multiple parameter estimations is easy with COPASI because you can c
 
 Moreover, pycotools additionally supports the running of multiple copies of your copasi file in separate processes, or on a cluster.
 
-.. code-block:: python
+.. highlight:: python
 
     from pycotools3 import model, tasks
 

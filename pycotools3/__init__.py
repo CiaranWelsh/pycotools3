@@ -7,7 +7,7 @@ from . import tasks
 from . import errors
 from . import misc
 from . import model
-from . import munch
+from . import bunch
 
 if version_info[0] < 3:
     raise RuntimeError('On python version >3 you must use "import pycotools3" rather '
@@ -47,3 +47,4 @@ except Exception:
 #todo fix logging
 #todo steady state documentation
 #todo make explicit how  pe works
+#todo documentation on sensitivity analysis

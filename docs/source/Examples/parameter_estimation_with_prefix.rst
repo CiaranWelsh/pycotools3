@@ -3,7 +3,7 @@ Parameter Estimation using Prefix Argument
 
 Sometimes we would like to select a set of parameters to estimate and leave the rest fixed. One way to do this is to compile a list of parameters you would like to estimate and enter them into the :py:class:`ParameterEstimation.Config` class. A quicker alternative is to use the `prefix` setting.
 
-.. code-block:: python
+.. highlight:: python
 
     import os, glob
     import pandas, numpy

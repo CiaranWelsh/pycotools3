@@ -1,13 +1,26 @@
-Simple Parameter Estimation
-===========================
-This is an example of how to configure a simple parameter estimation using pycotools. We first create a toy model for demonstration, then simulate some experimental data from it and fit it back to the model, using pycotools for configuration.
+Parameter Estimation with Independent Variables
+===============================================
+
+The concept of independent variables is important for
+parameter fitting because it enables us to simultaneously
+fit multiple datasets to a single model. The is achieved
+by iterating over all the datasets in your objective function
+and changing variables (such as initial concentration parameters)
+to what ever they should be for that dataset. These
+variables are independent variables and they basically
+define the initial conditions for fitting the dataset.
+
+Independent variables are handled in PyCoTools by appending
+the string `'_indep'` after a variable in the data file itself.
+PyCoTools will then recognize the variable and set it as independent
+rather than dependent.
+
+Here's an example:
 
 .. highlight:: python
 
     import os, glob
     import pandas, numpy
-    import matplotlib.pyplot as plt
-    import seaborn
     from pycotools3 import model, tasks, viz
     seaborn.set_context(context='talk')		# set seaborn context for formatting output of plots
 
@@ -46,22 +59,23 @@ This is an example of how to configure a simple parameter estimation using pycot
     # Create a path to a copasi file
     copasi_file = os.path.join(working_directory, 'example_model.cps')
 
-    ## build model
+    # build model
     mod = model.loada(antimony_string, copasi_file)
     assert isinstance(mod, model.Model)
 
-    ## simulate some data, returns a pandas.DataFrame
+    # simulate some data, returns a pandas.DataFrame
     data = mod.simulate(0, 20, 1)
 
-    ## write data to file
+    # creates a new column in the dataset called A_indep
+    data['A_indep'] = 50
+    # the initial abundance of A will now be set to 50 prior to estimation
+
+    # write data to file
     experiment_filename = os.path.join(working_directory, 'experiment_data.txt')
     data.to_csv(experiment_filename)
 
-    ## We now have a model and some experimental data and can
-    ## configure a parameter estimation
 
-
-Parameter estimation configuration in pycotools3 revolves around the :py:class:`tasks.ParameterEstimation.Config` object which is the input to the parameter estimation task. The object necessarily takes a lot of manual configuration to ensure it is flexible enough for any parameter estimation configuration. However, the :py:class:`ParameterEstimation.Context` class is a tool for simplifying the construction of a Config object.
+We now configure a parameter estimation like normal.
 
 .. code-block:: python
 

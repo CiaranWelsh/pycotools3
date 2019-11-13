@@ -6,7 +6,7 @@ Cross validation is a new feature of pycotools3 but has been supported by COPASI
 
 Cross validation can help identify datasets which do and don't fit well together. Here we create a model, simulate 3 datasets, make a data set up and use cross validation to infer the dataset that is made up.
 
-.. code-block:: python
+.. highlight:: python
     
     # imports and create our antimony model string
     from pycotools3 import model, tasks

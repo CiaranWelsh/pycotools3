@@ -24,8 +24,8 @@
 from . import viz
 from . import errors
 from . import model
-from .munch import Bunch
-from . import munch
+from .bunch import Bunch
+from . import bunch
 import time
 import threading
 import queue as queue
@@ -2525,8 +2525,6 @@ class ParameterEstimation(_ParameterEstimationBase):
             - items
             - settings
 
-
-
         Examples:
             >>> ## create a model
             >>> antimony_string = '''
@@ -2704,7 +2702,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                     if k2 == 'model':
                         kwargs.models[k][k2] = str(kwargs.models[k][k2])
 
-            yml = munch.toYAML(kwargs)
+            yml = bunch.toYAML(kwargs)
 
             if filename is not None:
                 with open(filename, 'w') as f:

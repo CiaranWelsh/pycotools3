@@ -1,6 +1,11 @@
-Simple Parameter Estimation
-===========================
-This is an example of how to configure a simple parameter estimation using pycotools. We first create a toy model for demonstration, then simulate some experimental data from it and fit it back to the model, using pycotools for configuration.
+Simple Parameter with Steady State Data
+=======================================
+
+The short story here is that PyCoTools distinguishes
+ time series and steady state data automatically, using
+ the presence or absence of the `time` column.
+
+Here's an example.
 
 .. highlight:: python
 
@@ -50,18 +55,22 @@ This is an example of how to configure a simple parameter estimation using pycot
     mod = model.loada(antimony_string, copasi_file)
     assert isinstance(mod, model.Model)
 
-    ## simulate some data, returns a pandas.DataFrame
-    data = mod.simulate(0, 20, 1)
+    ## create some made up data
+    data = pandas.DataFrame({'A': 30, 'B': 10, 'C': 10})
 
     ## write data to file
     experiment_filename = os.path.join(working_directory, 'experiment_data.txt')
     data.to_csv(experiment_filename)
 
-    ## We now have a model and some experimental data and can
-    ## configure a parameter estimation
+We now have a model and some experimental data and can
+  configure a parameter estimation. Configuring steady
+  state data is semantically identical to configuring
+  time series data. The difference is that our `data`
+  no longer has a `time` column and so PyCoTools assumes
+  that it is steady state data.
 
-
-Parameter estimation configuration in pycotools3 revolves around the :py:class:`tasks.ParameterEstimation.Config` object which is the input to the parameter estimation task. The object necessarily takes a lot of manual configuration to ensure it is flexible enough for any parameter estimation configuration. However, the :py:class:`ParameterEstimation.Context` class is a tool for simplifying the construction of a Config object.
+Now, as usual, we configure the parameter estimation
+with the `Context` manager.
 
 .. code-block:: python
 
