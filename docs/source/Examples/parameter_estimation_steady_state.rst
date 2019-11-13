@@ -1,13 +1,12 @@
 Simple Parameter with Steady State Data
 =======================================
 
-The short story here is that PyCoTools distinguishes
- time series and steady state data automatically, using
- the presence or absence of the `time` column.
+The short story here is that PyCoTools distinguishes time series and steady
+state data automatically, using the presence or absence of the `time` column.
 
 Here's an example.
 
-.. highlight:: python
+.. code-block:: python
 
     import os, glob
     import pandas, numpy
@@ -63,11 +62,11 @@ Here's an example.
     data.to_csv(experiment_filename)
 
 We now have a model and some experimental data and can
-  configure a parameter estimation. Configuring steady
-  state data is semantically identical to configuring
-  time series data. The difference is that our `data`
-  no longer has a `time` column and so PyCoTools assumes
-  that it is steady state data.
+configure a parameter estimation. Configuring steady
+state data is semantically identical to configuring
+time series data. The difference is that our `data`
+no longer has a `time` column and so PyCoTools assumes
+that it is steady state data.
 
 Now, as usual, we configure the parameter estimation
 with the `Context` manager.

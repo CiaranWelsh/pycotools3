@@ -79,7 +79,7 @@ class BuildAntimonyTestsCreateFromNew(unittest.TestCase):
         Forget the trailing 'end' and ensure it produces an error
         :return:
         """
-        exception_message = "Antimony: Error in model string, line 19:  syntax error, unexpected end of file, expecting '-' or '+' or => or '<'"
+        exception_message = "Antimony: Error in model string, line 19:  syntax error, unexpected end of file"
         try:
             with model.BuildAntimony(self.copasi_file2) as loader:
                 self.mod2 = loader.load(
@@ -107,8 +107,6 @@ class BuildAntimonyTestsCreateFromNew(unittest.TestCase):
         except Exception as E:
             self.assertEqual(str(E), str(exception_message))
 
-    # def tearDown(self):
-    #     rmtree(self.dire)
 
 
 class BuildAntimonyTestsWithoutRemovalBetweenTests(unittest.TestCase):

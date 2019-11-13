@@ -17,7 +17,7 @@ rather than dependent.
 
 Here's an example:
 
-.. highlight:: python
+.. code-block:: python
 
     import os, glob
     import pandas, numpy

@@ -8,10 +8,15 @@ Examples
    :name: examples-toc
 
    make_model_from_existing_cps
+   integration_with_tellurium
    parameter_estimation_simple
-   multiple_parameter_estimations
+   parameter_estimation_steady_state
    parameter_estimation_with_prefix
+   parameter_estimation_with_independent_variables
+   parameter_estimation_low_level_interface
+   multiple_parameter_estimations
    parameter_estimation_multiple_models
+   parameter_estimation_constraints
    shortcuts2
    profile_likelihoods
    cross_validations

@@ -6,7 +6,7 @@ You can create a new model using the antimony language. Sometimes however, you h
 Create a PyCoTools model from an existing model
 -----------------------------------------------
 
-.. highlight:: python
+.. code-block:: python
 
     from pycotools3 import model
     

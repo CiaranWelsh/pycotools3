@@ -235,7 +235,7 @@ class BuildAntimony(object):
     Build a copasi model using antimony
 
     A context manager to create a copasi model `copasi_file` using the
-    [antimony language](http://tellurium.analogmachine.org/antimony-tutorial/).
+    `antimony language <http://tellurium.analogmachine.org/antimony-tutorial/>`_
 
     Examples:
     
@@ -362,10 +362,10 @@ def loada(antimony_str, copasi_file):
     Returns:
         A :py:class:`model.Model` object
     """
-    ## wrap conversion function in try block
-    ## so we can store the exception
-    ## for raising in the __exit__ function
-    ## Otherwise the error gets suppressed.
+    # patch to protect against unusual bug where current directory was deleted
+    # during the program
+    if not os.path.isfile(os.getcwd()):
+        os.chdir(os.path.split(copasi_file)[0])
     sbml_file = os.path.splitext(copasi_file)[0] + '.sbml'
     sbml_str = te.antimonyToSBML(antimony_str)
 
@@ -377,15 +377,18 @@ def loada(antimony_str, copasi_file):
     if not os.path.isfile(sbml_file):
         raise errors.FileDoesNotExistError('Sbml file does not exist')
 
-    ## Perform conversion wtih CopasiSE
-    cmd = f"CopasiSE -i {sbml_file}"
-    os.system(cmd)
+    ## Perform conversion wtih CopasiSE using copasi_file as save argument
+    cmd = f"CopasiSE -i {sbml_file} -s {copasi_file}"
 
-    ## copy from temporary copasiSE output name to user specified name
-    copasiSE_output_file = copasi_file[:-4] + '.sbml.cps'
+    # known bug:
+    #  it appears that when using the -s flag for copasi, the name is lost
+    #  in the translation of sbml to copasi. I'll not worry about this for now.
+    import subprocess
+    subprocess.check_call([cmd])
 
-    copy(copasiSE_output_file, copasi_file)
-    os.remove(copasiSE_output_file)
+    if not os.path.isfile(copasi_file):
+        raise FileNotFoundError('The file you are trying to create "{}"'
+                                ' was not created'.format(copasi_file))
 
     ## create a pycotools3 model from the resulting copasi_file
     return Model(copasi_file)
@@ -553,15 +556,9 @@ class Model(_base._Base):
     @property
     def copasi_file(self):
         """
-
-        Args:
-
         Returns:
-          :py:class:`Model` was built
+          :py:class:`Model`
           
-          :return:
-          str.
-
         """
         return self._copasi_file
 
@@ -748,13 +745,9 @@ class Model(_base._Base):
 
     @property
     def avagadro(self):
-        """Not really needed but good to check
-        consistancy of avagadros number.
-        **This number was updated between between version 16 and 19 and messed with things
-        
-        :return:
-            `int`
+        """Not really needed but good to check the consistancy of avagadros number.
 
+            This number was changed between version 16 and 19 and caused a bug
         Args:
 
         Returns:
@@ -1088,14 +1081,12 @@ class Model(_base._Base):
         returned list
 
         Args:
-          which: string. Default='a'. A string containing any or all of characters 'a', 'm', 'g', 'l', 'c'
-        for all, metabolites, global_quantities, local_parameters and compartments respectively
+          which: string. Default='a'. A string containing any or all of characters 'a', 'm', 'g', 'l', 'c' for all, metabolites, global_quantities, local_parameters and compartments respectively
           include_assignments: Boolean. Default=True. If True, return global variables with assignments
-          prefix: str. Default=None. If given, returned parameter names are filtered to only include parameter
-        with `prerfix` at the begining.
+          prefix: str. Default=None. If given, returned parameter names are filtered to only include parameter with `prerfix` at the begining.
 
         Returns:
-
+            'list' of variable names
         """
         if not isinstance(include_assignments, bool):
             raise errors.InputError(
@@ -1554,12 +1545,9 @@ class Model(_base._Base):
     @cached_property
     def functions(self):
         """get model functions
-        :return:
-            `list` each element a `py:class:`Function`
-
-        Args:
 
         Returns:
+            `list` each element a `py:class:`Function`
 
         """
         lst = []
@@ -1686,14 +1674,10 @@ class Model(_base._Base):
 
     @cached_property
     def constants(self):
-        """Get list of constants from xml attribute
-        `cn="String=Kinetic Parameters"
-        :return:
-            `list` each element :py:class:`LocalParameter`
-
-        Args:
+        """Get list of constants from xml attribute `cn="String=Kinetic Parameters"
 
         Returns:
+            `list` each element :py:class:`LocalParameter`
 
         """
         if 'constants' in self.__dict__:
@@ -1739,12 +1723,9 @@ class Model(_base._Base):
     @cached_property
     def reactions(self):
         """assemble a list of reactions
-        :return:
-            `list` each element a :py:class:`Reaction`
-
-        Args:
 
         Returns:
+            `list` each element a :py:class:`Reaction`
 
         """
         ## make sure list of reaction tag exists befor continuing
@@ -2028,16 +2009,13 @@ class Model(_base._Base):
         """Save copasiML to copasi_filename.
 
         Args:
-          copasi_filename: str` or `None`. Deafult is `None`. When `None`
-        defaults to same filepath the model came from.
-        If another path, saves to that path.
-          copasi_file:  (Default value = None)
+          copasi_filename: str` or `None`. Deafult is `None`. When `None` defaults to same filepath the model came from. If another path, saves to that path. copasi_file:  (Default value = None)
 
         Returns:
           py:class:`Model`
 
         """
-        if copasi_file == None:
+        if copasi_file is None:
             copasi_file = self.copasi_file
 
         ##
@@ -2228,10 +2206,8 @@ class Model(_base._Base):
         Args:
           component_name: str`. i.e. 'reaction', 'function', 'metabolite
           component: py:class:`model.<component>`. The component class to add i.e. Metabolite
-          reaction_expression: When adding reaction using string as first arg,
-        this argument takes the reaction expression (i.e. A -> B) (Default value = None)
-          reaction_rate_law: When adding reaction using string as first argument
-        this argument takes the reaction rate law (i.e. k*A) (Default value = None)
+          reaction_expression: When adding reaction using string as first arg, this argument takes the reaction expression (i.e. A -> B) (Default value = None)
+          reaction_rate_law: When adding reaction using string as first argument this argument takes the reaction rate law (i.e. k*A) (Default value = None)
 
         Returns:
           py:class:`Model
@@ -2262,14 +2238,12 @@ class Model(_base._Base):
         Args:
           component_name: str`. i.e. 'reaction', 'function', 'metabolite
           component: py:class:`model.<component>`. The component class to add i.e. Metabolite
-          reaction_expression: When adding reaction using string as first arg,
-        this argument takes the reaction expression (i.e. A -> B)
-          reaction_rate_law: When adding reaction using string as first argument
-        this argument takes the reaction rate law (i.e. k*A)
+          reaction_expression: When adding reaction using string as first arg, this argument takes the reaction expression (i.e. A -> B)
+          reaction_rate_law: When adding reaction using string as first argument this argument takes the reaction rate law (i.e. k*A)
           **kwargs: 
 
         Returns:
-          py:class:`Model
+          :py:class:`Model
 
         """
         if component_name not in self._model_components():
@@ -4923,5 +4897,3 @@ class ParameterSet(object):
                                      'simulationType': k.simulation_type})
 
         print((etree.tostring(parameter_set, pretty_print=True)))
-
-

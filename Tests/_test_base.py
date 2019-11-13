@@ -24,6 +24,9 @@ class _BaseTest(unittest.TestCase):
         -> Initiate model
     """
     def setUp(self, test_model='test_model1'):
+        print('base class setUp being called')
+        #make sure were in the same directory every time
+        os.chdir(os.path.dirname(__file__))
         self.copasi_file = os.path.join(os.path.dirname(__file__), 'test_model.cps')
 
         self.ant = """// Created by libAntimony v2.9.4
@@ -70,47 +73,51 @@ class _BaseTest(unittest.TestCase):
                           A2B_0 is "A2B";
                           B2C_0 is "B2C";
                         end"""
+        if os.path.isfile(self.copasi_file):
+            raise ValueError('copasi file "{}" is already a file before test'.format(self.copasi_file))
         self.model = pycotools3.model.loada(self.ant, self.copasi_file)
+        print(self.model)
 
-    @classmethod
-    def tearDownClass(cls):
-        tear_down = False
-        delete_dirs = False
+        if not os.path.isfile(self.copasi_file):
+            raise FileNotFoundError('copasi file "{}" is not found after creating with loada'.format(self.copasi_file))
 
-        if tear_down:
-            dire = os.path.dirname(__file__)
-            subdirs = ['Boxplots', 'TimeCourseGraphs',
-                       'ParameterEstimationPlots', 'test_mpe',
-                       'EnsembleTimeCourse', 'Histograms',
-                       'LinearRegression', 'MultipleParameterEstimationResults',
-                       'PCA', 'Scatters', 'ProfileLikelihoods',
-                       'ParameterEstimationResults', 'Problem1',
-                       'CrossValidation']
-            if delete_dirs:
-                for i in subdirs:
-                    d = os.path.join(dire, i)
-                    if os.path.isdir(d):
-                        try:
-                            shutil.rmtree(d)
-                        except WindowsError:
-                            print('failed with windows error')
+    def tearDown(self):
+        print('tearing down')
 
-            file_types_to_remove = [
-                '*.xlsx',
-                '*.log',
-                '*.cps',
-                '*.txt',
-                '*.csv',
-                '*.pickle',
-                '*.json',
-                '*.yaml',
-                '*.yml',
-                '*.yaml',
-                '*.sbml',
-            ]
-            for i in file_types_to_remove:
-                for j in glob.glob(os.path.join(dire, i)):
-                    os.remove(j)
+        dire = os.path.dirname(__file__)
+        subdirs = ['Boxplots', 'TimeCourseGraphs',
+                   'ParameterEstimationPlots', 'test_mpe',
+                   'EnsembleTimeCourse', 'Histograms',
+                   'LinearRegression', 'MultipleParameterEstimationResults',
+                   'PCA', 'Scatters', 'ProfileLikelihoods',
+                   'ParameterEstimationResults', 'Problem1',
+                   'CrossValidation', 'AntimonyModels',
+                   'SensitivityTests']
+
+        for i in subdirs:
+            d = os.path.join(dire, i)
+            if os.path.isdir(d):
+                try:
+                    shutil.rmtree(d)
+                except WindowsError:
+                    print('failed with windows error')
+
+        file_types_to_remove = [
+            '*.xlsx',
+            '*.log',
+            '*.cps',
+            '*.txt',
+            '*.csv',
+            '*.pickle',
+            '*.json',
+            '*.yaml',
+            '*.yml',
+            '*.yaml',
+            '*.sbml',
+        ]
+        for i in file_types_to_remove:
+            for j in glob.glob(os.path.join(dire, i)):
+                os.remove(j)
 
 
 

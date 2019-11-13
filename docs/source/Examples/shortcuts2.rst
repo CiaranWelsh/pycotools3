@@ -5,7 +5,7 @@ The pycotools3 tasks module contains classes for a bunch of copasi tasks that ca
 
 We first configure a model for the demonstration
 
-.. highlight:: python
+.. code-block:: python
 
     import os, glob
     import pandas, numpy

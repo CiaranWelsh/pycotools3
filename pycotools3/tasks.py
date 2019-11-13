@@ -336,8 +336,6 @@ class CopasiMLParser(_Task):
         self.copasiML = self.copasiMLTree.getroot()
         self.xml = self.copasiMLTree.getroot()
 
-        os.chdir(os.path.dirname(self.copasi_file))
-
     def _parse_copasiML(self):
         """Parse xml doc with lxml
         :return:

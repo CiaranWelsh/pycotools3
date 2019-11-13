@@ -4,7 +4,7 @@ Profile Likelihoods
 Since a profile likelihood is just a parameter scan of parameter estimations, all we need to do to configure a profile likelihood analysis is to setup an appropriate :py:class:`ParameterEstimation.Config` object and feed it into the :py:class:`ParameterEstimation` class. This would be tedious to do manually but is easy with :py:class:`ParameterEstimation.Context`
 
 
-.. highlight:: python
+.. code-block:: python
 
     import os, glob
     import pandas, numpy

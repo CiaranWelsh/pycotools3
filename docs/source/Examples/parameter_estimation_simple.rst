@@ -2,7 +2,7 @@ Simple Parameter Estimation
 ===========================
 This is an example of how to configure a simple parameter estimation using pycotools. We first create a toy model for demonstration, then simulate some experimental data from it and fit it back to the model, using pycotools for configuration.
 
-.. highlight:: python
+.. code-block:: python
 
     import os, glob
     import pandas, numpy

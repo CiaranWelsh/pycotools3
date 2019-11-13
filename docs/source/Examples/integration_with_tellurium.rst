@@ -13,7 +13,7 @@ be simulated and analysed with both COPASI and tellurium.
 
 Here's a short example of how using the tellurium back end.
 
-.. highlight:: python
+.. code-block:: python
 
     import tellurium as te
 
