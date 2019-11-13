@@ -134,6 +134,8 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC3.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC4.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC5.report_name)
+
+
         self.config = ParameterEstimation.Config(
             models={
                 'model1': {

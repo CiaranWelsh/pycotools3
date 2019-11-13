@@ -48,3 +48,15 @@ except Exception:
 #todo steady state documentation
 #todo make explicit how  pe works
 #todo documentation on sensitivity analysis
+#todo you have both a Bunch and a DotDict which as far as I can tell does the same thing. Fix
+#todo build interface to sbmlviz from tellurium
+#todo modify the models section of the parameter estimation config
+#todo fix pycotools imports
+#todo explain the concept of fit and Problem within parameter estimoatin settings
+ # and working directory
+#todo build a proper queing system for running models in parallel. This can be done by creating N lists, like the bioinformatics problem.
+#todo provide a list of both parameter estimation algorithms and solvers that are available
+#todo Think about clearing up some of the unused arguments
+#todo explain the concept of running parameter estimations through scan task for NxP runs
+#todo enable giving explicit parameters as strings to the Context
+
