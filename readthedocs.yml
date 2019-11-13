@@ -1,7 +1,9 @@
 version: 1
 
 build:
-    image: latest
+    image:
+        - latest
+        - develop
 
 python:
     version: 3.6
