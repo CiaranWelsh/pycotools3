@@ -81,6 +81,7 @@ class BuildAntimonyTestsCreateFromNew(unittest.TestCase):
         """
         exception_message = "Antimony: Error in model string, line 19:  syntax error, unexpected end of file"
         try:
+
             with model.BuildAntimony(self.copasi_file2) as loader:
                 self.mod2 = loader.load(
                     """

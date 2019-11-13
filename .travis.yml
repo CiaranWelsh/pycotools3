@@ -16,3 +16,7 @@ branches:
     - master
 after_success:
   - coveralls
+os:
+  - linux
+  - osx
+  - windows
