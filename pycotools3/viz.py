@@ -1982,6 +1982,146 @@ class Boxplots(_Plotter):
             dct[model_name] = l
         return dct
 
+class Violinplots(_Plotter):
+    """Plot a Violinplots for multi parameter estimation data.
+
+    ============    =================================================
+    kwarg           Description
+    ============    =================================================
+    num_per_plot    Number of parameter per plot. Remainder
+                    fills up another plot.
+    **kwargs        see :ref:`kwargs`  options
+    ============    =================================================
+
+    Args:
+
+    Returns:
+
+    """
+
+    def __init__(self, cls, **kwargs):
+        """
+
+        :param cls:
+            instance of tasks.MultiParameterEstimation or string .
+            Same as :py:class:`PlotTimeCourseEnsemble`
+
+
+        :param kwargs:
+        """
+        self.cls = cls
+        self.kwargs = kwargs
+        self.plot_kwargs = self.plot_kwargs()
+
+        self.default_properties = {'log10': False,
+                                   'truncate_mode': 'percent',
+                                   'theta': 100,
+                                   'num_per_plot': 6,
+                                   'xtick_rotation': 'vertical',
+                                   'ylabel': 'Estimated Parameter\n Value(Log10)',
+                                   'title': 'Parameter Distributions',
+                                   'savefig': False,
+                                   'results_directory': None,
+                                   'dpi': 400,
+                                   'show': False,
+                                   'despine': True,
+                                   'ext': 'png',
+                                   'context': 'talk',
+                                   'font_scale': 1.5,
+                                   'rc': None,
+                                   'copasi_file': None,
+                                   'filename': 'boxplot'
+                                   }
+        self.default_properties.update(self.plot_kwargs)
+        for i in list(kwargs.keys()):
+            assert i in list(self.default_properties.keys()), '{} is not a keyword argument for Boxplot'.format(i)
+        self.kwargs = self.default_properties
+        self.default_properties.update(kwargs)
+        self.default_properties.update(self.plot_kwargs)
+        self.update_properties(self.default_properties)
+        self._do_checks()
+
+        seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
+
+        self.data = self.parse(self.cls, log10=self.log10, copasi_file=self.copasi_file)
+
+        self.data = self.truncate(self.data, mode=self.truncate_mode, theta=self.theta)
+        self.divide_data()
+        if self.savefig:
+            self.results_directory = self.create_directory()
+        self.plot()
+
+    def _do_checks(self):
+        """ """
+        pass
+
+    def create_directory(self):
+        """:return:"""
+        dct = {}
+        for model_name in self.data:
+            if self.results_directory is None:
+                dct[model_name] = os.path.join(
+                    os.path.dirname(self.cls.models_dir[model_name]), 'Boxplots')
+
+                if not os.path.isdir(dct[model_name]):
+                    os.makedirs(dct[model_name])
+        return dct
+
+    def plot(self):
+        """Plot multiple parameter estimation data as boxplot
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        for model_name in self.data:
+            data = self.data[model_name]
+            labels = self.divide_data()[model_name]
+            for label_set in range(len(labels)):
+                fig = plt.figure()  #
+                plot_data = data[labels[label_set]]
+                seaborn.violinplot(data=plot_data)
+                plt.xticks(rotation=self.xtick_rotation)
+                if self.despine:
+                    seaborn.despine(fig=fig, top=True, right=True)
+                if self.title is not None:
+                    plt.title(self.title + '(n={})'.format(data.shape[0]))
+                plt.ylabel(self.ylabel)
+                if self.savefig:
+                    fle = os.path.join(self.results_directory[model_name],
+                                       '{}{}.{}'.format(self.filename, label_set, self.ext))
+                    plt.savefig(fle, dpi=self.dpi, bbox_inches='tight')
+        if self.show:
+            plt.show()
+
+    def divide_data(self):
+        """split data into multi plot
+        :return:
+
+        Args:
+
+        Returns:
+
+        """
+        dct = {}
+        for model_name in self.data:
+            data = self.data[model_name]
+            n_vars = len(list(data.keys()))
+            n_per_plot = self.num_per_plot
+            #        assert n_per_plot<n_vars,'number of variables per plot must be smaller than the number of variables'
+            int_division = n_vars // n_per_plot
+            remainder = n_vars - (n_per_plot * int_division)
+
+            l = []
+            for i in range(int_division):
+                l.append(list(list(data.keys())[i * n_per_plot:(i + 1) * n_per_plot]))
+            if remainder is not 0:
+                l.append(list(list(data.keys())[-remainder:]))
+            dct[model_name] = l
+        return dct
+
 
 class ChiSquaredStatistics:
     """ """
