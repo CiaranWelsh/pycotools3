@@ -9,12 +9,15 @@ from . import misc
 from . import model
 from . import bunch
 
-if version_info[0] < 3:
+if version_info.major < 3:
     raise RuntimeError('On python version >3 you must use "import pycotools3" rather '
                        'than "import pycotools". To install pycotools3 '
                        ' use "pip install pycotools3". Please note'
                        ' that improvements will only be made to pycotools3 in '
                        'future. ')
+if version_info.minor != 6:
+    raise ValueError('One of PyCoTools dependencies does not yet support > Python3.6. Therefore, please install '
+                     'a Python 3.6 conda environment')
 
 import logging
 import logging.config
