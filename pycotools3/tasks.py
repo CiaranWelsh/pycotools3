@@ -53,7 +53,6 @@ from .mixin import mixin
 
 LOG = logging.getLogger(__name__)
 
-
 sns.set_context(context='poster',
                 font_scale=3)
 
@@ -254,6 +253,7 @@ class _Task(object):
         for key in given:
             if key not in allowed:
                 raise errors.InputError('{} not in {}'.format(key, allowed))
+
 
 class Bool2Str(object):
     """copasiML expects strings and we pythoners
@@ -467,7 +467,6 @@ class Run(_Task):
 
         if self.sge_job_filename is None:
             self.sge_job_filename = os.path.join(os.getcwd(), 'sge_job_file.sh')
-
 
         self.model = self.set_task()
         self.model.save()
@@ -2280,6 +2279,7 @@ class _ParameterEstimationBase(_Task):
     """
     These are methods that are needed in more than one of the Parameter estimation classes
     """
+
     @staticmethod
     def _read_data(fname, sep):
         """
@@ -2315,7 +2315,7 @@ class _ParameterEstimationBase(_Task):
         for i, df in enumerate(data):
             if i == 0:
                 start = 1
-                end = df.shape[0]+1
+                end = df.shape[0] + 1
                 line_numbers.append((start, end))
             else:
                 start = end + 2
@@ -3218,9 +3218,10 @@ class ParameterEstimation(_ParameterEstimationBase):
                         multiple_experiments = True
                         # and count the experiments
                         num_experiments = len(data_str.strip().split('\n\n'))
-                        assert num_experiments > 1, "was expecting more than 1 experiment but got {}".format(num_experiments)
+                        assert num_experiments > 1, "was expecting more than 1 experiment but got {}".format(
+                            num_experiments)
                 if multiple_experiments:
-                    experiment_names += [experiment_name+'_MultiExperiment'+str(j) for j in range(num_experiments)]
+                    experiment_names += [experiment_name + '_MultiExperiment' + str(j) for j in range(num_experiments)]
                 else:
                     experiment_names.append(experiment_name)
             return experiment_names
@@ -3785,10 +3786,10 @@ class ParameterEstimation(_ParameterEstimationBase):
             ## This implements the affected_models aspect of configuration for experiments
             if model_name not in experiment.affected_models:
                 message = f'Trying to map experiment "{experiment_name}" (validation={validation}) ' \
-                    f'to model "{model_name}" but it is not in ' \
-                    f'model "{model_name}" but it is not in  ' \
-                    f'the affected models list for this model: ' \
-                    f'"{experiment.affected_models}". This configuration has been skipped.'
+                          f'to model "{model_name}" but it is not in ' \
+                          f'model "{model_name}" but it is not in  ' \
+                          f'the affected models list for this model: ' \
+                          f'"{experiment.affected_models}". This configuration has been skipped.'
                 ## in cross validation we expect to see some of these
                 ## these messages whereas with other types of analysis
                 ## they probably mean something ominus.
@@ -3918,10 +3919,10 @@ class ParameterEstimation(_ParameterEstimationBase):
                 elif experiment.mappings[data_name].object_type == 'Metabolite':
                     metab = [i for i in mod.metabolites if
                              i.name == experiment.mappings[data_name].model_object \
-                             or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                             or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != []]
                     assert len(metab) == 1, f"len(metab) should equal 1 but instead equals {len(metab)}"
                     indep = [i for i in mod.metabolites if \
-                             re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                             re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != []]
                     if indep != []:
                         experiment.mappings[data_name].role = 'independent'
 
@@ -3937,15 +3938,14 @@ class ParameterEstimation(_ParameterEstimationBase):
                 elif experiment.mappings[data_name].object_type == 'GlobalQuantity':
                     glo = [i for i in mod.global_quantities if
                            i.name == experiment.mappings[data_name].model_object \
-                           or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                           or re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != []]
                     assert len(glo) == 1
 
                     indep = [i for i in mod.global_quantities if \
-                             re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != [] ]
+                             re.findall(i.name + '_indep', experiment.mappings[data_name].model_object) != []]
 
                     if indep != []:
                         experiment.mappings[data_name].role = 'independent'
-
 
                     self._create_global_quantity_reference(
                         mod,
@@ -4321,7 +4321,6 @@ class ParameterEstimation(_ParameterEstimationBase):
             else:
                 items = self.config.items.fit_items
 
-
             for item_name in items:
                 item = items[item_name]
 
@@ -4415,10 +4414,10 @@ class ParameterEstimation(_ParameterEstimationBase):
                         for affected_experiment in item['affected_experiments']:
                             multi_experiments, num_experiments = self.config.multi_experiments
                             if affected_experiment in multi_experiments:
-                                new_affected_experiments += [affected_experiment+'_MultiExperiment'+str(i) for i in range(num_experiments)]
+                                new_affected_experiments += [affected_experiment + '_MultiExperiment' + str(i) for i in
+                                                             range(num_experiments)]
                             else:
                                 new_affected_experiments.append(affected_experiment)
-
 
                         for affected_experiment in new_affected_experiments:  ## iterate over the list
                             ## ensures that the parameter being configured `item_name`
@@ -4440,7 +4439,6 @@ class ParameterEstimation(_ParameterEstimationBase):
                                                  'affect the {} parameter'.format(
                                     affected_experiment, component.name
                                 ))
-
 
                             if affected_experiment not in self._get_experiment_keys()[model_name]:
                                 raise ValueError('"{}" (type({}))is not one of your _experiments. These are '
@@ -4977,7 +4975,6 @@ class ParameterEstimation(_ParameterEstimationBase):
                     'Switching to False mode -- parameter estimations have been configured but not run.')
                 self.config.settings.run_mode = True
 
-
         if self.config.settings.run_mode == 'slurm':
             try:
                 check_call('squeue')
@@ -5003,7 +5000,6 @@ class ParameterEstimation(_ParameterEstimationBase):
                 for copy_number, mod in list(models[model_name].items()):
                     print(f'running model {model_name}: {copy_number}')
                     Run(mod, mode=self.config.settings.run_mode, task='scan')
-
 
     def duplicate_for_every_experiment(self, model, fit_items, lower_bounds, start_values, upper_bounds):
         """
@@ -5100,7 +5096,6 @@ class ParameterEstimation(_ParameterEstimationBase):
             self.settings = settings
 
             self.defaults = ParameterEstimation._Defaults()
-
 
         def __enter__(self):
             return self
@@ -5524,7 +5519,6 @@ class ParameterEstimation(_ParameterEstimationBase):
             if not hasattr(self, 'settings'):
                 setattr(self, 'settings', {})
             self.settings[setting] = value
-
 
         def _add_settings(self, settings):
             """
@@ -6077,9 +6071,6 @@ class GlobalSensitivities(Sensitivities):
     pass
 
 
-##todo implements the steady state task
 
 if __name__ == '__main__':
     pass
-#    execfile('/home/b3053674/Documents/Models/2017/08_Aug/pycotoolsTests/RunPEs.py')
-#    execfile('/home/b3053674/Documents/pycotools3/pycotools3/pycotoolsTutorial/Test/testing_kholodenko_manually.py')
