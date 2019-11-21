@@ -1,0 +1,16 @@
+pandas
+numpy
+scipy
+matplotlib
+lxml
+seaborn
+sklearn
+psutil
+tellurium
+pyyaml
+munch
+deprecated
+
+[docs]
+sphinx>=1.4
+sphinx_rtd_theme

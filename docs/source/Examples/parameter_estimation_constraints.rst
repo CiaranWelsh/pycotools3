@@ -1,6 +1,5 @@
-Parameter estimation with multiple models
+Parameter estimation with constraints
 =========================================
-This is an example of how to configure a parameter estimation for multiple COPASI models using pycotools. We first create two similar but different toy models for demonstration, then simulate some experimental data from one of them and and fit it back to both models.
 
 .. code-block:: python
 

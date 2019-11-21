@@ -49,7 +49,6 @@ except Exception:
 
 #todo fix logging
 #todo implements the steady state task
-#todo steady state documentation
 #todo documentation on sensitivity analysis
 #todo you have both a Bunch and a DotDict which as far as I can tell does the same thing. Fix
 #todo build interface to sbmlviz from tellurium

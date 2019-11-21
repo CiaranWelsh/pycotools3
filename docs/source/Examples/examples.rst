@@ -16,7 +16,6 @@ Examples
    parameter_estimation_low_level_interface
    multiple_parameter_estimations
    parameter_estimation_multiple_models
-   parameter_estimation_constraints
    shortcuts2
    profile_likelihoods
    cross_validations

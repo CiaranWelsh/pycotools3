@@ -1,5 +1,5 @@
-Parameter Estimation with the Low Level Interface
-=================================================
+Advanced Parameter Estimation
+=============================
 
 Parameter estimation configuration in PyCoTools revolves around the :py:class:`ParameterEstimation.Config` object,
 which is merely a nested data storage class. When you use the :py:class:`ParameterEstimation.Context` object,
@@ -12,7 +12,7 @@ in a 'default system' whereby if a (non-compulsory) section is left blank, then
 PyCoTools tries to use the default values.
 
 The :py:class:`ParameterEstimation.Config` Object is a bit like a Struct from other
-languages or a tree. You can access attributes using either dot notation or dictionary like
+languages or a tree (see :py:class:`bunch.Bunch`). You can access attributes using either dot notation or dictionary like
 access.
 
 There are four main sections to the Config object:

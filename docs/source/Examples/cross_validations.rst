@@ -91,7 +91,7 @@ Configuring a cross validation experiment is similar to running parameter estima
 
 .. note::
 
-   The `cross_validation_depth` argument specifies far to go combinatorially. For instance, when `cross_validation_depth=2` and there are 4 datasets, all combinations of 2 datasets for experiments and 2 for validation will be applied.
+   The `cross_validation_depth` argument specifies how far to go combinatorially. For instance, when `cross_validation_depth=2` and there are 4 datasets, all combinations of 2 datasets for experiments and 2 for validation will be applied.
 
 .. warning::
 
