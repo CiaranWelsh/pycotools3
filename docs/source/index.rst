@@ -17,7 +17,15 @@ PyCoTools is a python package that was developed as an alternative interface int
 
 Installation
 ------------
-Use:
+
+First make sure you use a Python 3.6 environment.
+
+.. warning::
+
+   Using Python 3.7 or 3.8 will not work at this time due to dependency issues
+   (which are unfortunately out of my control).
+
+Then use:
 
 .. code-block:: bash
 
