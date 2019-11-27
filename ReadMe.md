@@ -15,7 +15,7 @@ Since publication, the pycotools project has moved to this pycotools3 repository
 **[pycotools3 documentation](http://pycotools3.readthedocs.io/en/latest/)**
 
 ## Support 
-I get email notificatons fror stackoverflow questions tagged with `pycotools` so you can ask a question there. Additionally, you may contact me directly or post an issue.
+I'm happy to help if you post questions, bugs, feature ideas etc. as an issue. 
 
 ## Contributions
 Contributions, ideas, suggestions, feature requests or anything generally geared towards improving the package are welcome. 
