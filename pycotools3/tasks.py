@@ -50,6 +50,7 @@ from . import errors
 from . import model
 from .bunch import Bunch
 from .mixin import mixin
+import yaml
 
 LOG = logging.getLogger(__name__)
 
@@ -2707,7 +2708,8 @@ class ParameterEstimation(_ParameterEstimationBase):
                     f.write(yml)
             return yml
 
-        def from_yaml(self, yml):
+        @staticmethod
+        def from_yaml(yml):
             """
             Read config object from yaml file
             Args:
@@ -2718,12 +2720,9 @@ class ParameterEstimation(_ParameterEstimationBase):
                 ParameterEstimation.Config
 
             """
-            if os.path.isfile(yml):
-                with open(yml, 'r') as f:
-                    yml_string = f.read()
-            else:
-                yml_string = yml
-            raise NotImplementedError('Do this when needed')
+            with open(yml, 'r') as f:
+                yml = yaml.safe_load(f)
+            return ParameterEstimation.Config(**yml)
 
         @staticmethod
         def _add_defaults_to_dict(dct, defaults):

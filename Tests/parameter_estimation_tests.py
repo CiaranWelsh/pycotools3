@@ -135,7 +135,6 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC4.report_name)
         pycotools3.misc.correct_copasi_timecourse_headers(self.TC5.report_name)
 
-
         self.config = ParameterEstimation.Config(
             models={
                 'model1': {
@@ -335,6 +334,15 @@ class ParameterEstimationTestsConfig(_test_base._BaseTest):
         fname = os.path.join(os.path.dirname(__file__), 'config_file.yml')
         self.PE.config.to_yaml(fname)
         self.assertTrue(os.path.isfile(fname))
+
+    def test_read_config_file(self):
+        fname = os.path.join(os.path.dirname(__file__), 'config_file.yml')
+        # write a yaml to file
+        self.PE.config.to_yaml(fname)
+        config = ParameterEstimation.Config.from_yaml(fname)
+        actual = config.settings.validation_weight
+        expected = 4
+        self.assertEqual(expected, actual)
 
     def test_create_config_without_prefix_then_add_prefix(self):
         self.config.settings.prefix = 'B'
@@ -1121,7 +1129,8 @@ class ParameterEstimationTests(_test_base._BaseTest):
         ## and 4268
         experiment_keys = []
         for i in self.PE.models.model1.model.xml.findall('.//*[@name="ObjectCN"]'):
-            if i.attrib['value'] == 'CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration':
+            if i.attrib[
+                'value'] == 'CN=Root,Model=NoName,Vector=Compartments[nuc],Vector=Metabolites[A],Reference=InitialConcentration':
                 for j in i.getparent():
                     if j.attrib['name'] == 'Affected Experiments':
                         for k in j:
@@ -1936,8 +1945,6 @@ class TestThatRemoveExperimentsWorksCorrectly(_test_base._BaseTest):
                 if j.attrib['name'] == 'data':
                     actual = True
         self.assertEqual(expected, actual)
-
-
 
 
 class TestModelBuildWithOOInterface(unittest.TestCase):

@@ -292,3 +292,41 @@ Using a :py:class:`ParameterEstimation.Context` as a template
 The most effective way to use the low level interface is to let the :py:class:`ParameterEstimation.Context`
 do most of the work and then retrieve the mostly configured config string and then make your
 desired ammendments.
+
+
+Saving and loading configurations from and to yaml
+--------------------------------------------------
+
+To save an existing configuration to file to yaml,
+assuming `PE` is an instantiated :py:class:`pycotools3.class.ParameterEstimation`
+
+
+.. code-block:: python
+    :linenos:
+
+    fname = os.path.join(os.path.dirname(__file__), 'config_file.yml')
+    PE.config.to_yaml(fname)
+    assert os.path.isfile(fname)
+
+To load the configuration from the yaml again:
+
+.. code-block:: python
+    :linenos:
+
+    # assuming our yaml configuration lives here:
+    fname = os.path.join(os.path.dirname(__file__), 'config_file.yml')
+    config = ParameterEstimation.Config.from_yaml(fname)
+
+The `config` is an instance of :py:class:`ParameterEstimation.Config` which
+can be passed to the :py:class:`ParameterEstimation`
+
+.. code-block:: python
+    :linenos:
+
+    pe = ParameterEstimation(config)
+
+
+
+
+
+
