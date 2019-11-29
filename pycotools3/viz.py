@@ -194,6 +194,10 @@ class _Plotter:
                 setattr(self, k, kwargs[k])
             except AttributeError:
                 setattr(self, k, kwargs[k])
+        rc = kwargs.get('rc')
+        if rc is not None:
+            import matplotlib
+            matplotlib.rcParams.update(rc)
 
     @staticmethod
     def parse(cls, log10, copasi_file=None):
@@ -1133,9 +1137,9 @@ class PlotTimeCourse(_Plotter):
     ================    ======================================
     x                   `str`. Parameter to go on x axis.
                         defaults to 'Time'. If not 'Time'
-                        then  plot is a phase space plot
+                        then  plot is a phase space plot. Required.
     y                   `str` or `list` of `str`. Parameters
-                        for the y axis.
+                        for the y axis. Required.
     log10               `bool` plot on log10 scale
     separate            bool` separate time courses onto
                         different axes. Default: True
@@ -1982,6 +1986,7 @@ class Boxplots(_Plotter):
             dct[model_name] = l
         return dct
 
+
 class Violinplots(_Plotter):
     """Plot a Violinplots for multi parameter estimation data.
 
@@ -2030,7 +2035,7 @@ class Violinplots(_Plotter):
                                    'font_scale': 1.5,
                                    'rc': None,
                                    'copasi_file': None,
-                                   'filename': 'boxplot'
+                                   'filename': 'violinplot',
                                    }
         self.default_properties.update(self.plot_kwargs)
         for i in list(kwargs.keys()):
@@ -2039,6 +2044,7 @@ class Violinplots(_Plotter):
         self.default_properties.update(kwargs)
         self.default_properties.update(self.plot_kwargs)
         self.update_properties(self.default_properties)
+
         self._do_checks()
 
         seaborn.set_context(context=self.context, font_scale=self.font_scale, rc=self.rc)
@@ -2061,14 +2067,14 @@ class Violinplots(_Plotter):
         for model_name in self.data:
             if self.results_directory is None:
                 dct[model_name] = os.path.join(
-                    os.path.dirname(self.cls.models_dir[model_name]), 'Boxplots')
+                    os.path.dirname(self.cls.models_dir[model_name]), 'ViolinPlots')
 
                 if not os.path.isdir(dct[model_name]):
                     os.makedirs(dct[model_name])
         return dct
 
     def plot(self):
-        """Plot multiple parameter estimation data as boxplot
+        """Plot multiple parameter estimation data as violin
         :return:
 
         Args:
@@ -2082,7 +2088,7 @@ class Violinplots(_Plotter):
             for label_set in range(len(labels)):
                 fig = plt.figure()  #
                 plot_data = data[labels[label_set]]
-                seaborn.violinplot(data=plot_data)
+                seaborn.violinplot(data=plot_data, **self.kwargs)
                 plt.xticks(rotation=self.xtick_rotation)
                 if self.despine:
                     seaborn.despine(fig=fig, top=True, right=True)
@@ -2181,8 +2187,9 @@ class WaterfallPlot(_Plotter):
                                    'ext': 'png',
                                    'line_transparency': 1,  ##passed to matplotlib alpha parameter
                                    'marker_transparency': 0.7,
-                                   'color': '#004ADF',
-                                   'markercolor': '#FF9709',
+                                   'color': 'grey',
+                                   'markercolor': 'black',
+                                   'marker': '.',
                                    'linewidth': 3,
                                    'markersize': 10,
                                    'context': 'talk',
@@ -2255,7 +2262,7 @@ class WaterfallPlot(_Plotter):
                      )
 
             plt.plot(x,
-                     df['RSS'].sort_values(ascending=True), 'o',
+                     df['RSS'].sort_values(ascending=True), self.marker,
                      color=self.markercolor, markersize=self.markersize,
                      alpha=self.marker_transparency
                      )
@@ -2433,7 +2440,7 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                         os.path.join(
                             self.cls.models[model_name].model.root, self.cls.config.settings.problem),
                         f'Fit{self.cls.config.settings.fit}',
-                    'ParameterEstimationPlots')
+                        'ParameterEstimationPlots')
                 )
             self.results_directory = dct
         # if not isinstance(self.y, list):
@@ -2560,7 +2567,7 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                     d[model_name][experiment_file] = mod.simulate(
                         time[0], time[1], step_size,
                         variables='gm'
-                        )
+                    )
 
         return d
 

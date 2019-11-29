@@ -32,6 +32,10 @@ Parameter estimation with constraints
         k4 = 0.1;
         k5 = 0.1;
         k6 = 0.1;
+
+        A = 0;
+        B = 0;
+        C = 0;
     end
     """
 
@@ -51,6 +55,10 @@ Parameter estimation with constraints
         k4 = 0.1;
         k5 = 0.1;
         k6 = 0.1;
+
+        A = 0;
+        B = 0;
+        C = 0;
     end
     """
     # create paths to where we want the two models

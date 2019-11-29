@@ -46,6 +46,16 @@ class ModelLevelAttributeTests(_BaseTest):
     def setUp(self):
         super(ModelLevelAttributeTests, self).setUp()
 
+    def test_change_quantity_type_throws_error(self):
+        with self.assertRaises(ValueError) as context:
+            self.model.quantity_type = 'no type'
+
+        self.assertTrue('"quantity_type argument should be one of "concentration" or "particle_numbers"' in str(context.exception))
+
+    def test_change_quantity_can_be_changed(self):
+        self.model.quantity_type = 'particle_numbers'
+        self.assertEqual(self.model.quantity_type, 'particle_numbers')
+
     def test_time_unit(self):
         self.assertEqual(self.model.time_unit, 's')
 

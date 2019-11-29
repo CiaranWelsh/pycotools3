@@ -863,6 +863,25 @@ class ExperimentMapperTests(_test_base._BaseTest):
                         ans = j.attrib['name']
         self.assertEqual('Genetic Algorithm SR', ans)
 
+    def test_set_PE_method2(self):
+
+        with ParameterEstimation.Context(self.model, [self.report1], context='s', parameters='g') as context:
+            context.set('method', 'nlsol')
+            config = context.get_config()
+
+        pe = ParameterEstimation(config)
+
+        mod = pe.models.test_model.model
+        mod.open()
+        query = '//*[@name="Parameter Estimation"]'
+        ans = None
+        for i in mod.xml.xpath(query):
+            if i.tag == '{http://www.copasi.org/static/schema}Task':
+                for j in i:
+                    if j.tag == 'Method':
+                        ans = j.attrib['name']
+        self.assertEqual('NL2SOL', ans)
+
     def test_independent_variables_get_mapped(self):
         mod = self.PE.models['model1'].model
         query = '//*[@name="ss"]'

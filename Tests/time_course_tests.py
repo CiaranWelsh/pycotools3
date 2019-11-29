@@ -127,6 +127,14 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         """
         pycotools3.viz.PlotTimeCourse(self.TC, y='metabolites')
 
+    def test_for_docs(self):
+        """
+        :return:
+        """
+        print(self.model.simulate(0, 100, 0.1))
+
+
+
 
 class GibsonBruckTimeCourseTests(_test_base._BaseTest):
     def setUp(self):
@@ -288,19 +296,6 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
         df = pandas.read_csv(self.TC.report_name, sep='\t', index_col=0)
         self.assertEqual(df.shape, (11, 9))
 
-    # def test_correct_output(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     self.TC.correct_output_headers()
-    #     df = pandas.read_csv(self.TC.report_name, sep='\t')
-    #     check = True
-    #     for i in df.keys():
-    #         if '[' in i:
-    #             check = False
-    #     self.assertTrue(check)
-
     def test_parser_in_viz(self):
         """
         :return:
@@ -322,6 +317,45 @@ class DeterministicTimeCourseTests(_test_base._BaseTest):
                 boolean = False
         self.assertTrue(boolean)
 
+    def test_for_docs(self):
+        """
+        :return:
+        """
+        model_string = """
+        model model1()
+    
+            R1:   => A ; k1*S;
+            R2: A =>   ; k2*A;
+            R3:   => B ; k3*A;
+            R4: B =>   ; k4*B*C; //feedback term
+            R5:   => C ; k5*B;
+            R6: C =>   ; k6*C;
+    
+            S = 1;
+            k1 = 0.0001;
+            k2 = 0.0001;
+            k3 = 0.0001;
+            k4 = 0.0001;
+            k5 = 0.0001;
+            k6 = 0.0001;
+            
+            A = 0;
+            B = 0;
+            C = 0;
+            APlusB := A + B;
+
+        end
+        """
+        copasi_file = os.path.join(os.path.dirname(__file__), 'copasi_file.cps')
+        mod = pycotools3.model.loada(model_string, copasi_file)
+        df = mod.simulate(0, 10, 1, variables='m')
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        sns.set_context('talk')
+
+        variables = ['']
+        print(df.plot())
+        plt.show()
 
 class GibsonBruckTimeCourseTests(_test_base._BaseTest):
     def setUp(self):

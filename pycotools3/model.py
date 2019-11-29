@@ -505,7 +505,7 @@ class Model(_base._Base):
         """
         super(Model, self).__init__(**kwargs)
         self._copasi_file = copasi_file
-        self.quantity_type = quantity_type
+        self._quantity_type = quantity_type
         self.new_model = new
         if self.new_model:
             misc.new_model(copasi_file)
@@ -522,6 +522,15 @@ class Model(_base._Base):
         return 'Model(name={}, time_unit={}, volume_unit={}, quantity_unit={})'.format(self.name, self.time_unit,
                                                                                        self.volume_unit,
                                                                                        self.quantity_unit)
+    @property
+    def quantity_type(self):
+        return self._quantity_type
+
+    @quantity_type.setter
+    def quantity_type(self, quantity_type):
+        if quantity_type not in ['concentration', 'particle_numbers']:
+            raise ValueError('"quantity_type argument should be one of "concentration" or "particle_numbers"')
+        self._quantity_type = quantity_type
 
     def __repr__(self):
         return self.__str__()
@@ -2047,6 +2056,7 @@ class Model(_base._Base):
           None`
 
         """
+        copasi_temp = None
         if copasi_file == None:
             copasi_file = self.copasi_file
         if as_temp:
@@ -2109,6 +2119,7 @@ class Model(_base._Base):
         """
         if component not in self._model_components():
             raise errors.InputError('{} not in list of components: {}'.format(component, self._model_components()))
+        res = None
 
         if component == 'metabolite':
             res = [i for i in self.metabolites if getattr(i, by) == value]
@@ -2294,7 +2305,8 @@ class Model(_base._Base):
             return self.remove_metabolite(name, by='name')
 
         else:
-            raise errors.InputError('{} is not an accepted type. Choose from: {}'.format(self._model_components()))
+            raise errors.InputError('{0} is not an accepted type.'
+                                    ' Choose from: {0}'.format(self._model_components()))
 
     @property
     def active_parameter_set(self):
@@ -2335,7 +2347,6 @@ class Model(_base._Base):
         for i in self.xml.iter():
             if i.tag == '{http://www.copasi.org/static/schema}ListOfModelParameterSets':
                 i.attrib['active_set'] = parameter_set
-        return self
 
     @property
     def parameter_sets(self):
@@ -2392,21 +2403,6 @@ class Model(_base._Base):
         os.system(f'CopasiSE {self.copasi_file} -e {sbml_file}')
         return sbml_file
 
-    def to_antimony(self):
-        """Returns antimony string of model. Wrapper around tellurium
-        functions
-        :return:
-
-        Args:
-
-        Returns:
-
-        """
-        sbml_file = self.to_sbml()
-        with open(sbml_file) as f:
-            sbml = f.read()
-        antimony_str = te.sbmlToAntimony(sbml)
-        return antimony_str
 
     def insert_parameters(self, **kwargs):
         """Wrapper around the InsetParameters class

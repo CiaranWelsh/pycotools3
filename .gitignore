@@ -60,4 +60,5 @@ docs/build/*
 docs/source/Tutorials/*.ipynb_checkpoints
 build
 
-
+# temp dir for trial unit testing
+_trial_temp

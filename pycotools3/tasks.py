@@ -4124,6 +4124,10 @@ class ParameterEstimation(_ParameterEstimationBase):
             method_name = 'Genetic Algorithm SR'
             method_type = 'GeneticAlgorithmSR'
 
+        elif self.config.settings.method == 'nlsol'.lower():
+            method_name = 'NL2SOL'
+            method_type = 'NL2SOL'
+
         else:
             raise errors.InputError(
                 f'"{self.config.settings.method}" is an invalid '

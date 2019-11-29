@@ -13,7 +13,21 @@
 
 PyCoTools
 =========
-PyCoTools is a python package that was developed as an alternative interface into `COPASI <http://copasi.org/>`_, simulation software for modelling biochemical systems. The PyCoTools paper can be found `here <https://academic.oup.com/bioinformatics/article/34/21/3702/5001390>`_ and describes in detail the intentions and functionality of PyCoTools. There are some important differences between the PyCoTools version that is described in the publication and the current version. The first is that PyCoTools is now a python 3 only package. If using Python 2.7 you should create a virtual Python 3.6 environment using `conda <https://salishsea-meopar-docs.readthedocs.io/en/latest/work_env/python3_conda_environment.html>`_ or `virtualenv <https://virtualenv.pypa.io/en/latest/>`_. My preference is conda. The other major difference is the interface to COPASI's parameter estimation task which is described in the tutorials and examples.
+PyCoTools is a python package that was developed
+as an alternative interface into
+`COPASI <http://copasi.org/>`_, simulation software
+for modelling biochemical systems. The PyCoTools
+paper can be found `here <https://academic.oup.com/bioinformatics/article/34/21/3702/5001390>`_ and describes in detail the intentions and functionality of PyCoTools. There are some important differences between the PyCoTools version that is described in the publication and the current version. The first is that PyCoTools is now a python 3 only package. If using Python 2.7 you should create a virtual Python 3.6 environment using `conda <https://salishsea-meopar-docs.readthedocs.io/en/latest/work_env/python3_conda_environment.html>`_ or `virtualenv <https://virtualenv.pypa.io/en/latest/>`_.
+My preference is conda. The other major difference
+is the interface to COPASI's parameter estimation task which is described in the tutorials and examples.
+
+.. note::
+
+   I am in the process of improving this documentation.
+   Although still valid, content in the
+   `Tutorials <https://pycotools3.readthedocs.io/en/latest/Tutorials/tutorials.html>`_ page
+   is quite old and is in the process of being replaced by content
+   in the `examples <https://pycotools3.readthedocs.io/en/latest/Examples/examples.html>`_.
 
 Installation
 ------------

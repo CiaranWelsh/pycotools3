@@ -1,4 +1,4 @@
-Working from the model.Model class directly
+The :py:class:`pycotools.model.Model` class
 ===========================================
 
 The pycotools3 tasks module contains classes for a bunch of copasi tasks that can be configured from python using pycotools. To simplify some of these tasks, wrappers have been build around these task classes in the :py:class:`model.Model` class so that they can be used like a regular method. Here I demonstrate some of these.
