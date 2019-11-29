@@ -2556,7 +2556,7 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                     # simulate time series
                     d[model_name][experiment_file] = mod.simulate(
                         time[0], time[1], step_size,
-                        variables='gmc'
+                        variables='gm'
                         )
 
         return d
