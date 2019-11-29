@@ -2546,6 +2546,9 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                     te_mod.steadyStateSolver.allow_precomputation = True
                     te_mod.steadyStateSolver.allow_approx = True
 
+                    # add global parameters to ss selections
+                    te_mod.steadyStateSelections += te_mod.getGlobalParameterIds()
+
                     te_mod.steadyState()
                     ss = dict(zip(
                         [i.replace('[', '').replace(']', '') for i in te_mod.steadyStateSelections],
