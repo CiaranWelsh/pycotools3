@@ -8,6 +8,7 @@ Examples
    :name: examples-toc
 
    make_model_from_existing_cps
+   timeseries
    integration_with_tellurium
    parameter_estimation_simple
    parameter_estimation_steady_state
