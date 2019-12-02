@@ -58,7 +58,7 @@ The `prefix` argument will setup the configuration of a parameter estimation con
     ## write data to file
     data.to_csv(fname)
 
-And now we configure a parameter estimation like normal but set `prefix` to `_`.
+And now we configure a parameter estimation like normal but set `prefix` to `'_'`.
 
 .. code-block:: python
 
