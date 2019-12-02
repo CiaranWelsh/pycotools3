@@ -55,6 +55,9 @@ The `prefix` argument will setup the configuration of a parameter estimation con
 
     fname = os.path.join(working_directory, 'experiment_data.txt')
     data = mod.simulate(0, 20, 1, report_name=fname)
+    data.to_csv(fname)
+
+
 
     ## write data to file
 
@@ -63,7 +66,7 @@ And now we configure a parameter estimation like normal but set `prefix` to `_`.
 
 .. code-block:: python
 
-    with tasks.ParameterEstimation.Context(mod, experiment_filename, context='s', parameters='a') as context:
+    with tasks.ParameterEstimation.Context(mod, fname, context='s', parameters='a') as context:
         context.set('separator', ',')
         context.set('run_mode', True)
         context.set('randomize_start_values', True)

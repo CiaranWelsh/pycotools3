@@ -20,7 +20,7 @@ Here's an example:
 .. code-block:: python
 
     import os, glob
-    import pandas, numpy
+    import pandas, numpy, seaborn
     from pycotools3 import model, tasks, viz
     seaborn.set_context(context='talk')		# set seaborn context for formatting output of plots
 

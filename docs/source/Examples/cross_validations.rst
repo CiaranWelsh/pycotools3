@@ -63,6 +63,8 @@ Cross validation can help identify datasets which do and don't fit well together
     ss2 = pandas.DataFrame(dct2, index=[0])
     ss2.to_csv(self.ss_fname2, sep='\t', index=False)
 
+    experiments = [ss1, ss2]
+
 
 Configuring a cross validation experiment is similar to running parameter estimation or profile likelihoods: the difference is that you use `context='cv'` as argument to :py:class:`ParameterEstimation.Context`.
 

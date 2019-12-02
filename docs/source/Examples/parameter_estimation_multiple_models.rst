@@ -65,7 +65,7 @@ This is an example of how to configure a parameter estimation for multiple COPAS
     # create models
     model_list = []
     for i in range(len(copasi_files)):
-        model_list.append(model.loada(antimony_strings[i], copasi_files[i])
+        model_list.append(model.loada(antimony_strings[i], copasi_files[i]))
 
     ## simulate some data, returns a pandas.DataFrame
     data = model_list[0].simulate(0, 20, 1)

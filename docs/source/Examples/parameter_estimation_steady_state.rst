@@ -55,11 +55,11 @@ Here's an example.
     assert isinstance(mod, model.Model)
 
     ## create some made up data
-    data = pandas.DataFrame({'A': 30, 'B': 10, 'C': 10})
+    data = pandas.DataFrame({'A': 30, 'B': 10, 'C': 10}, index=[0])
 
     ## write data to file
     experiment_filename = os.path.join(working_directory, 'experiment_data.txt')
-    data.to_csv(experiment_filename)
+    data.to_csv(experiment_filename, index=False)
 
 We now have a model and some experimental data and can
 configure a parameter estimation. Configuring steady

@@ -59,7 +59,7 @@ The profile likelihood is calculated around the current parameter set in the mod
 
 .. code-block:: python
 
-   with ParameterEstimation.Context(
+   with tasks.ParameterEstimation.Context(
        mod, experiment_filename,
        context='pl', parameters='gm'
    ) as context:
@@ -76,9 +76,15 @@ Now, like with other parameter estimations we can simply do
 
 .. code-block:: python
 
-   ParameterEstimation(config)
+   tasks.ParameterEstimation(config)
 
 Because the `context=pl` was used, pycotools knows to copy the model for each parameter, remove the parameter of interest from the parameter estimation task and create a scan of the parameter of interest.
+
+.. note::
+
+    You will see a bunch of warnings about "model "X" is not in the
+    affected model list". You will get one of these for each model. These warnings
+    can be ignored.
 
 
 
