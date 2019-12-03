@@ -2618,16 +2618,15 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                                     label='Exp', linestyle=self.linestyle,
                                     marker=self.marker, linewidth=self.linewidth,
                                     markersize=self.markersize,
-                                    alpha=0.5,
-                                    color='#0E00FA',
+                                    alpha=0.7,
+                                    color='black',
                                 )
                                 plt.plot(
                                     plot_data_sim.index, plot_data_sim[y],
                                     label='Sim', linestyle=self.linestyle,
-                                    marker=self.marker, linewidth=self.linewidth,
-                                    markersize=self.markersize,
-                                    alpha=0.5,
-                                    color='#FC0077'
+                                    linewidth=self.linewidth,
+                                    alpha=0.7,
+                                    color='red'
                                 )
 
                                 plt.legend(loc=(1, 0.5))
@@ -2668,7 +2667,8 @@ class PlotParameterEstimation(_ParameterEstimationPlotter):
                             ss_df = ss_df.reset_index()
 
                             fig = plt.figure()
-                            seaborn.barplot(x='variable', y='amount', hue='type', data=ss_df)
+                            seaborn.barplot(x='variable', y='amount', hue='type', data=ss_df, edgecolor='black',
+                                            linewidth=2, palette='Greys')
                             seaborn.despine(fig=fig, top=True, right=True)
                             plt.xticks(rotation=90, fontsize=12)
                             plt.xlabel('')
