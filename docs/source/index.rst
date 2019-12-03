@@ -98,7 +98,9 @@ This is a guide to PyCoTools version >2.0.1.
 
 Support
 -------
-Users can post a question on stack-overflow using the :code:`pycotools` tag. I get email notifications for these questions and will respond.
+
+Users are encouraged to post an issue on ` GitHub <https://github.com/CiaranWelsh/pycotools3>`_ for help
+or to report bugs.
 
 People
 ------
