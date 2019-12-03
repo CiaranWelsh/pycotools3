@@ -866,13 +866,12 @@ class ExperimentMapperTests(_test_base._BaseTest):
     def test_set_PE_method2(self):
 
         with ParameterEstimation.Context(self.model, [self.report1], context='s', parameters='g') as context:
-            context.set('method', 'nlsol')
+            context.set('method', 'nl2sol')
             config = context.get_config()
 
         pe = ParameterEstimation(config)
 
         mod = pe.models.test_model.model
-        mod.open()
         query = '//*[@name="Parameter Estimation"]'
         ans = None
         for i in mod.xml.xpath(query):
