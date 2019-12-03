@@ -72,7 +72,9 @@ Pycotools3 is only supported in Python 3 to Python 3.6. If you are using Python 
 
 The same commands should work cross platform. 
 
-### You get errors when trying to build a model using :py:func:`pycotools3.model.loada`
+Troubleshooting
+---------------
+If you get errors when trying to build a model using :py:func:`pycotools3.model.loada`
 Make sure you have installed `Copasi <http://copasi.org/Download/>`_ and added the `Copasi/bin` directory to
 the path variable.
 
