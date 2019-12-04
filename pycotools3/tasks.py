@@ -4896,6 +4896,9 @@ class ParameterEstimation(_ParameterEstimationBase):
                 scan_obj_init_value = scan_obj.initial_value
             elif isinstance(scan_obj, model.LocalParameter):
                 scan_obj_init_value = scan_obj.value
+            if self.config.settings.pe_number <= 1:
+                raise ValueError('pe_number must be set to a number '
+                                 'greater than 1 for profile likelihoods. ')
             q.put(Scan(
                 mod,
                 scan_type='scan',
@@ -4905,6 +4908,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                 subtask='parameter_estimation',
                 report_type='multi_parameter_estimation',
                 report_name=report,
+                number_of_steps=self.config.settings.pe_number-1,
                 run=False,
                 append=False,
                 confirm_overwrite=False,

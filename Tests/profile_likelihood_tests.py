@@ -77,18 +77,16 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         ) as context:
             context.set('method', 'nl2sol')
             context.set('run_mode', 'parallel')
-            context.set('max_active', 2)
+            context.set('nproc', 2)
             context.set('pe_number', 12)
             config = context.get_config()
-        # print(config)
         pe = tasks.ParameterEstimation(config)
-        # import time
-        # time.sleep(5)
-        # expected = 11
-        # data = viz.Parse(pe)['A2B']
-        # print(data)
-        # actual = data.shape[0]
-        # self.assertEqual(expected, actual)
+        import time
+        time.sleep(5)
+        expected = 12
+        data = viz.Parse(pe)['A2B']
+        actual = data.shape[0]
+        self.assertEqual(expected, actual)
 
     def test_plot(self):
         with tasks.ParameterEstimation.Context(

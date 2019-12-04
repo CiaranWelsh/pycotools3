@@ -92,15 +92,52 @@ to know about.
 
     * `copy_number` is the number of model copies that you want to run
     * `pe_number` is the number of parameter estimations each of `copy_number` models will run in serial
-    * `nproc` is the
+    * `nproc` is the number of processes to use for getting through all `copy_number` models.
 
-
+The configuration below will run 20 parameter estimations using a pool of 6 processes.
 
 .. code-block:: python
 
     with tasks.ParameterEstimation.Context(mod, experiment_filename, context='s', parameters='g') as context:
         context.set('separator', ',')
-        context.set('run_mode', True)
+        context.set('run_mode', 'parallel')
+        context.set('copy_number', 20)
+        context.set('pe_number', 1)
+        context.set('max_active', 6)
+        context.set('randomize_start_values', True)
+        context.set('method', 'genetic_algorithm')
+        context.set('population_size', 100)
+        context.set('lower_bound', 1e-1)
+        context.set('upper_bound', 1e1)
+        config = context.get_config()
+    pe = tasks.ParameterEstimation(config)
+
+.. warning::::
+
+    If you set `max_active` to a number larger than the number of
+    cores in your machine, although you will be running more models
+    at once, you will be running each model more slowly. Running at full
+    capacity, a single COPASI instance takes about 12% CPU.
+    If you set `max_active` to 12 on an 8 core machine, each instance will
+    run at about 4% CPU.
+
+On a Computer Cluster
+---------------------
+
+
+If you have access to a computer cluster, then PyCoTools already supports
+`Slurm` and `SunGridEngine` sheduling systems. If you are using `slurm`, set
+`run_mode='slurm'` and PyCoTools will submit `copy_number` jobs using `sbatch`.
+If you are using `SunGridEngine` then set `run_mode='sge'`.
+
+.. code-block:: python
+
+    with tasks.ParameterEstimation.Context(mod, experiment_filename, context='s', parameters='g') as context:
+        context.set('separator', ',')
+        context.set('run_mode', 'slurm') # or sge
+        context.set('copy_number', 300)
+        context.set('pe_number', 1)
+        context.set('max_active', 6)
         context.set('randomize_start_values', True)
         context.set('method', 'genetic_algorithm')
         context.set('population_size', 100)
@@ -110,7 +147,17 @@ to know about.
     pe = tasks.ParameterEstimation(config)
 
 
+.. note::
 
+    PyCoTools will expect Copasi to already be available
+    in the environment so that the command `CopasiSE` will produce
+    Copasi's help message and not an error.
 
+If you are using a scheduling system different to `SGE` or `Slurm`
+then you'll have to write your own wrapper, analogous to
+:py:meth:`pycotools3.tasks.Run.submit_copasi_job_SGE` and
+:py:meth:`pycotools3.tasks.Run.submit_copasi_job_slurm`. This shouldn't
+be too difficult. If you run into trouble please submit an issue
+on `GitHub <https://github.com/CiaranWelsh/pycotools3/issues>`_.
 
 
