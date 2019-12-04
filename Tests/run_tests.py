@@ -127,7 +127,7 @@ class RunTests(_test_base._BaseTest):
             context.set('run_mode', 'parallel')
             context.set('copy_number', copy_number)
             context.set('pe_number', 1)
-            context.set('max_active', 3)
+            context.set('nproc', 3)
             context.set('randomize_start_values', True)
             context.set('method', 'nl2sol')
             context.set('lower_bound', 1e-1)

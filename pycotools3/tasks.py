@@ -768,11 +768,11 @@ class RunParallel(_Task):
 
         def worker(copasi_file):
             os.system(f'CopasiSE {copasi_file}')
-        if self.max_active > cpu_count():
-            LOG.warning(f'Requested number of active processes ({self.max_active}) is '
+        if self.nproc > cpu_count():
+            LOG.warning(f'Requested number of active processes ({self.nproc}) is '
                         f'greater than the number of available cores ({cpu_count}). This '
                         f'will likely have a negative impact on computation.')
-        pool = Pool(nodes=self.max_active)
+        pool = Pool(nodes=self.nproc)
         res = pool.amap(worker, [mod.copasi_file for mod in self.models])
         while not res.ready():
             time.sleep(3)
@@ -2543,7 +2543,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                 'weight_method': 'mean_squared',
                 'validation_weight': 1,
                 'validation_threshold': 5,
-                'max_active': 3,
+                'nproc': 3,
                 'prefix': None,
                 'context': 's',
                 'pl_upper_bound': 1000,
@@ -5040,14 +5040,14 @@ class ParameterEstimation(_ParameterEstimationBase):
                 RunParallel(
                     models_list,
                     mode=self.config.settings.run_mode,
-                    max_active=self.config.settings.max_active,
+                    nproc=self.config.settings.nproc,
                     task='scan')
             else:
                 for model_name in models:
                     RunParallel(
                         list(models[model_name].values()),
                         mode=self.config.settings.run_mode,
-                        max_active=self.config.settings.max_active,
+                        nproc=self.config.settings.nproc,
                         task='scan')
 
         else:
