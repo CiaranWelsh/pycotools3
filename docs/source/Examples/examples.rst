@@ -15,6 +15,8 @@ Examples
    parameter_estimation_with_prefix
    parameter_estimation_with_independent_variables
    parameter_estimation_low_level_interface
+   parameter_estimation_increased_throughput
+   parameter_estimation_increased_increment
    multiple_parameter_estimations
    parameter_estimation_multiple_models
    shortcuts2
