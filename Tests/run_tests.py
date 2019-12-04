@@ -84,7 +84,66 @@ class RunTests(_test_base._BaseTest):
 
         :return:
         """
-        R = pycotools3.tasks.Run(self.model, task='parameter_estimation')
+        copy_number = 3
+        df = self.model.simulate(0, 10, 1)
+        fname = os.path.join(os.path.dirname(__file__), 'data.csv')
+        df.to_csv(fname)
+        with pycotools3.tasks.ParameterEstimation.Context(
+                self.model, fname, context='s', parameters='g') as context:
+            context.set('separator', ',')
+            context.set('run_mode', True)
+            context.set('copy_number', copy_number)
+            context.set('pe_number', 1)
+            context.set('randomize_start_values', True)
+            context.set('method', 'nl2sol')
+            context.set('lower_bound', 1e-1)
+            context.set('upper_bound', 1e1)
+            config = context.get_config()
+
+        pe = pycotools3.tasks.ParameterEstimation(config)
+
+        import time
+        done = False
+        while not done:
+            data = pycotools3.viz.Parse(pe).data['test_model']
+            if data.shape[0] == copy_number:
+                done = True
+            time.sleep(5)
+        self.assertEqual(data.shape[0], copy_number)
+
+    def test_parameter_estimation_runs_parallel(self):
+        """
+
+        :return:
+        """
+        copy_number = 20
+        df = self.model.simulate(0, 10, 1)
+        fname = os.path.join(os.path.dirname(__file__),
+                             'data.csv')
+        df.to_csv(fname)
+        with pycotools3.tasks.ParameterEstimation.Context(
+                self.model, fname, context='s', parameters='g') as context:
+            context.set('separator', ',')
+            context.set('run_mode', 'parallel')
+            context.set('copy_number', copy_number)
+            context.set('pe_number', 1)
+            context.set('max_active', 3)
+            context.set('randomize_start_values', True)
+            context.set('method', 'nl2sol')
+            context.set('lower_bound', 1e-1)
+            context.set('upper_bound', 1e1)
+            config = context.get_config()
+
+        pe = pycotools3.tasks.ParameterEstimation(config)
+
+        import time
+        done = False
+        while not done:
+            data = pycotools3.viz.Parse(pe).data['test_model']
+            if data.shape[0] == copy_number:
+                done = True
+            time.sleep(5)
+        self.assertEqual(data.shape[0], copy_number)
 
     def test_sheduled_parameter_estimation(self):
         """
@@ -111,10 +170,6 @@ class RunTests(_test_base._BaseTest):
         for i in new_xml.find('{http://www.copasi.org/static/schema}ListOfTasks'):
             if i.attrib['name'] == 'Scan':
                 self.assertTrue(i.attrib['scheduled'] == 'true')
-
-
-
-
 
 
 if __name__ == '__main__':

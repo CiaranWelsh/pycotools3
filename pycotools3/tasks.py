@@ -37,6 +37,7 @@ from copy import deepcopy
 from functools import reduce
 from io import StringIO
 from multiprocessing import Process, cpu_count
+from pathos.multiprocessing import ProcessingPool as Pool
 from subprocess import check_call
 
 import numpy
@@ -456,8 +457,6 @@ class Run(_Task):
         self.default_properties = {'task': 'time_course',
                                    'mode': True,
                                    'sge_job_filename': None,
-                                   # 'copasi_location': COPASI_DIR
-                                   # 'copasi_location': 'apps/COPASI/4.21.166-Linux-64bit',  # for sge mode
                                    }
 
         self.default_properties.update(self.kwargs)
@@ -666,9 +665,6 @@ class RunParallel(_Task):
         if self.task not in tasks:
             raise errors.InputError('{} not in list of tasks. List of tasks are: {}'.format(self.task, tasks))
 
-        # modes = [False, 'multiprocess']
-        # if self.mode not in modes:
-        #     raise errors.InputError('{} not in {}'.format(self.mode, modes))
         if not isinstance(self.models, list):
             raise errors.InputError('input should be a list of models to run')
 
@@ -678,9 +674,6 @@ class RunParallel(_Task):
 
         if self.max_active is None:
             self.max_active = len(self.models)
-
-    # def __str__(self):
-    #     return 'RunParallel({})'.format()
 
     def set_task(self):
         """:return:"""
@@ -696,7 +689,7 @@ class RunParallel(_Task):
         assert len(self.models) == len(model_list)
         return model_list
 
-    def run_parallel(self):
+    def run_parallel2(self):
         """Run models in parallel. Only have self.max_active
         models running at once
         :return:
@@ -709,6 +702,7 @@ class RunParallel(_Task):
         """
         pids = []
         num_models_to_process = len(self.models)
+        num_queues = self.max_active
 
         while num_models_to_process > 0:
 
@@ -737,6 +731,54 @@ class RunParallel(_Task):
             except IndexError:
                 LOG.warning('index error skipped')
                 continue
+
+    def run_parallel(self):
+        """Run models in parallel. Only have self.max_active
+        models running at once
+        :return:
+            None
+
+        Args:
+
+        Returns:
+
+        """
+        pids = []
+        num_models_to_process = len(self.models)
+        num_queues = self.max_active
+        num_per_queue = int(numpy.floor(num_models_to_process / num_queues))
+        remainnder = num_models_to_process % num_queues
+
+        print(self.models)
+
+        # q = []
+        # for i in range(num_queues):
+        #     q.append([])
+        #     for j in range(num_per_queue):
+        #         q[i].append(self.models.pop())
+        # for r in range(remainnder):
+        #     q[r].append(self.models.pop())
+        #
+        # assert len([i for j in q for i in j]) == num_models_to_process
+
+        class CustomObject:
+
+            def __init__(self):
+                pass
+
+        def worker(copasi_file):
+            os.system(f'CopasiSE {copasi_file}')
+        if self.max_active > cpu_count():
+            LOG.warning(f'Requested number of active processes ({self.max_active}) is '
+                        f'greater than the number of available cores ({cpu_count}). This '
+                        f'will likely have a negative impact on computation.')
+        pool = Pool(nodes=self.max_active)
+        res = pool.amap(worker, [mod.copasi_file for mod in self.models])
+        while not res.ready():
+            time.sleep(3)
+            print(".", end=' ')
+
+
 
 
 @mixin(model.GetModelComponentFromStringMixin)
@@ -4988,15 +5030,25 @@ class ParameterEstimation(_ParameterEstimationBase):
                 self.config.settings.run_mode = False
 
         if self.config.settings.run_mode == 'parallel':
-            if self.config.settings.context != 'lhs':
+            if self.config.settings.context == 'lhs':
+                raise NotImplementedError('Parallel implemented of lhs is not yet implemented. Use run_mode=True')
+            elif self.config.settings.context == 'pl':
+                models_list = []
+                for model_name in models:
+                    for parameter_set_idx in models[model_name]:
+                        models_list.append(models[model_name][parameter_set_idx])
+                RunParallel(
+                    models_list,
+                    mode=self.config.settings.run_mode,
+                    max_active=self.config.settings.max_active,
+                    task='scan')
+            else:
                 for model_name in models:
                     RunParallel(
                         list(models[model_name].values()),
                         mode=self.config.settings.run_mode,
                         max_active=self.config.settings.max_active,
                         task='scan')
-            else:
-                raise NotImplementedError('Parallel implemented of lhs is not yet implemented. Use run_mode=True')
 
         else:
             for model_name in models:
@@ -5225,8 +5277,10 @@ class ParameterEstimation(_ParameterEstimationBase):
                     'Currently pycotools3 only supports the configuration of profile likelihoods'
                     ' for a single model at a time'
                 )
-
-            config.settings['problem'] = 'ProfileLikelihoods'
+            config.settings['problem'] = os.path.join(
+                config.settings['problem'],
+                os.path.join('Fit' + str(config.settings['fit']), 'ProfileLikelihoods')
+            )
             config.settings['randomize_start_values'] = False
             config.settings['context'] = self.context
 
@@ -6072,7 +6126,6 @@ class Hessian(Sensitivities):
 class GlobalSensitivities(Sensitivities):
     """Sensitivity around parameter estimates"""
     pass
-
 
 
 if __name__ == '__main__':

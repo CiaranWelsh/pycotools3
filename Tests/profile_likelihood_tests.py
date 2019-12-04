@@ -41,7 +41,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         with tasks.ParameterEstimation.Context(
                 self.model, self.fname, context='s', parameters='g'
         ) as context:
-            context.set('method', 'hooke_jeeves')
+            context.set('method', 'nl2sol')
             context.set('run_mode', True)
             context.set('pe_number', 1)
             config = context.get_config()
@@ -56,14 +56,39 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         with tasks.ParameterEstimation.Context(
                 self.pe_mod, self.fname, context='pl', parameters='g'
         ) as context:
-            context.set('method', 'hooke_jeeves')
+            context.set('method', 'nl2sol')
             context.set('run_mode', True)
             context.set('pe_number', 12)
             config = context.get_config()
         pe = tasks.ParameterEstimation(config)
         expected = 11
-        actual = viz.Parse(pe)['A2B'].shape[0]
+        data = viz.Parse(pe)['A2B']
+        print(data)
+        actual = data.shape[0]
         self.assertEqual(expected, actual)
+
+    def test_run_parallel(self):
+        """
+        Returns:
+
+        """
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'nl2sol')
+            context.set('run_mode', 'parallel')
+            context.set('max_active', 2)
+            context.set('pe_number', 12)
+            config = context.get_config()
+        # print(config)
+        pe = tasks.ParameterEstimation(config)
+        # import time
+        # time.sleep(5)
+        # expected = 11
+        # data = viz.Parse(pe)['A2B']
+        # print(data)
+        # actual = data.shape[0]
+        # self.assertEqual(expected, actual)
 
     def test_plot(self):
         with tasks.ParameterEstimation.Context(

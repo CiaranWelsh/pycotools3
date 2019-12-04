@@ -62,3 +62,5 @@ except Exception:
 #todo deprecate BuildAntimony class
 #todo restructure the docs to remove distinction between tutorials and examples.
 #todo think more about global/local chasers.
+#todo in viz you need to double check the location of all the plots, profile likelihoods and parameter estimaton
+# plots are definately going in the wrong place.
