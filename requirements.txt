@@ -65,3 +65,4 @@ twine==1.13.0
 urllib3==1.25.6
 wcwidth==0.1.7
 zipp==0.6.0
+pathos
