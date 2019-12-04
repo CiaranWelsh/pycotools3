@@ -28,10 +28,10 @@ The `prefix` argument will setup the configuration of a parameter estimation con
         _C in Cell;
 
         // reactions
-        R1: A => B ; Cell * _k1 * A;
-        R2: B => A ; Cell * k2 * B * _C;
-        R3: B => C ; Cell * _k3 * B;
-        R4: C => B ; Cell * k4 * _C;
+        R1: A => B  ; Cell * _k1 * A;
+        R2: B => A  ; Cell * k2 * B * _C;
+        R3: B => _C ; Cell * _k3 * B;
+        R4: _C => B ; Cell * k4 * _C;
 
         // initial concentrations
         A = 100;
