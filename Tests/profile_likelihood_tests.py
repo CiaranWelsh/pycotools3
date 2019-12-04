@@ -61,7 +61,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
             context.set('pe_number', 12)
             config = context.get_config()
         pe = tasks.ParameterEstimation(config)
-        expected = 11
+        expected = 12
         data = viz.Parse(pe)['A2B']
         print(data)
         actual = data.shape[0]
