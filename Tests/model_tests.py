@@ -535,6 +535,16 @@ class GetTests(_BaseTest):
         """
         self.assertEqual(self.model.parameters.shape[1], 9)
 
+    def test_get_parameters_as_dict(self):
+        """
+
+        :return:
+        """
+        dct = self.model.get_parameters_as_dict()
+        expected = {'cyt': 3.0, 'nuc': 1.0, 'A': 1.0000001549282924, 'B': 1.0000001549282924, 'C': 1.0000001549282924, 'A2B': 4.0, 'ADeg_k1': 0.1, 'B2C': 9.0, 'B2C_0_k2': 0.1, 'C2A_k1': 0.1, 'ThisIsAssignment': 13.0}
+        self.assertEqual(expected, dct)
+        # self.assertEqual(self.model.parameters.shape[1], 9)
+
     def test_number_of_local_parameters(self):
         """
 

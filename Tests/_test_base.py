@@ -73,51 +73,51 @@ class _BaseTest(unittest.TestCase):
                           A2B_0 is "A2B";
                           B2C_0 is "B2C";
                         end"""
-        if os.path.isfile(self.copasi_file):
-            raise ValueError('copasi file "{}" is already a file before test'.format(self.copasi_file))
+        # if os.path.isfile(self.copasi_file):
+        #     raise ValueError('copasi file "{}" is already a file before test'.format(self.copasi_file))
         self.model = pycotools3.model.loada(self.ant, self.copasi_file)
-        print(self.model)
 
         if not os.path.isfile(self.copasi_file):
             raise FileNotFoundError('copasi file "{}" is not found after creating with loada'.format(self.copasi_file))
 
     def tearDown(self):
         print('tearing down')
+        tear_down = True
+        if tear_down:
+            dire = os.path.dirname(__file__)
+            subdirs = ['Boxplots', 'TimeCourseGraphs',
+                       'ParameterEstimationPlots', 'test_mpe',
+                       'EnsembleTimeCourse', 'Histograms',
+                       'LinearRegression', 'MultipleParameterEstimationResults',
+                       'PCA', 'Scatters', 'ProfileLikelihoods',
+                       'ParameterEstimationResults', 'Problem1',
+                       'CrossValidation', 'AntimonyModels',
+                       'SensitivityTests']
 
-        dire = os.path.dirname(__file__)
-        subdirs = ['Boxplots', 'TimeCourseGraphs',
-                   'ParameterEstimationPlots', 'test_mpe',
-                   'EnsembleTimeCourse', 'Histograms',
-                   'LinearRegression', 'MultipleParameterEstimationResults',
-                   'PCA', 'Scatters', 'ProfileLikelihoods',
-                   'ParameterEstimationResults', 'Problem1',
-                   'CrossValidation', 'AntimonyModels',
-                   'SensitivityTests']
+            for i in subdirs:
+                d = os.path.join(dire, i)
+                if os.path.isdir(d):
+                    try:
+                        shutil.rmtree(d)
+                    except WindowsError:
+                        print('failed with windows error')
 
-        for i in subdirs:
-            d = os.path.join(dire, i)
-            if os.path.isdir(d):
-                try:
-                    shutil.rmtree(d)
-                except WindowsError:
-                    print('failed with windows error')
-
-        file_types_to_remove = [
-            '*.xlsx',
-            '*.log',
-            '*.cps',
-            '*.txt',
-            '*.csv',
-            '*.pickle',
-            '*.json',
-            '*.yaml',
-            '*.yml',
-            '*.yaml',
-            '*.sbml',
-        ]
-        for i in file_types_to_remove:
-            for j in glob.glob(os.path.join(dire, i)):
-                os.remove(j)
+            file_types_to_remove = [
+                '*.xlsx',
+                '*.log',
+                '*.cps',
+                '*.txt',
+                '*.csv',
+                '*.pickle',
+                '*.json',
+                '*.yaml',
+                '*.yml',
+                '*.yaml',
+                '*.sbml',
+            ]
+            for i in file_types_to_remove:
+                for j in glob.glob(os.path.join(dire, i)):
+                    os.remove(j)
 
 
 

@@ -548,6 +548,12 @@ class Parse(object):
         if self.log10:
             for model_name, df in data.items():
                 data[model_name] = numpy.log10(data[model_name])
+
+        # when only 1 model return dataframe. When > 1 models, return
+        #  a dict of dataframes
+        if len(data) == 1:
+            key = list(data.keys())[0]
+            return data[key]
         return data
 
     def from_timecourse(self):
@@ -635,20 +641,21 @@ class Parse(object):
         Returns:
 
         """
-
         def read1(folder):
             tmp_dct = {}
             for report_name in folder:
                 report_name = os.path.abspath(report_name)
                 if not os.path.isfile(report_name):
-                    raise errors.FileDoesNotExistError('"{}" does not exist'.format(report_name))
+                    raise FileNotFoundError('"{}" does not exist'.format(report_name))
 
                 try:
                     data = pandas.read_csv(report_name,
-                                           sep='\t', header=None, skiprows=[0])
+                                           sep='\t',
+                                           header=None, skiprows=[0])
                 except:
-                    LOG.warning('No Columns to parse from file. "{}" is empty. Skipping this file'.format(
-                        report_name))
+                    LOG.warning(f'No data are available in parameter estimation data file '
+                                f' "{os.path.split(report_name)[1]}". Since it is empty, it will be '
+                                f'skipped.')
                     continue
                 try:
                     bracket_columns = data[data.columns[[0, -2]]]
@@ -672,7 +679,9 @@ class Parse(object):
 
                     if len(names) != data.shape[1]:
                         raise errors.SomethingWentHorriblyWrongError(
-                            'length of parameter estimation data does not equal number of parameters estimated')
+                            f'The shape of parameter estimation data ({data.shape}) does not '
+                            f'match the number of parameters that were estimated ({len(names)}). You might be '
+                            f'using an old parameter set on a new model? ')
 
                     if os.path.isfile(report_name):
                         os.remove(report_name)
@@ -737,9 +746,6 @@ class Parse(object):
                 df = df.transpose().set_index(0).transpose()
                 d.append(df)
 
-            #
-            #     # raise NotImplementedError('Still developing this function to read data from CPE')
-            #
             except errors.NonFormattedPEFileError:
                 df = pandas.read_csv(
                     report_name,
@@ -752,11 +758,6 @@ class Parse(object):
                 data[width] = data[width].str[1:]
                 names = self.cls_instance.model.fit_item_order + ['RSS']
                 data.columns = names
-                # os.remove(report_name)
-                # data.to_csv(report_name,
-                #             sep='\t',
-                #             index=False)
-                #     # d[report_name] = data
                 d.append(data)
 
             except ValueError as e:
@@ -895,233 +896,234 @@ class Parse(object):
         Returns:
 
         """
+        print('invoked')
+        # def get_results():
+        #     """Get results files as dict
+        #     :return:
+        #         2 element `tuple`.
+        #         First element:
+        #             dict[model_number][parameter] = path/to/results.csv
+        #
+        #         Second element:
+        #             dict[model_number][parameter] = fit item order for that model
+        #
+        #     Args:
+        #
+        #     Returns:
+        #
+        #     """
+        #     results_dirs = {}
+        #     fit_item_order_dirs = {}
+        #     param_of_interest_dict = {}
+        #
+        #     ## iterate over models in ProfileLikelihood task
+        #     for model in self.cls_instance.model_dct:
+        #
+        #         ## create dict's for collection of results
+        #         results_dirs[model] = {}
+        #         fit_item_order_dirs[model] = {}
+        #         param_of_interest_dict[model] = {}
+        #
+        #         ## iterate over parameters in models
+        #         for param in self.cls_instance.model_dct[model]:
+        #
+        #             ## get the copasi file from that model
+        #             copasi_file = self.cls_instance.model_dct[model][param].copasi_file
+        #
+        #             ## infer the results file from copasi file
+        #             results_file = os.path.splitext(copasi_file)[0] + '.csv'
+        #
+        #             ## ensure it exists
+        #             if not os.path.isfile(results_file):
+        #                 raise errors.InputError('file does not exist: "{}"'.format(results_file))
+        #
+        #             ## assign to dict
+        #             results_dirs[model][param] = results_file
+        #
+        #             ## collect fit items
+        #             fit_item_order_dirs[model][param] = self.cls_instance.model_dct[model][param].fit_item_order
+        #     return results_dirs, fit_item_order_dirs
+        #
+        # def experiment_files_in_use(mod):
+        #     """Search the model specified by mod for experiment
+        #     files defined in the parameter estimation task
+        #
+        #     Args:
+        #       mod: py:class:`model.Model`. The
+        #     still configured model that was used
+        #     to generate parameter estimation data
+        #
+        #     Returns:
+        #       list` of experiment files
+        #
+        #     """
+        #     query = '//*[@name="File Name"]'
+        #     l = []
+        #     for i in mod.xml.xpath(query):
+        #         f = os.path.abspath(i.attrib['value'])
+        #         if os.path.isfile(f) != True:
+        #             raise errors.InputError(
+        #                 'Experimental files in use cannot be automatically '
+        #                 ' determined. Please give a list of experiment file '
+        #                 'paths to the experiment_files keyword'.format())
+        #         l.append(os.path.abspath(i.attrib['value']))
+        #     return l
+        #
+        # def dof(mod):
+        #     """Return degrees of freedom. This is the
+        #     number of estimated parameters minus 1
+        #
+        #     Args:
+        #       mod: py:class:`model.Model`. The
+        #     still configured model that was used
+        #     to generate parameter estimation data
+        #
+        #     Returns:
+        #
+        #     """
+        #     return len(mod.fit_item_order) - 1
+        #
+        # def num_data_points(experiment_files):
+        #     """number of data points in your data files. Relies on
+        #     being able to locate the experiment files from the
+        #     copasi file
+        #
+        #     :return:
+        #         `int`.
+        #
+        #     Args:
+        #       experiment_files:
+        #
+        #     Returns:
+        #
+        #     """
+        #     experimental_data = [pandas.read_csv(i, sep='\t') for i in experiment_files]
+        #     l = []
+        #     for i in experimental_data:
+        #         l.append(i.shape[0] * (i.shape[1] - 1))
+        #     s = sum(l)
+        #     if s == 0:
+        #         raise errors.InputError('Number of data points cannot be 0. '
+        #                                 'Experimental data is inferred from the '
+        #                                 'parameter estimation task definition. '
+        #                                 'It might be that copasi_file refers to a '
+        #                                 'fresh copy of the model. Try redefining the '
+        #                                 'same parameter estimation problem that you '
+        #                                 'used in the profile likelihood, using the '
+        #                                 '_setup method but not running the '
+        #                                 'parameter estimation before trying again.')
+        #     return s
+        #
+        # def confidence_level(cls):
+        #     """Get confidence level using ChiSquaredStatistics
+        #
+        #     :return:
+        #         dict[index][confidence_level]
+        #
+        #     Args:
+        #
+        #     Returns:
+        #
+        #     """
+        #     CL_dct = {}
+        #     if cls.index == 'current_parameters':
+        #         rss_value = self.rss_value
+        #         experiment_files = experiment_files_in_use(cls.model)
+        #         CL_dct[0] = float(ChiSquaredStatistics(rss_value, dof(cls.model),
+        #                                                num_data_points(experiment_files), self.alpha).CL)
+        #     else:
+        #         for index in cls.parameters:
+        #             rss_value = cls.parameters[index]['RSS']
+        #             experiment_files = experiment_files_in_use(cls.model)
+        #             CL_dct[index] = float(ChiSquaredStatistics(rss_value, dof(cls.model),
+        #                                                        num_data_points(experiment_files), self.alpha).CL)
+        #     return CL_dct
+        #
+        # def parse_data(results_dict, fit_item_order_dict):
+        #     """Parse data from profile likelihood analysis
+        #     into :py:class`pandas.DataFrame`
+        #
+        #     Args:
+        #       results_dict: dict[model][param] = path/to/csv.
+        #     First element of output from get_results
+        #       fit_item_order_dict: dict[model][param] = model.fit_item_order.
+        #     second element from output of get_results
+        #
+        #     Returns:
+        #       py:class:`pandas.DataFrame`. Results in
+        #       formatted pandas Dataframe
+        #
+        #     """
+        #     res = {}
+        #     df_list = []
+        #     for index in results_dict:
+        #         res[index] = {}
+        #         for param in results_dict[index]:
+        #             df = pandas.read_csv(results_dict[index][param],
+        #                                  sep='\t', skiprows=1, header=None)
+        #             bracket_indices = [1, -2]
+        #             df = df.drop(df.columns[bracket_indices], axis=1)
+        #             df.columns = list(range(len(df.columns)))
+        #             items = ['Parameter Of Interest Value'] + fit_item_order_dict[index][param] + ['RSS']
+        #             df.columns = items
+        #             if self.log10:
+        #                 df_list2 = []
+        #                 for key in list(df.keys()):
+        #                     l = []
+        #                     for i in range(df[key].shape[0]):
+        #                         l.append(numpy.log10(df[key].iloc[i]))
+        #                     df_list2.append(pandas.DataFrame(l, columns=[key]))
+        #                 df = pandas.concat(df_list2, axis=1)
+        #             CL = confidence_level(self.cls_instance)
+        #
+        #             if self.cls_instance.index == 'current_parameters':
+        #                 """
+        #                 This is a patch over what was here originally to
+        #                 get the current parameters index working.
+        #                 """
+        #                 ## set index name to current parameters
+        #                 # self.cls_instance.parameters['best_parameter_set'] = 0#'current_parameters'
+        #                 # self.cls_instance.parameters.set_index('best_parameter_set', drop=True, inplace=True)
+        #
+        #                 if self.log10:
+        #                     ## get best parameters
+        #                     df['Best Parameter Value'] = math.log10(
+        #                         float(self.cls_instance.parameters.loc[index][param]))
+        #                     df['Best RSS Value'] = math.log10(float(self.rss_value))
+        #                     ## This is the old version::
+        #                     # CL[index] = math.log10(CL[index])
+        #                     CL[index] = math.log10(CL[index])
+        #                 else:
+        #                     df['Best Parameter Value'] = float(self.cls_instance.parameters.loc[index][param])
+        #                     df['Best RSS Value'] = float(self.rss_value)
+        #             else:
+        #                 if self.log10:
+        #                     df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
+        #                     df['Best RSS Value'] = math.log10(float(self.cls_instance.parameters[index]['RSS']))
+        #                     CL[index] = math.log10(CL[index])
+        #
+        #                 else:
+        #                     df['Best Parameter Value'] = float(self.cls_instance.parameters[index][param])
+        #                     df['Best RSS Value'] = float(self.cls_instance.parameters[index]['RSS'])
+        #
+        #             ## end of patch
+        #             ## with index works with from file but not from current_parameters
+        #             df['Confidence Level'] = CL[index]
+        #             # df['Confidence Level'] = CL[param]
+        #             df['Best Fit Index'] = index
+        #             df['Parameter Of Interest'] = param
+        #             df = df.set_index(['Parameter Of Interest', 'Best Fit Index', 'Confidence Level',
+        #                                'Best Parameter Value', 'Best RSS Value',
+        #                                'Parameter Of Interest Value'], drop=True)
+        #             df_list.append(df)
+        #     df = pandas.concat(df_list)
+        #     return df
+        #
+        # print('asdfasdjfnalisdcli')
+        # print(get_results())
+        # results, fit_item_order = get_results()
 
-        def get_results():
-            """Get results files as dict
-            :return:
-                2 element `tuple`.
-                First element:
-                    dict[model_number][parameter] = path/to/results.csv
-
-                Second element:
-                    dict[model_number][parameter] = fit item order for that model
-
-            Args:
-
-            Returns:
-
-            """
-            results_dirs = {}
-            fit_item_order_dirs = {}
-            param_of_interest_dict = {}
-
-            ## iterate over models in ProfileLikelihood task
-            for model in self.cls_instance.model_dct:
-
-                ## create dict's for collection of results
-                results_dirs[model] = {}
-                fit_item_order_dirs[model] = {}
-                param_of_interest_dict[model] = {}
-
-                ## iterate over parameters in models
-                for param in self.cls_instance.model_dct[model]:
-
-                    ## get the copasi file from that model
-                    copasi_file = self.cls_instance.model_dct[model][param].copasi_file
-
-                    ## infer the results file from copasi file
-                    results_file = os.path.splitext(copasi_file)[0] + '.csv'
-
-                    ## ensure it exists
-                    if not os.path.isfile(results_file):
-                        raise errors.InputError('file does not exist: "{}"'.format(results_file))
-
-                    ## assign to dict
-                    results_dirs[model][param] = results_file
-
-                    ## collect fit items
-                    fit_item_order_dirs[model][param] = self.cls_instance.model_dct[model][param].fit_item_order
-
-            return results_dirs, fit_item_order_dirs
-
-        def experiment_files_in_use(mod):
-            """Search the model specified by mod for experiment
-            files defined in the parameter estimation task
-
-            Args:
-              mod: py:class:`model.Model`. The
-            still configured model that was used
-            to generate parameter estimation data
-
-            Returns:
-              list` of experiment files
-
-            """
-            query = '//*[@name="File Name"]'
-            l = []
-            for i in mod.xml.xpath(query):
-                f = os.path.abspath(i.attrib['value'])
-                if os.path.isfile(f) != True:
-                    raise errors.InputError(
-                        'Experimental files in use cannot be automatically '
-                        ' determined. Please give a list of experiment file '
-                        'paths to the experiment_files keyword'.format())
-                l.append(os.path.abspath(i.attrib['value']))
-            return l
-
-        def dof(mod):
-            """Return degrees of freedom. This is the
-            number of estimated parameters minus 1
-
-            Args:
-              mod: py:class:`model.Model`. The
-            still configured model that was used
-            to generate parameter estimation data
-
-            Returns:
-
-            """
-            return len(mod.fit_item_order) - 1
-
-        def num_data_points(experiment_files):
-            """number of data points in your data files. Relies on
-            being able to locate the experiment files from the
-            copasi file
-
-            :return:
-                `int`.
-
-            Args:
-              experiment_files:
-
-            Returns:
-
-            """
-            experimental_data = [pandas.read_csv(i, sep='\t') for i in experiment_files]
-            l = []
-            for i in experimental_data:
-                l.append(i.shape[0] * (i.shape[1] - 1))
-            s = sum(l)
-            if s == 0:
-                raise errors.InputError('Number of data points cannot be 0. '
-                                        'Experimental data is inferred from the '
-                                        'parameter estimation task definition. '
-                                        'It might be that copasi_file refers to a '
-                                        'fresh copy of the model. Try redefining the '
-                                        'same parameter estimation problem that you '
-                                        'used in the profile likelihood, using the '
-                                        '_setup method but not running the '
-                                        'parameter estimation before trying again.')
-            return s
-
-        def confidence_level(cls):
-            """Get confidence level using ChiSquaredStatistics
-
-            :return:
-                dict[index][confidence_level]
-
-            Args:
-
-            Returns:
-
-            """
-            CL_dct = {}
-            if cls.index == 'current_parameters':
-                rss_value = self.rss_value
-                experiment_files = experiment_files_in_use(cls.model)
-                CL_dct[0] = float(ChiSquaredStatistics(rss_value, dof(cls.model),
-                                                       num_data_points(experiment_files), self.alpha).CL)
-            else:
-                for index in cls.parameters:
-                    rss_value = cls.parameters[index]['RSS']
-                    experiment_files = experiment_files_in_use(cls.model)
-                    CL_dct[index] = float(ChiSquaredStatistics(rss_value, dof(cls.model),
-                                                               num_data_points(experiment_files), self.alpha).CL)
-            return CL_dct
-
-        def parse_data(results_dict, fit_item_order_dict):
-            """Parse data from profile likelihood analysis
-            into :py:class`pandas.DataFrame`
-
-            Args:
-              results_dict: dict[model][param] = path/to/csv.
-            First element of output from get_results
-              fit_item_order_dict: dict[model][param] = model.fit_item_order.
-            second element from output of get_results
-
-            Returns:
-              py:class:`pandas.DataFrame`. Results in
-              formatted pandas Dataframe
-
-            """
-            res = {}
-            df_list = []
-            for index in results_dict:
-                res[index] = {}
-                for param in results_dict[index]:
-                    df = pandas.read_csv(results_dict[index][param],
-                                         sep='\t', skiprows=1, header=None)
-                    bracket_indices = [1, -2]
-                    df = df.drop(df.columns[bracket_indices], axis=1)
-                    df.columns = list(range(len(df.columns)))
-                    items = ['Parameter Of Interest Value'] + fit_item_order_dict[index][param] + ['RSS']
-                    df.columns = items
-                    if self.log10:
-                        df_list2 = []
-                        for key in list(df.keys()):
-                            l = []
-                            for i in range(df[key].shape[0]):
-                                l.append(numpy.log10(df[key].iloc[i]))
-                            df_list2.append(pandas.DataFrame(l, columns=[key]))
-                        df = pandas.concat(df_list2, axis=1)
-                    CL = confidence_level(self.cls_instance)
-
-                    if self.cls_instance.index == 'current_parameters':
-                        """
-                        This is a patch over what was here originally to 
-                        get the current parameters index working. 
-                        """
-                        ## set index name to current parameters
-                        # self.cls_instance.parameters['best_parameter_set'] = 0#'current_parameters'
-                        # self.cls_instance.parameters.set_index('best_parameter_set', drop=True, inplace=True)
-
-                        if self.log10:
-                            ## get best parameters
-                            df['Best Parameter Value'] = math.log10(
-                                float(self.cls_instance.parameters.loc[index][param]))
-                            df['Best RSS Value'] = math.log10(float(self.rss_value))
-                            ## This is the old version::
-                            # CL[index] = math.log10(CL[index])
-                            CL[index] = math.log10(CL[index])
-                        else:
-                            df['Best Parameter Value'] = float(self.cls_instance.parameters.loc[index][param])
-                            df['Best RSS Value'] = float(self.rss_value)
-                    else:
-                        if self.log10:
-                            df['Best Parameter Value'] = math.log10(float(self.cls_instance.parameters[index][param]))
-                            df['Best RSS Value'] = math.log10(float(self.cls_instance.parameters[index]['RSS']))
-                            CL[index] = math.log10(CL[index])
-
-                        else:
-                            df['Best Parameter Value'] = float(self.cls_instance.parameters[index][param])
-                            df['Best RSS Value'] = float(self.cls_instance.parameters[index]['RSS'])
-
-                    ## end of patch
-                    ## with index works with from file but not from current_parameters
-                    df['Confidence Level'] = CL[index]
-                    # df['Confidence Level'] = CL[param]
-                    df['Best Fit Index'] = index
-                    df['Parameter Of Interest'] = param
-                    df = df.set_index(['Parameter Of Interest', 'Best Fit Index', 'Confidence Level',
-                                       'Best Parameter Value', 'Best RSS Value',
-                                       'Parameter Of Interest Value'], drop=True)
-                    df_list.append(df)
-            df = pandas.concat(df_list)
-            return df
-
-        results, fit_item_order = get_results()
-
-        return parse_data(results, fit_item_order)
+        # return parse_data(results, fit_item_order)
 
     def concat(self):
         return pandas.concat(self.data)
@@ -2288,8 +2290,9 @@ class WaterfallPlot(_Plotter):
 
 
 class PlotProfileLikelihoods(_Plotter):
-
-    def __init__(self, mod, data):
+    def __init__(self, mod, pl):
+        self.pl = pl
+        data = Parse(pl).data
         if not isinstance(data, dict):
             raise TypeError('expected a dictionary object but got a {}'.format(type(data)))
 
@@ -2299,6 +2302,7 @@ class PlotProfileLikelihoods(_Plotter):
 
         self.mod = mod
         self.data = data
+        self.data = pandas.concat(self.data, sort=False)
 
     def _get_number_of_estimated_parameters(self):
         """
@@ -2334,12 +2338,78 @@ class PlotProfileLikelihoods(_Plotter):
             df = self._get_number_of_estimated_parameters()
 
         cl = scipy.stats.chi2.ppf(alpha, df=df) + best_rss
-
+        print(cl)
         data = pandas.concat(self.data)
+        print(data)
         data = data.loc[parameter][selection]
 
-    def calculate_cl(self):
-        pass
+    def get_best_original_parameter_set(self):
+        """
+        From pe class
+        Returns:
+
+        """
+        cols = [i for i in self.data.columns if i != 'RSS']
+        params = pandas.DataFrame(self.mod.get_parameters_as_dict(), index=[0])
+        return params[cols]
+
+    def compute_x(self):
+        lb = self.pl.config.settings.pl_lower_bound
+        ub = self.pl.config.settings.pl_upper_bound
+        parameters = self.get_best_original_parameter_set()
+        num_steps = self.pl.config.settings.pe_number
+        dct = {}
+        for i in parameters:
+            val = parameters.loc[0, i]
+            low = numpy.log10(val / lb)
+            high = numpy.log10(val * ub)
+            dct[i] = pandas.Series(numpy.logspace(low, high, num_steps).flatten())
+        df = pandas.concat(dct, axis=1)
+
+        # when num_steps is even we need to add
+        #  the best parameter set into the df.
+        # When num steps is odd, we can omit this step
+        # because the numpy.logspace should land on the
+        # best parameter set anyway
+        if num_steps % 2 == 0:
+            mid_point = int(num_steps / 2)
+            df = pandas.concat([df.iloc[:mid_point], parameters, df.iloc[mid_point:]]).reset_index(drop=True)
+        return df
+
+    def plot(self, x, y='RSS', ncol=3):
+        # validate input
+        if not isinstance(x, str):
+            raise ValueError('x must be a string')
+        if not isinstance(y, (str, list)):
+            raise ValueError('y must be a string or a list of strings')
+        if isinstance(y, str):
+            y = [y]
+        for i in y:
+            if not isinstance(i, str):
+                raise ValueError('y must be a string or list of strings.')
+        if x not in self.data.columns:
+            raise ValueError(f'Cannot find parameter "{x}" in your '
+                             f'profile likelihood analysis. These '
+                             f'are your options {list(sorted(self.data.columns))}')
+        if not isinstance(ncol, int):
+            raise ValueError('ncol argument must be of type int')
+
+        # compute number of rows needed for len(y) plots
+        N = len(y)
+        if N < ncol:
+            ncol = N
+        nrow = N // ncol
+        r = N % ncol
+        if r > 0:
+            nrow += 1
+
+        # select plot data
+        print(self.data)
+        data = self.data.set_index(x, append=True)
+        data.index = data.index.droplevel(1)
+        data = data[y]
+        print(data)
+
 
 
 class PlotParameterEstimation(_ParameterEstimationPlotter):

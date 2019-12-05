@@ -2499,6 +2499,24 @@ class Model(_base._Base):
 
         return s
 
+    def get_parameters_as_dict(self):
+        """
+        Uses :py:meth:`model.Model.get_parameters_as_antimony
+        then converts into a dict.
+        Returns:
+
+        """
+        parameters_str = self.get_parameters_as_antimony()
+        parameters_lst = parameters_str.split('\n')
+        parameters_lst = [i.strip() for i in parameters_lst if i != '']
+        parameters_lst = [i.replace(';', '') for i in  parameters_lst]
+        dct = {}
+        for i in parameters_lst:
+            left, right = i.split('=')
+            left = left.strip()
+            right = right.strip()
+            dct[left] = float(right)
+        return dct
 
 @mixin(ReadModelMixin)
 class InsertParameters(object):

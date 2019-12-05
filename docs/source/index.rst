@@ -59,10 +59,7 @@ The procedure is the same in linux, mac and windows.
 
 Troubleshooting
 ---------------
-
-### PyCoTools3 will not install
-
-Pycotools3 is only supported in Python 3 to Python 3.6. If you are using Python 2.7 or Python 3.7 please create a new conda Python3.7 environment. 
+Pycotools3 is only supported in Python 3 to Python 3.6. If you are using Python 2.7 or Python 3.7 please create a new conda Python3.7 environment.
 
 .. code-block:: bash
 

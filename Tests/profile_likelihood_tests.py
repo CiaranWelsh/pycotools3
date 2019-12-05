@@ -41,12 +41,16 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         with tasks.ParameterEstimation.Context(
                 self.model, self.fname, context='s', parameters='g'
         ) as context:
-            context.set('method', 'nl2sol')
+            context.set('method', 'hooke_jeeves')
             context.set('run_mode', True)
-            context.set('pe_number', 1)
+            context.set('randomize_start_values', True)
+            context.set('update_model', False)
+            context.set('iteration_limit', 5)
             config = context.get_config()
         self.pe = tasks.ParameterEstimation(config)
+        data = viz.Parse(self.pe).data
         self.pe_mod = self.pe.models['test_model'].model
+        self.pe_mod.insert_parameters(df=data, index=0, inplace=True)
 
     def test_run(self):
         """
@@ -88,7 +92,7 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         actual = data.shape[0]
         self.assertEqual(expected, actual)
 
-    def test_plot(self):
+    def test_parse(self):
         with tasks.ParameterEstimation.Context(
                 self.pe_mod, self.fname, context='pl', parameters='g'
         ) as context:
@@ -100,12 +104,76 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
             config = context.get_config()
         pe = tasks.ParameterEstimation(config)
         data = viz.Parse(pe).data
-        p = viz.PlotProfileLikelihoods(self.pe_mod, data)
-        p.plot1('A2B', best_rss=1.2)
+        print(data)
+
+    def test_get_best_parameter_set(self):
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'nl2sol')
+            context.set('tolerance', 1e-1)
+            context.set('iteration_limit', 5)
+            context.set('run_mode', True)
+            context.set('pe_number', 10)
+            config = context.get_config()
+        pl = tasks.ParameterEstimation(config)
+        data = viz.Parse(pl).data
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl)
+        print(p.get_best_original_parameter_set())
+
+    def test_compute_x_even(self):
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'nl2sol')
+            context.set('tolerance', 1e-1)
+            context.set('iteration_limit', 5)
+            context.set('run_mode', True)
+            context.set('pe_number', 10)
+            config = context.get_config()
+        pl = tasks.ParameterEstimation(config)
+        data = viz.Parse(pl).data
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl)
+        print(p.compute_x())
+        # p.plot1('A2B', best_rss=1.2)
+        # print(p.plot(x='ADeg_k1'))
+
+    def test_compute_x_odd(self):
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'nl2sol')
+            context.set('tolerance', 1e-1)
+            context.set('iteration_limit', 5)
+            context.set('run_mode', True)
+            context.set('pe_number', 10)
+            config = context.get_config()
+        pl = tasks.ParameterEstimation(config)
+        data = viz.Parse(pl).data
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl)
+        print(p.compute_x())
+        # p.plot1('A2B', best_rss=1.2)
+        # print(p.plot(x='ADeg_k1'))
+
+    def test_compute_plot(self):
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'nl2sol')
+            context.set('tolerance', 1e-1)
+            context.set('iteration_limit', 5)
+            context.set('run_mode', True)
+            context.set('pe_number', 10)
+            config = context.get_config()
+        pl = tasks.ParameterEstimation(config)
+        data = viz.Parse(pl).data
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl)
+        print(p.compute_x())
+        # p.plot1('A2B', best_rss=1.2)
+        # print(p.plot(x='ADeg_k1'))
 
     def test(self):
-        from scipy.stats import chi2
-        print(chi2.ppf(0.95, df=6))
+        pass
 
 
 

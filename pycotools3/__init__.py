@@ -64,3 +64,8 @@ except Exception:
 #todo think more about global/local chasers.
 #todo in viz you need to double check the location of all the plots, profile likelihoods and parameter estimaton
 # plots are definately going in the wrong place.
+
+# todo fix problem with profile likelihood report where we don't get
+#   the output for the parameter being scanned. We need the independent values
+#   values for plotting.
+#  actually probs best to figure out the x in the plot c;lass
