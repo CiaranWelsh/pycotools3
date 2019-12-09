@@ -44,11 +44,10 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
             context.set('method', 'hooke_jeeves')
             context.set('run_mode', True)
             context.set('randomize_start_values', True)
-            context.set('update_model', False)
-            context.set('iteration_limit', 5)
             config = context.get_config()
         self.pe = tasks.ParameterEstimation(config)
         data = viz.Parse(self.pe).data
+        self.rss = data.loc[0, 'RSS']
         self.pe_mod = self.pe.models['test_model'].model
         self.pe_mod.insert_parameters(df=data, index=0, inplace=True)
 
@@ -67,7 +66,6 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
         pe = tasks.ParameterEstimation(config)
         expected = 12
         data = viz.Parse(pe)['A2B']
-        print(data)
         actual = data.shape[0]
         self.assertEqual(expected, actual)
 
@@ -103,10 +101,12 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
             context.set('pe_number', 10)
             config = context.get_config()
         pe = tasks.ParameterEstimation(config)
-        data = viz.Parse(pe).data
-        print(data)
+        data = viz.Parse(pe).data['A2B']
+        expected = (10, 5)
+        actual = data.shape
+        self.assertEqual(expected, actual)
 
-    def test_get_best_parameter_set(self):
+    def test_compute_x(self):
         with tasks.ParameterEstimation.Context(
                 self.pe_mod, self.fname, context='pl', parameters='g'
         ) as context:
@@ -118,25 +118,11 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
             config = context.get_config()
         pl = tasks.ParameterEstimation(config)
         data = viz.Parse(pl).data
-        p = viz.PlotProfileLikelihoods(self.pe_mod, pl)
-        print(p.get_best_original_parameter_set())
-
-    def test_compute_x_even(self):
-        with tasks.ParameterEstimation.Context(
-                self.pe_mod, self.fname, context='pl', parameters='g'
-        ) as context:
-            context.set('method', 'nl2sol')
-            context.set('tolerance', 1e-1)
-            context.set('iteration_limit', 5)
-            context.set('run_mode', True)
-            context.set('pe_number', 10)
-            config = context.get_config()
-        pl = tasks.ParameterEstimation(config)
-        data = viz.Parse(pl).data
-        p = viz.PlotProfileLikelihoods(self.pe_mod, pl)
-        print(p.compute_x())
-        # p.plot1('A2B', best_rss=1.2)
-        # print(p.plot(x='ADeg_k1'))
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl, 1.2)
+        x = p.compute_x()
+        expected = (10, 5)
+        actual = x.shape
+        self.assertEqual(expected, actual)
 
     def test_compute_x_odd(self):
         with tasks.ParameterEstimation.Context(
@@ -150,12 +136,12 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
             config = context.get_config()
         pl = tasks.ParameterEstimation(config)
         data = viz.Parse(pl).data
-        p = viz.PlotProfileLikelihoods(self.pe_mod, pl)
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl, 1.2)
         print(p.compute_x())
         # p.plot1('A2B', best_rss=1.2)
         # print(p.plot(x='ADeg_k1'))
 
-    def test_compute_plot(self):
+    def test_get_experiment_filenames(self):
         with tasks.ParameterEstimation.Context(
                 self.pe_mod, self.fname, context='pl', parameters='g'
         ) as context:
@@ -166,16 +152,116 @@ class ProfileLikelihoodTests(_test_base._BaseTest):
             context.set('pe_number', 10)
             config = context.get_config()
         pl = tasks.ParameterEstimation(config)
-        data = viz.Parse(pl).data
-        p = viz.PlotProfileLikelihoods(self.pe_mod, pl)
-        print(p.compute_x())
-        # p.plot1('A2B', best_rss=1.2)
-        # print(p.plot(x='ADeg_k1'))
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl, 1.2)
+        actual = p.get_experiment_files()
+        expected = {'timecourse': self.fname}
+        self.assertEqual(expected, actual)
 
-    def test(self):
-        pass
+    def test_dof(self):
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'nl2sol')
+            context.set('tolerance', 1e-1)
+            context.set('iteration_limit', 5)
+            context.set('run_mode', True)
+            context.set('pe_number', 10)
+            config = context.get_config()
+        pl = tasks.ParameterEstimation(config)
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl, 1.2)
+        expected = 4
+        actual = p.dof()
+        self.assertEqual(expected, actual)
+
+    def test_num_data_points(self):
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'nl2sol')
+            context.set('tolerance', 1e-1)
+            context.set('iteration_limit', 5)
+            context.set('run_mode', True)
+            context.set('pe_number', 10)
+            config = context.get_config()
+        pl = tasks.ParameterEstimation(config)
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl, 1.2)
+        expected = 99
+        actual = p.num_data_points()
+        self.assertEqual(expected, actual)
+
+    def test_compute_plot3(self):
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'nl2sol')
+            context.set('tolerance', 1e-1)
+            context.set('iteration_limit', 5)
+            context.set('run_mode', True)
+            context.set('pe_number', 10)
+            config = context.get_config()
+        pl = tasks.ParameterEstimation(config)
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl, self.rss)
+        filename = os.path.join(os.path.dirname(__file__), 'plt.png')
+        p.plot(x='all', y='C2A_k1', ncol=2,
+               savefig=False, filename=filename)
+        self.assertTrue(os.path.isfile(filename))
 
 
+## todo update profile likelihood test model
+class ProfileLikelihoodTests(unittest.TestCase):
+
+    def setUp(self):
+        super(ProfileLikelihoodTests, self).setUp()
+        ant_str = """
+        model new_model
+            R1: A -> B ; _k1*A;
+            R2: B -> A; k2*B;
+            R3: C -> D; _k3*C*B;
+            R4: D -> C; k4*D;
+            
+            A = 100;
+            B = 0;
+            _k1=0.1;
+            k2 = 0.01
+            _k3 = 0.01
+            k4 = 1
+        end
+        """
+        self.copasi_file = os.path.join(os.path.dirname(__file__), 'test_model.cps')
+        self.model = model.loada(ant_str, self.copasi_file)
+        self.fname = os.path.join(os.path.dirname(__file__), 'timecourse.txt')
+        self.data = self.model.simulate(0, 10, 1, report_name=self.fname)
+
+        with tasks.ParameterEstimation.Context(
+                self.model, self.fname, context='s', parameters='g'
+        ) as context:
+            context.set('method', 'hooke_jeeves')
+            context.set('run_mode', True)
+            context.set('prefix', '_')
+            context.set('randomize_start_values', True)
+            config = context.get_config()
+        self.pe = tasks.ParameterEstimation(config)
+        data = viz.Parse(self.pe).data
+        self.rss = data.loc[0, 'RSS']
+        self.pe_mod = self.pe.models['test_model'].model
+        self.pe_mod.insert_parameters(df=data, index=0, inplace=True)
+
+    def test_plotcl(self):
+        with tasks.ParameterEstimation.Context(
+                self.pe_mod, self.fname, context='pl', parameters='g'
+        ) as context:
+            context.set('method', 'hooke_jeeves')
+            context.set('run_mode', True)
+            context.set('pe_number', 10)
+            context.set('prefix', '_')
+            context.set('nproc', 5)
+            config = context.get_config()
+        pl = tasks.ParameterEstimation(config)
+        p = viz.PlotProfileLikelihoods(self.pe_mod, pl, self.rss)
+        filename = os.path.join(os.path.dirname(__file__), 'plt.png')
+        p.plot(x='all', y='RSS', ncol=2,
+               filename=None)
+        # self.assertTrue(os.path.isfile(filename))
 
 
 if __name__ == '__main__':

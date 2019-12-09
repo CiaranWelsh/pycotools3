@@ -5292,6 +5292,7 @@ class ParameterEstimation(_ParameterEstimationBase):
                 os.makedirs(config.settings['problem'])
 
             parameters = list(config.items.fit_items.keys())
+            print(parameters)
 
             files = {}
             for p in parameters:

@@ -1170,6 +1170,21 @@ class InsertParameterTests(_BaseTest):
         conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
         self.assertAlmostEqual(float(conc[0]), float(35))
 
+    def test_insert_parameters_update_parameter_estimation_task(self):
+        """
+
+        :return:
+        """
+        parameter_dict = {'B': 35,
+                          'B2C_0_k2': 64,
+                          'A2B': 597}
+
+        df = pandas.DataFrame(parameter_dict, index=[0])
+        pycotools3.model.InsertParameters(self.model, df=df, inplace=True)
+        self.model.open()
+        # conc = [i.concentration for i in self.model.metabolites if i.name == 'B']
+        # self.assertAlmostEqual(float(conc[0]), float(35))
+
     def test_insert_parameters_metabolite_file(self):
         """
 

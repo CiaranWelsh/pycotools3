@@ -641,6 +641,7 @@ class Parse(object):
         Returns:
 
         """
+
         def read1(folder):
             tmp_dct = {}
             for report_name in folder:
@@ -2131,22 +2132,75 @@ class Violinplots(_Plotter):
         return dct
 
 
-class ChiSquaredStatistics:
-    """ """
-
+class ChiSquaredStatistics(object):
     def __init__(self, rss, dof, num_data_points, alpha,
                  plot_chi2=False, show=False):
         self.alpha = alpha
         self.dof = dof
+        if self.dof == 0 :
+            raise ValueError('Degrees of freedom cannot be 0')
         self.rss = rss
         self.num_data_points = num_data_points
+        self.CL = self.calc_chi2_CL()
         self.show = show
 
-        if self.alpha > 1 or self.alpha < 0:
-            raise TypeError('alpha parameter should be between 0 and 1. ')
+        if self.alpha > 1 or self.alpha < 0 or len(str(self.alpha)) > 4:
+            raise errors.InputError('alpha parameter should be between 0 and 1 and be '
+                                    'to 2 decimal places. I.e. 0.95')
 
-    def calculate_chi2_of_alpha_df(self):
-        return scipy.stats.chi2.ppf(self.alpha, df=self.dof)
+        if plot_chi2:
+            self.plot_chi2_CL()
+
+    def chi2_lookup_table(self, alpha):
+        """
+        Looks at the cdf of a chi2 distribution at incriments of
+        0.1 between 0 and 100.
+        Returns the x axis value at which the alpha interval has been crossed,
+        i.e. gets the cut off point for chi2 dist with dof and alpha .
+        """
+        nums = numpy.arange(0, 100, 0.1)
+        table = list(zip(nums, scipy.stats.chi2.cdf(nums, self.dof)))
+        chi2_df_alpha = None
+        for i in table:
+            if i[1] <= alpha:
+                chi2_df_alpha = i[0]
+        assert chi2_df_alpha is not None
+        return chi2_df_alpha
+
+    def get_chi2_alpha(self):
+        """
+        return the chi2 threshold for cut off point alpha and dof degrees of freedom
+        """
+        dct = {}
+        alphas = numpy.arange(0, 1, 0.01)
+        for i in alphas:
+            dct[round(i, 3)] = self.chi2_lookup_table(i)
+        return dct[self.alpha]
+
+    def plot_chi2_CL(self):
+        """
+        Visualize where the alpha cut off is on the chi2 distribution
+        """
+        x = numpy.linspace(scipy.stats.chi2.ppf(0.01, self.dof), scipy.stats.chi2.ppf(0.99, self.dof), 100)
+
+        plt.figure()
+        plt.plot(x, scipy.stats.chi2.pdf(x, self.dof), 'k-', lw=4, label='chi2 pdf')
+
+        y_alpha = numpy.linspace(plt.ylim()[0], plt.ylim()[1])
+        x_alpha = [self.get_chi2_alpha()] * len(y_alpha)
+
+        plt.plot(x_alpha, y_alpha, '--', linewidth=4)
+        plt.xlabel('x', fontsize=22)
+        plt.ylabel('Probability', fontsize=22)
+        plt.title('Chi2 distribution with {} dof'.format(self.dof), fontsize=22)
+        if self.show:
+            plt.show()
+
+    def calc_chi2_CL(self):
+        """
+        :return:
+        """
+        return self.rss * exponential_function((self.get_chi2_alpha() / self.num_data_points))
 
 
 class WaterfallPlot(_Plotter):
@@ -2290,8 +2344,10 @@ class WaterfallPlot(_Plotter):
 
 
 class PlotProfileLikelihoods(_Plotter):
-    def __init__(self, mod, pl):
+    def __init__(self, mod, pl, rss, alpha=0.95):
+        self.rss = rss
         self.pl = pl
+        self.alpha = alpha
         data = Parse(pl).data
         if not isinstance(data, dict):
             raise TypeError('expected a dictionary object but got a {}'.format(type(data)))
@@ -2316,33 +2372,6 @@ class PlotProfileLikelihoods(_Plotter):
             c += 1
         return c
 
-    def plot1(self, parameter, best_rss, alpha=0.95, selection='RSS', df=None):
-        """
-
-        Args:
-            selection:
-
-        Returns:
-
-        """
-        if isinstance(selection, str):
-            selection = [selection]
-
-        if not isinstance(selection, list):
-            raise TypeError
-
-        if parameter == selection:
-            raise ValueError
-
-        if df is None:
-            df = self._get_number_of_estimated_parameters()
-
-        cl = scipy.stats.chi2.ppf(alpha, df=df) + best_rss
-        print(cl)
-        data = pandas.concat(self.data)
-        print(data)
-        data = data.loc[parameter][selection]
-
     def get_best_original_parameter_set(self):
         """
         From pe class
@@ -2352,6 +2381,47 @@ class PlotProfileLikelihoods(_Plotter):
         cols = [i for i in self.data.columns if i != 'RSS']
         params = pandas.DataFrame(self.mod.get_parameters_as_dict(), index=[0])
         return params[cols]
+
+    def get_experiment_files(self):
+        experiments = self.pl.config.experiments
+        dct = {}
+        for name in experiments:
+            dct[name] = experiments[name].filename
+        return dct
+
+    def dof(self):
+        """Return degrees of freedom. This is the
+        number of estimated parameters minus 1
+        Args:
+          mod: py:class:`model.Model`. The
+        still configured model that was used
+        to generate parameter estimation data
+        Returns:
+        """
+        return self._get_number_of_estimated_parameters() - 1
+
+    def num_data_points(self):
+        """number of data points in your data files. Relies on
+        being able to locate the experiment files from the
+        copasi file
+        Returns:
+        """
+        experimental_data = [pandas.read_csv(i, sep='\t') for i in list(self.get_experiment_files().values())]
+        l = []
+        for i in experimental_data:
+            l.append(i.shape[0] * (i.shape[1] - 1))
+        s = sum(l)
+        if s == 0:
+            raise errors.InputError('Number of data points cannot be 0. '
+                                    'Experimental data is inferred from the '
+                                    'parameter estimation task definition. '
+                                    'It might be that copasi_file refers to a '
+                                    'fresh copy of the model. Try redefining the '
+                                    'same parameter estimation problem that you '
+                                    'used in the profile likelihood, using the '
+                                    '_setup method but not running the '
+                                    'parameter estimation before trying again.')
+        return s
 
     def compute_x(self):
         lb = self.pl.config.settings.pl_lower_bound
@@ -2366,36 +2436,36 @@ class PlotProfileLikelihoods(_Plotter):
             dct[i] = pandas.Series(numpy.logspace(low, high, num_steps).flatten())
         df = pandas.concat(dct, axis=1)
 
-        # when num_steps is even we need to add
-        #  the best parameter set into the df.
-        # When num steps is odd, we can omit this step
-        # because the numpy.logspace should land on the
-        # best parameter set anyway
-        if num_steps % 2 == 0:
-            mid_point = int(num_steps / 2)
-            df = pandas.concat([df.iloc[:mid_point], parameters, df.iloc[mid_point:]]).reset_index(drop=True)
         return df
 
-    def plot(self, x, y='RSS', ncol=3):
+    def plot(self, x, y='RSS', ncol=3,
+             filename=None, wspace=0.1,
+             hspace=1.0, figsize=(12, 8),
+             marker='.', **kwargs):
         # validate input
-        if not isinstance(x, str):
-            raise ValueError('x must be a string')
-        if not isinstance(y, (str, list)):
-            raise ValueError('y must be a string or a list of strings')
-        if isinstance(y, str):
-            y = [y]
-        for i in y:
+        if not isinstance(y, str):
+            raise ValueError('y must be a string')
+        if not isinstance(x, (str, list)):
+            raise ValueError('x must be a string or a list of strings')
+        if x == 'all':
+            x = [i for i in self.data.columns if i not in ['RSS', x]]
+        if isinstance(x, str):
+            x = [x]
+        for i in x:
             if not isinstance(i, str):
                 raise ValueError('y must be a string or list of strings.')
-        if x not in self.data.columns:
-            raise ValueError(f'Cannot find parameter "{x}" in your '
+        if y not in self.data.columns:
+            raise ValueError(f'Cannot find parameter "{y}" in your '
                              f'profile likelihood analysis. These '
                              f'are your options {list(sorted(self.data.columns))}')
         if not isinstance(ncol, int):
             raise ValueError('ncol argument must be of type int')
-
-        # compute number of rows needed for len(y) plots
-        N = len(y)
+        cl = float(ChiSquaredStatistics(
+            self.rss, self.dof(),
+            self.num_data_points(), self.alpha).CL)
+        # print(self.confidence_level())
+        # compute number of rows needed for len(x) plots
+        N = len(x)
         if N < ncol:
             ncol = N
         nrow = N // ncol
@@ -2404,12 +2474,37 @@ class PlotProfileLikelihoods(_Plotter):
             nrow += 1
 
         # select plot data
-        print(self.data)
-        data = self.data.set_index(x, append=True)
-        data.index = data.index.droplevel(1)
-        data = data[y]
-        print(data)
-
+        # if self.data.shape[0] % 2 == 0 :
+        #     mid_point = self.data.shape[0] / 2
+        #     best_parameters = self.get_best_original_parameter_set()
+        #     best_parameters['RSS'] = self.rss
+        # best_parameters = pandas.concat(
+        #     [self.data.iloc[:mid_point], best_parameters, self.data.iloc[mid_point:]]).reset_index(drop=True)
+        ydata = self.data.loc[x, [y]].unstack(level=0)[y]
+        xdata = self.compute_x()[x]
+        seaborn.set_context('talk')
+        from matplotlib.gridspec import GridSpec
+        fig = plt.figure(figsize=figsize)
+        gs = GridSpec(nrow, ncol, wspace=wspace,
+                      hspace=hspace)
+        for i, xi in enumerate(x):
+            ax = fig.add_subplot(gs[i])
+            xplt = numpy.log10(xdata[xi])
+            yplt = ydata[xi]
+            ax.plot(xplt, yplt, color='grey',
+                    label=xi, marker=marker, **kwargs)
+            if y == 'RSS':
+                ax.plot(xplt, [cl]*len(xplt), color='black', ls='--')
+            seaborn.despine(ax=ax, top=True, right=True)
+            # plt.xlabel('log10({})'.find(xi))
+            plt.ylabel(y)
+            plt.title(xi)
+        plt.subplots_adjust(hspace=hspace, wspace=wspace)
+        if filename is not None:
+            plt.savefig(filename, dpi=300, bbox_inches='tight')
+            print('saved figure to "{}"'.find(filename))
+        else:
+            plt.show()
 
 
 class PlotParameterEstimation(_ParameterEstimationPlotter):

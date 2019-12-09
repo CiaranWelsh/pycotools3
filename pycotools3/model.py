@@ -2063,9 +2063,16 @@ class Model(_base._Base):
             copasi_temp = os.path.join(self.root, os.path.split(self.copasi_file)[1][:-4] + '_1.cps')
         self.save(copasi_file)
         cmd = 'CopasiUI "{}"'.format(copasi_file)
-        os.system(cmd)
-        if as_temp:
-            os.remove(copasi_temp)
+        cmd_mac = 'open -a CopasiUI "{}"'.format(copasi_file)
+        import sys
+        if sys.platform != 'darwin':
+            os.system(cmd)
+            if as_temp:
+                os.remove(copasi_temp)
+        else:
+            os.system(cmd_mac)
+            if as_temp:
+                os.remove(copasi_temp)
 
     def _model_components(self):
         """list of model components that
