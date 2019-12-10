@@ -241,7 +241,7 @@ class ProfileLikelihoodTests(unittest.TestCase):
             context.set('randomize_start_values', True)
             config = context.get_config()
         self.pe = tasks.ParameterEstimation(config)
-        data = viz.Parse(self.pe).data
+        data = viz.Parse(self.pe).data['test_model']
         self.rss = data.loc[0, 'RSS']
         self.pe_mod = self.pe.models['test_model'].model
         self.pe_mod.insert_parameters(df=data, index=0, inplace=True)
@@ -261,7 +261,7 @@ class ProfileLikelihoodTests(unittest.TestCase):
         filename = os.path.join(os.path.dirname(__file__), 'plt.png')
         p.plot(x='all', y='RSS', ncol=2,
                filename=None)
-        # self.assertTrue(os.path.isfile(filename))
+        self.assertTrue(os.path.isfile(filename))
 
 
 if __name__ == '__main__':

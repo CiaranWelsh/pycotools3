@@ -41,7 +41,7 @@ global __version__
 # version
 MAJOR = 2
 MINOR = 1
-MICRO = 17
+MICRO = 19
 
 __version__ = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
