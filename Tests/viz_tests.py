@@ -154,11 +154,9 @@ class BoxPlotTests(_test_base._BaseTest):
         # self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 3)
 
 
-
-
-class WaterfallPlotTests(_test_base._BaseTest):
+class WaterFallPlotTests(_test_base._BaseTest):
     def setUp(self):
-        super(WaterfallPlotTests, self).setUp()
+        super(WaterFallPlotTests, self).setUp()
 
         fname = os.path.join(os.path.dirname(__file__), 'report1.txt')
         data = self.model.simulate(0, 50, 1, report_name=fname)
@@ -176,16 +174,13 @@ class WaterfallPlotTests(_test_base._BaseTest):
 
         self.pe = pycotools3.tasks.ParameterEstimation(config)
 
-    # def test_boxplot_is_saved(self):
-    #     """
-    #     :return:
-    #     """
-    #     b = pycotools3.viz.Boxplots(self.pe, savefig=True, num_per_plot=2)
-    #     self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 3)
+    def test_waterfall_is_saved(self):
+        """
+        :return:
+        """
+        b = pycotools3.viz.WaterfallPlot(self.pe, savefig=True)
+        self.assertEqual(len(glob.glob(b.results_directory['test_model'] + '/*')), 1)
 
-    def test_waterfall_plot_is_created(self):
-        wf = viz.WaterfallPlot(self.pe, savefig=True)
-        res = wf.create_directory()
 
 class PlotParameterEstimationTests(_test_base._BaseTest):
     def setUp(self):
@@ -213,19 +208,7 @@ class PlotParameterEstimationTests(_test_base._BaseTest):
 
         self.pe = pycotools3.tasks.ParameterEstimation(config)
         self.mod = self.pe.models['test_model'].model
-        # self.mod.open()
 
-    def test_create_directory(self):
-        """
-
-        :return:
-        """
-        pl = pycotools3.viz.PlotParameterEstimation(self.pe, savefig=False)
-
-        dire = pl.create_directories()
-        # for k, v in dire.items():
-            # print(k, v)
-            # self.assertTrue(os.path.isdir(v))
 
     def test_update_parameters(self):
         """
@@ -251,125 +234,8 @@ class PlotParameterEstimationTests(_test_base._BaseTest):
             savefig=True,
             show=False,
         )
-        pl.plot()
-        # for i in pl.create_directories():
-        #     self.assertEqual(len(glob.glob(pl.create_directories()[i] + '/*')), 6)
-
-    def test_ss(self):
-        pl = pycotools3.viz.PlotParameterEstimation(
-            self.pe,
-            savefig=True,
-            show=False,
-        )
-        # pl.simulate_steadystate()
-
-
-# class PlotTimeCourseTests(_test_base._BaseTest):
-#
-#     def setUp(self):
-#         super(PlotTimeCourseTests, self).setUp()
-#         self.model = pycotools3.model.Model(self.copasi_file)
-#         self.original_parameters = self.model.parameters
-#
-#         self.TC1 = pycotools3.tasks.TimeCourse(self.model, end=10, step_size=0.1,
-#                                                intervals=50, report_name='report1.txt')
-#
-#     def test_plot_tc(self):
-#         T = pycotools3.viz.PlotTimeCourse(self.TC1, savefig=True)
-#         self.assertEqual(len(glob.glob(T.results_directory + '/*')), 7)
-#
-#     def test_plot_tc(self):
-#         T = pycotools3.viz.PlotTimeCourse(self.TC1, savefig=True, y=['A', 'B'], x='A', show=False)
-#         self.assertEqual(len(glob.glob(T.results_directory + '/*')), 2)
-#
-#
-# class EnsembleTimeCourseTests(_test_base._BaseTest):
-#
-#     def setUp(self):
-#         super(EnsembleTimeCourseTests, self).setUp()
-#         self.model = pycotools3.model.Model(self.copasi_file)
-#         self.original_parameters = self.model.parameters
-#
-#
-# class PlotPLTests(_test_base._BaseTest):
-#     def setUp(self):
-#         super(PlotPLTests, self).setUp()
-#         self.model = pycotools3.model.Model(self.copasi_file)
-#
-#         ## simulate time course
-#         tc = pycotools3.tasks.TimeCourse(self.model, end=1000, intervals=1000, step_size=1)
-#
-#         ## format time course for parameter estimation
-#         pycotools3.misc.format_timecourse_data(tc.report_name)
-#
-#         ## get the paramete pickle filename
-#         pe_data_file = os.path.join(self.model.root, 'test_profile_likleihood.pickle')
-#
-#         ##try and get data from parameter pickle.
-#         ## if you can get the df, if not simulate the data
-#         try:
-#             PE = pycotools3.tasks.MultiParameterEstimation(
-#                 self.model, tc.report_name, metabolites=[],
-#                 lower_bound=0.1, upper_bound=100, method='genetic_algorithm',
-#                 copy_number=1, pe_number=10, number_of_generations=1,
-#                 population_size=1, overwrite_config_file=True,
-#             )
-#             PE.write_config_file()
-#             PE._setup()
-#             df = pandas.read_pickle(pe_data_file)
-#         except IOError:
-#             PE = pycotools3.tasks.MultiParameterEstimation(
-#                 self.model, tc.report_name, metabolites=[],
-#                 lower_bound=0.1, upper_bound=100, method='genetic_algorithm',
-#                 copy_number=5, pe_number=10, number_of_generations=1,
-#                 population_size=1, overwrite_config_file=True
-#             )
-#             PE.write_config_file()
-#             PE._setup()
-#             PE.run()
-#             time.sleep(10)
-#             p = pycotools3.viz.Parse(PE)
-#
-#             ##write pickle
-#             p.data.to_pickle(pe_data_file)
-#             df = pandas.read_pickle(pe_data_file)
-#
-#         ## try read the profile likelihood data
-#         ## if fail with input error, simulate profile likelihood data
-#         try:
-#             self.PL = pycotools3.tasks.ProfileLikelihood(
-#                 self.model, df=df, index=[0, 1],
-#                 lower_bound_multiplier=1001,
-#                 log10=True, run=False, tolerance=1e-1,
-#                 iteration_limit=1
-#             )
-#             p = pycotools3.viz.Parse(self.PL)
-#
-#         except pycotools3.errors.InputError:
-#             self.PL = pycotools3.tasks.ProfileLikelihood(
-#                 self.model, df=df, index=[0, 1],
-#                 lower_bound_multiplier=1001,
-#                 log10=True, run='multiprocess', tolerance=1e-1,
-#                 iteration_limit=1, intervals=4,
-#             )
-#             time.sleep(100)
-#             p = pycotools3.viz.Parse(self.PL)
-#
-#     def test_parse(self):
-#         p = pycotools3.viz.Parse(self.PL)
-#         self.assertTrue(isinstance(p.data, pandas.core.frame.DataFrame))
-#
-#     def test_parse_pl_log_linear(self):
-#         p = pycotools3.viz.Parse(self.PL)
-#         linear_scale_value = p.data.loc['B2C']['RSS'].iloc[0]
-#         log_scale = numpy.log10(linear_scale_value)
-#         p2 = pycotools3.viz.Parse(self.PL, log10=True)
-#
-#         self.assertEqual(log_scale, p2.data.loc['B2C']['RSS'].iloc[0])
-#
-
-#
-
+        k = list(pl.results_directory.keys())[0]
+        self.assertEqual(len(glob.glob(pl.results_directory[k] + '/*/*.png')), 10)
 
 if __name__ == '__main__':
     unittest.main()

@@ -403,7 +403,7 @@ class TruncateData(_Plotter):
             return self.ranks()
 
 
-class Parse(object):
+class Parse:
     """General class for parsing copasi output into Python.
 
     First argument is an instance of a pycotools3 class.
@@ -548,12 +548,6 @@ class Parse(object):
         if self.log10:
             for model_name, df in data.items():
                 data[model_name] = numpy.log10(data[model_name])
-
-        # when only 1 model return dataframe. When > 1 models, return
-        #  a dict of dataframes
-        if len(data) == 1:
-            key = list(data.keys())[0]
-            return data[key]
         return data
 
     def from_timecourse(self):
