@@ -64,7 +64,7 @@ setup(
 
     license='GPL4',
     install_requires=['pandas', 'numpy', 'scipy', 'matplotlib',
-                      'lxml', 'seaborn', 'sklearn', 'psutil',
+                      'lxml', 'seaborn', 'scikit-learn', 'psutil',
                       'tellurium', 'pyyaml', 'munch', 'deprecated'],
 
     long_description='A python package for enhancing mathematical'
